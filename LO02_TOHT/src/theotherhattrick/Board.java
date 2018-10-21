@@ -4,6 +4,10 @@ public class Board {
     private Prop[] props;
 
     private Trick[] tricks;
+    
+    public Board() {
+    	
+    }
 
     public void distribuerCartes() {
     }
