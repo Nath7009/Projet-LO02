@@ -1,3 +1,4 @@
+package theotherhattrick;
 
 public class Trick {
     private Prop[] ingredients;

@@ -1,3 +1,4 @@
+package theotherhattrick;
 
 public class Prop {
     private int type;

@@ -1,3 +1,4 @@
+package theotherhattrick;
 
 public class Board {
     private Prop[] props;

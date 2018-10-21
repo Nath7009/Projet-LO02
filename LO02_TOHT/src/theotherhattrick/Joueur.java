@@ -1,3 +1,4 @@
+package theotherhattrick;
 
 public class Joueur {
     private int id;
@@ -10,8 +11,9 @@ public class Joueur {
 
     public void chooseTrick() {
     }
-
+    
     public boolean returnTrick() {
+		return false;
     }
 
     public void speak() {
