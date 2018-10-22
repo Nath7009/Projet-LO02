@@ -1,6 +1,6 @@
 package theotherhattrick;
 
-public class test {
+public class Launcher {
 
 	public static void main(String[] args) {
 		Game game = Game.newGame();
