@@ -12,5 +12,16 @@ public class Trick {
     	this.ingredients = ingredients;
     	this.points = points;
     }
+    
+    public void print(){
+    	System.out.println("Trick composé de :");
+    	for(int i=0;i<ingredients.length;i++) {
+    		for(int j=0;j<ingredients[i].length;j++) {
+    			System.out.print(ingredients[i][j].getName() + ',');
+    			//System.out.println();
+    		}
+    		System.out.println(0);
+    	}
+    }
 
 }

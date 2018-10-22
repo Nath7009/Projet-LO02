@@ -59,10 +59,16 @@ public class Board {
     	tTricks.add(new Trick("The Other Hat Trick",new Prop[][]{{hat}, {oRabbit}} ,6));
     	
     	tricks = new Stack<Trick>();
+		tTricks.get(0).print();
+
     	
     	for(int i=tTricks.size()-1;i>=0;i--) {
     		tricks.push(tTricks.get(i));
     	}
+    }
+    
+    public void printTricks() {
+    	
     }
 
     public void comparePropsToTrick() {
