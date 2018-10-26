@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Player {
 	private int id;
 	private String name;
+	private Prop[] props;
 
 	public Player(String name) {
 		this.name = name;
@@ -12,6 +13,10 @@ public class Player {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public void setProps() {
+		
 	}
 
 	public void echangerCartes() {

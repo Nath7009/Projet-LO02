@@ -1,6 +1,7 @@
 package theotherhattrick;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.Collections;
 
@@ -9,21 +10,40 @@ public class Board {
 	private Stack<Trick> tricks;
 	private Stack depiledTricks;
 
-    private Prop[] props;
+    private Prop[] allProps;
+    private Prop[][] playersProps;
     
     public Board() {
     	this.createCards();
+    	this.distributeCards();
+    }
+    
+    public Prop[] getCardsOfPlayer(int id) {
+    	return null; //Temporaire
     }
 
     public void distributeCards() {
+    	this.playersProps = new Prop[3][];
     	
-    
-    }
+    	for(int i=0;i<3;i++) {
+    		this.playersProps[i] = new Prop[2];
+    	}
+    	
+    	Collections.shuffle(Arrays.asList(allProps));
+    	
+    	int ind = 0;
+    	for(int i=0;i<3;i++) {
+    		for(int j=0;j<2;j++) {
+    			playersProps[i][j] = allProps[ind];
+    			ind++;
+    		}
+    	}
+    			    }
     
     public void createCards() {
     	
     	//Création des props
-    	props = new Prop[7];
+    	allProps = new Prop[7];
     	
     	Prop carrot = new Prop("Carrot", 1);
     	Prop lettuce = new Prop("Lettuce", 2);
@@ -32,52 +52,62 @@ public class Board {
     	Prop oRabbit = new Prop("The Other Rabbit", 5);
     	
     	for(int i=0;i<3;i++) {
-    		props[i] = carrot;
+    		allProps[i] = carrot;
     	}
     	
-    	props[3] = lettuce;
-    	props[4] = hat;
-    	props[5] = rabbit;
-    	props[6] = oRabbit;
+    	allProps[3] = lettuce;
+    	allProps[4] = hat;
+    	allProps[5] = rabbit;
+    	allProps[6] = oRabbit;
     	
     	//Création des tricks
     	ArrayList<Trick> tTricks = new ArrayList<Trick>(10);
     	//Liste permettant de stocker les tricks, on utilise une liste parcequ'elle peut être mélangée
     	//Ensuite, on place l'arraylist dans une pile
     	
-    	tTricks.add(new Trick("The Hungry Rabbit",new Prop[][]{{rabbit, oRabbit}, {carrot, lettuce}} ,1));
-    	tTricks.add(new Trick("The Bunch of Carrots",new Prop[][]{{carrot}, {carrot}} ,2));
-    	tTricks.add(new Trick("The Vegetable Patch",new Prop[][]{{carrot}, {lettuce}} ,3));
-    	tTricks.add(new Trick("The Rabbit That Didn't Like Carrots",new Prop[][]{{rabbit, oRabbit}, {lettuce}} ,4));
-    	tTricks.add(new Trick("The Pair of Rabbits",new Prop[][]{{rabbit}, {oRabbit}} ,5));
-    	tTricks.add(new Trick("The Vegetable Hat Trick",new Prop[][]{{hat}, {carrot, lettuce}} ,2));
-    	tTricks.add(new Trick("The Carrot Hat Trick",new Prop[][]{{hat}, {carrot}} ,3));
-    	tTricks.add(new Trick("The Slightly Easier Hat Trick",new Prop[][]{{hat}, {rabbit, oRabbit}} ,4));
-    	tTricks.add(new Trick("The Hat Trick",new Prop[][]{{hat}, {rabbit}} ,5));
+    	tTricks.add(new Trick("The Hungry Rabbit", new Prop[][]{{rabbit, oRabbit}, {carrot, lettuce}} ,1));
+    	tTricks.add(new Trick("The Bunch of Carrots", new Prop[][]{{carrot}, {carrot}} ,2));
+    	tTricks.add(new Trick("The Vegetable Patch", new Prop[][]{{carrot}, {lettuce}} ,3));
+    	tTricks.add(new Trick("The Rabbit That Didn't Like Carrots", new Prop[][]{{rabbit, oRabbit}, {lettuce}} ,4));
+    	tTricks.add(new Trick("The Pair of Rabbits", new Prop[][]{{rabbit}, {oRabbit}} ,5));
+    	tTricks.add(new Trick("The Vegetable Hat Trick", new Prop[][]{{hat}, {carrot, lettuce}} ,2));
+    	tTricks.add(new Trick("The Carrot Hat Trick", new Prop[][]{{hat}, {carrot}} ,3));
+    	tTricks.add(new Trick("The Slightly Easier Hat Trick", new Prop[][]{{hat}, {rabbit, oRabbit}} ,4));
+    	tTricks.add(new Trick("The Hat Trick", new Prop[][]{{hat}, {rabbit}} ,5));
     	
-    	Collections.shuffle(tTricks);    	
-    	tTricks.add(new Trick("The Other Hat Trick",new Prop[][]{{hat}, {oRabbit}} ,6));
+    	Collections.shuffle(tTricks); //Mélange des cartes
+    	tTricks.add(new Trick("The Other Hat Trick", new Prop[][]{{hat}, {oRabbit}} ,6));
+    	//Ajout de cette carte à la fin pour qu'on soit sure qu'elle se trouve en fin de tas
     	
     	tricks = new Stack<Trick>();
 		tTricks.get(0).print();
 
     	
-    	for(int i=tTricks.size()-1;i>=0;i--) {
+    	for(int i=tTricks.size()-1;i>=0;i--) { //On parcourt la liste à l'envers pour mettre The Other Hat Trick en dernier
     		tricks.push(tTricks.get(i));
     	}
+    	
+    	//printTricks();
     }
     
     public void printTricks() {
+    	Trick[] arr = new Trick[tricks.size()];
+    	tricks.toArray(arr);
     	
+    	for(int i=0;i<arr.length;i++) {
+    		arr[i].print();
+    	}
     }
 
     public void comparePropsToTrick() {
     }
 
-    public void createCopy(Prop prop) {
+    public Prop createCopy(Prop prop) {
+    	return prop.clone();
     }
 
-    public void createCopy(Trick trick) {
+    public Trick createCopy(Trick trick) {
+    	return trick.clone();
     }
 
     public void replace() {
@@ -91,12 +121,12 @@ public class Board {
 
     Prop[] getProps() {
         // Automatically generated method. Please delete this comment before entering specific code.
-        return this.props;
+        return this.allProps;
     }
 
     void setProps(Prop[] value) {
         // Automatically generated method. Please delete this comment before entering specific code.
-        this.props = value;
+        this.allProps = value;
     }
 
 }

@@ -14,14 +14,24 @@ public class Trick {
     }
     
     public void print(){
-    	System.out.println("Trick composé de :");
+    	System.out.println(this.name + " composé de :");
     	for(int i=0;i<ingredients.length;i++) {
     		for(int j=0;j<ingredients[i].length;j++) {
     			System.out.print(ingredients[i][j].getName() + ',');
     			//System.out.println();
     		}
-    		System.out.println(0);
+    		System.out.println();
     	}
+    }
+    
+    public Trick clone() {
+    	try {
+			return (Trick) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
 }

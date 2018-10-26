@@ -27,5 +27,15 @@ public class Prop {
     public String getName() {
     	return this.name;
     }
+    
+    public Prop clone() {
+    	try {
+			return (Prop) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+    }
 
 }
