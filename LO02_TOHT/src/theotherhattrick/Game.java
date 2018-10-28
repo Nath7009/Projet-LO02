@@ -7,11 +7,9 @@ public class Game {
 	private static Game game;
 	private Board board;
 	private Player[] players;
-	private int tour; //Le joueur qui doit jouer
-
+	private int tour; // Le joueur qui doit jouer
 
 	private Game() {
-		board = new Board();
 	}
 
 	public static Game newGame() {
@@ -44,34 +42,46 @@ public class Game {
 		for (int i = nbHumains - 1; i < 3; i++) {
 			players[i] = new Robot();
 		}
-		
-		//Gestion du tour de jeu : faire jouer chaque joueur tour après tour jusqu'à ce que la pile de tricks soit vide
-		//Quand la pile de tricks est vide, on cherche le joueur gagnant et on l'affiche
+
+		board = new Board(players);
+
+		// Gestion du tour de jeu : faire jouer chaque joueur tour après tour jusqu'à ce
+		// que la pile de tricks soit vide
+		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
+		// l'affiche
 		this.tour = 0;
-		
-		
-		
-		
+
 		keyboard.close();
 	}
-	
+
 	private void JouerTour() {
 		Player p = players[tour];
 		boolean playerIn;
 
-		if(p instanceof Human) {
-			System.out.println("C'est le tour de "+p.getName());
+		if (p instanceof Human) {
+			System.out.println("C'est le tour de " + p.getName());
 			playerIn = p.speak("Retourner un trick ?");
-		//Retourner trick ?
-		//Changer les props
+
+			if (playerIn) {
+				board.depile();
+			}
+
+			// Changer les props
 			playerIn = p.speak("Performer le trick ?");
-		//Performer le trick ?
+			// Performer le trick ?
+
 		}
-		
+
 		else {
 			System.out.println("Le comportements des robots n'a pas encore été implémenté");
 		}
 
+		this.nextTurn();
+
+	}
+
+	private void nextTurn() {
+		this.tour++;
 	}
 
 }

@@ -1,8 +1,8 @@
 package theotherhattrick;
 
 public class Robot extends Player {
-	
-	public Robot(){
+
+	public Robot() {
 		super("Robot");
 	}
 }
