@@ -19,39 +19,150 @@ public class Player {
 		this.props = props;
 	}
 
-	public void echangerCartes() {
+	/**	
+	*	
+	*
+	*
+	*
+	**/
+	public void exchangeProps() {
 	}
 
-	public void realiserTrick() {
+	public void performTrick() {
 	}
 
 	public void chooseTrick() {
 	}
 
-	public boolean speak(String text) {
-		String ans;
+
+
+
+	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion) { 
 		Scanner keyboard = new Scanner(System.in);
-
+		String ans = null;
+		int ansInt = -1;
 		System.out.println(text);
-
-		do {
-			System.out.println("Entrer y pour répondre oui et n pour répondre non");
-			ans = keyboard.nextLine();
-			ans.toLowerCase();
-		} while (ans != "y" || ans != "n");
-
-		keyboard.close();
-
-		if (ans == "y") {
-			return true;
-		} else {
-			return false;
+		
+		
+		switch(choiceNumb) {
+		case 2 : 
+			switch(typeOfQuestion) {
+			case 'b' : 
+				do {
+					System.out.println("Entrer y pour oui et n pour non : ");
+					ans = keyboard.nextLine();
+					ans.toLowerCase();
+				}while(ans.equals("y") && ans.equals("n"));
+				
+				if(ans.equals("y")) {
+					ansInt = 0;
+				}
+				else if(ans.equals("n")) {
+					ansInt = 1;
+				}
+				else {
+					ansInt = -1;
+				}
+				break; 
+				
+			case 'p' : 
+				do {
+					System.out.println("Entrer g pour la prop de gauche et d pour la prop de droite : ");
+					ans = keyboard.nextLine();
+					ans.toLowerCase();
+					} while (ans.equals("g") && ans.equals("d"));
+				if(ans.equals("g")) {
+					ansInt = 0;
+				}
+				else if(ans.equals("d")) {
+					ansInt = 1;
+				}
+				else {
+					ansInt = -1;
+				}
+				break;
+			
+			default :
+				ans = "error";
+				break;
+			}
+			break;
+			
+		case 3 : 
+			do {
+				System.out.println("Entrer g, pour le prop de gauche, d pour le prop de droite, r pour garder les mêmes props : ");
+				ans = keyboard.nextLine();
+				ans.toLowerCase();
+			}while(ans.equals("y") && ans.equals("n") && ans.equals("r"));
+			
+			if(ans.equals("y")) {
+				ansInt = 0;
+			}
+			else if(ans.equals("n")) {
+				ansInt = 1;
+			}
+			else if(ans.equals("r")) {
+				ansInt = 2;
+			}
+			else {
+				ansInt = -1;
+			}
+			break;
+		
+		case 4 : 
+			switch(typeOfQuestion) {
+			case 'n' : // n stands for neutral
+				do {
+					System.out.println("Entrer d1 ou g1 pour les props droite ou gauche de " + players[(this.id+1)%3].name + ", ou d2 ou g2 pour les props droite ou gauche de " + players[(this.id+2)%3].name + " : ");
+					ans = keyboard.nextLine();
+					ans.toLowerCase();
+				}while(ans.equals("g1") && ans.equals("g2") && ans.equals("d1") && ans.equals("d2"));
+				
+				if(ans.equals("g1")) {
+					ansInt = 0;
+				}
+				else if(ans.equals("d1")) {
+					ansInt = 1;
+				}
+				else if(ans.equals("g2")) {
+					ansInt = 2;
+				}
+				else if(ans.equals("d2")) {
+					ansInt = 3;
+				}
+				else {
+					ansInt = -1;
+				}
+				break;
+			
+			case 'v' : // v stands for variant. Pas encore développé.
+				ans = "error";
+				break;
+			
+			default : 
+				ans = "error";
+			}
+			break;
+		
+		default : 
+			ans  = "error";
+			break;
 		}
-
+		keyboard.close();
+		
+		return ansInt;
 	}
 
-	public int choosePropsToChange() { // Retourne l'indice dans Player.tricks[] de la carte que le joueur souhaite
-										// retourner
+
+
+	/**	ChooseProptoChange
+	*	
+	*
+	*
+	*
+	**/
+	public int choosePropToChange() { // Retourne l'indice dans Player.props[] de la carte que le joueur souhaite
+										// échanger
 		return 0; // Temporaire
 	}
 
