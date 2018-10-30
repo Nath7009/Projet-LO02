@@ -7,8 +7,9 @@ public class Player {
 	private String name;
 	private Prop[] props;
 
-	public Player(String name) {
+	public Player(String name, int id) {
 		this.name = name;
+		this.id = id;
 	}
 
 	public String getName() {
@@ -18,13 +19,15 @@ public class Player {
 	public void setProps(Prop[] props) {
 		this.props = props;
 	}
-
-	/**	
-	*	
-	*
-	*
-	*
-	**/
+	
+	public Prop getProp(int ind) {
+		return props[ind];
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
 	public void exchangeProps() {
 	}
 
@@ -34,15 +37,12 @@ public class Player {
 	public void chooseTrick() {
 	}
 
-
-
-
-	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion) { 
-		Scanner keyboard = new Scanner(System.in);
+	//choiceNumb = nombre de réponses possibles
+	// typeOfQuestion = b pour oui/non, 
+	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion, Scanner keyboard) { 
 		String ans = null;
 		int ansInt = -1;
 		System.out.println(text);
-		
 		
 		switch(choiceNumb) {
 		case 2 : 
@@ -148,7 +148,6 @@ public class Player {
 			ans  = "error";
 			break;
 		}
-		keyboard.close();
 		
 		return ansInt;
 	}

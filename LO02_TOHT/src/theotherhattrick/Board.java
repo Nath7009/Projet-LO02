@@ -24,6 +24,10 @@ public class Board {
 	public Prop[] getCardsOfPlayer(int id) {
 		return null;
 	}
+	
+	public int getTrickPileLength() {
+		return tricks.size();
+	}
 
 	public void distributeCards() {
 		this.playersProps = new Prop[players.length][];
@@ -90,7 +94,6 @@ public class Board {
 		// de tas
 
 		tricks = new Stack<Trick>();
-		tTricks.get(0).print();
 
 		for (int i = tTricks.size() - 1; i >= 0; i--) { // On parcourt la liste � l'envers pour mettre The Other Hat
 														// Trick en dernier
@@ -108,8 +111,15 @@ public class Board {
 			arr[i].print();
 		}
 	}
+	
+	public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
+	}
+	
+	public void giveTrick(int id) { //Donne le trick sur le dessus de depiledTricks au joueur d'id id
+	}
 
-	public void comparePropsToTrick() {
+	public boolean comparePropsToTrick() {
+		return false; //TEMPORAIRE
 	}
 
 	public Prop createCopy(Prop prop) {
@@ -126,7 +136,14 @@ public class Board {
 	public void depile() {
 	}
 
-	public void revealProp() {
+	public void revealProp(int id) { //Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on retourne sont other prop.
+	}
+	
+	public void showAllProps(int id) { //Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
+		
+	}
+	
+	public void hideAllProps(int id) { //Retourne face cachée tous les props du joueur en cas de tour réussi
 	}
 
 	Prop[] getProps() {
