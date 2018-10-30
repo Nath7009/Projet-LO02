@@ -12,6 +12,7 @@ public class Board {
 
 	private Prop[] allProps;
 	private Prop[][] playersProps;
+	private Prop middleProp;
 
 	private Player[] players;
 
@@ -21,14 +22,16 @@ public class Board {
 		this.distributeCards();
 	}
 
-<<<<<<< HEAD
-=======
 	public Prop[] getCardsOfPlayer(int id) {
 		return null;
 	}
-	
+
 	public int getTrickPileLength() {
 		return tricks.size();
+	}
+
+	public Prop getMiddleProp() {
+		return this.middleProp;
 	}
 
 	public void distributeCards() {
@@ -48,11 +51,12 @@ public class Board {
 			}
 		}
 
+		this.middleProp = allProps[ind];
+
 		for (int i = 0; i < playersProps.length; i++) {
 			players[i].setProps(playersProps[i]);
 		}
 	}
->>>>>>> 4c87daf8e5153920c4a1a5b09b9f1397c468037d
 
 	public void createCards() {
 
@@ -106,34 +110,9 @@ public class Board {
 		// printTricks();
 	}
 
-
-	
 	public Prop[] getCardsOfPlayer(int id, int numProp) {
 		return null;
 	}
-
-	public void distributeCards() {
-		this.playersProps = new Prop[players.length][];
-
-		for (int i = 0; i < 3; i++) {
-			this.playersProps[i] = new Prop[2];
-		}
-
-		Collections.shuffle(Arrays.asList(allProps));
-
-		int ind = 0;
-		for (int i = 0; i < playersProps.length; i++) {
-			for (int j = 0; j < 2; j++) {
-				playersProps[i][j] = allProps[ind];
-				ind++;
-			}
-		}
-
-		for (int i = 0; i < playersProps.length; i++) {
-			players[i].setProps(playersProps[i]);
-		}
-	}
-
 
 	public void printTricks() {
 		Trick[] arr = new Trick[tricks.size()];
@@ -143,15 +122,16 @@ public class Board {
 			arr[i].print();
 		}
 	}
-	
-	public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
+
+	public void exchangeProps(int p1, int ind1, int p2, int ind2) { // Echange le prop d'indice ind1 du joueur d'id p1,
+																	// avec le prop d'indice ind2 du joueur p2
 	}
-	
-	public void giveTrick(int id) { //Donne le trick sur le dessus de depiledTricks au joueur d'id id
+
+	public void giveTrick(int id) { // Donne le trick sur le dessus de depiledTricks au joueur d'id id
 	}
 
 	public boolean comparePropsToTrick() {
-		return false; //TEMPORAIRE
+		return false; // TEMPORAIRE
 	}
 
 	public Prop createCopy(Prop prop) {
@@ -168,14 +148,16 @@ public class Board {
 	public void depile() {
 	}
 
-	public void revealProp(int id) { //Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on retourne sont other prop.
+	public void revealProp(int id) { // Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on
+										// retourne sont other prop.
 	}
-	
-	public void showAllProps(int id) { //Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
-		
+
+	public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le
+										// tour
+
 	}
-	
-	public void hideAllProps(int id) { //Retourne face cachée tous les props du joueur en cas de tour réussi
+
+	public void hideAllProps(int id) { // Retourne face cachée tous les props du joueur en cas de tour réussi
 	}
 
 	Prop[] getProps() {
@@ -188,6 +170,10 @@ public class Board {
 		// Automatically generated method. Please delete this comment before entering
 		// specific code.
 		this.allProps = value;
+	}
+	
+	void print() { //Affiche toutes les cartes des joueurs en fonction de leur visibilité
+		
 	}
 
 }

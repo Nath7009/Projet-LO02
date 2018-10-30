@@ -59,66 +59,82 @@ public class Game {
 	}
 
 	private void playTurn() {
-		Player p = players[tour%3];
+		Player p = players[tour % 3];
 		boolean playerIn;
 		int playerChoice = 0;
 
 		if (p instanceof Human) {
 			System.out.println("C'est le tour de " + p.getName());
-			playerIn = p.speak("Retourner un trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion d'int en booleen
+			playerIn = p.speak("Retourner un trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion
+																										// d'int en
+																										// booleen
 
-			//RETOURNER UN TRICK ?
+			// RETOURNER UN TRICK ?
 			if (playerIn) {
 				board.depile();
 			}
-			
-			//CHOISIR SA CARTE A ECHANGER 
+
+			// CHOISIR SA CARTE A ECHANGER
 			int ind1 = -1;
 			int ind2 = -1;
 			int p2 = -1;
 			playerChoice = p.speak("Choisir la carte à échanger", 2, players, 'p', keyboard);
-			
-			if(playerChoice >= 0) {
+
+			if (playerChoice >= 0) {
 				ind1 = playerChoice;
-			}
-			else {
+			} else {
 				System.out.println("Une erreur est survenue dans la réception des cartes à échanger");
 			}
-			
-			//CHOISIR LA CARTE ADVERSE A ECHANGER
+
+			// CHOISIR LA CARTE ADVERSE A ECHANGER
 			playerChoice = p.speak("Choisir la carte adverse à échanger", 4, players, 'n', keyboard);
-			
-			if(playerChoice >= 0) {
-				p2 = (playerChoice/2 + 1 + p.getId())%3; //Normalement cette ligne fonctionne, mais certains bugs peuvent venir de là
-				ind2 = playerChoice%2;
+
+			if (playerChoice >= 0) {
+				p2 = (playerChoice / 2 + 1 + p.getId()) % 3; // Normalement cette ligne fonctionne, mais certains bugs
+																// peuvent venir de là
+				ind2 = playerChoice % 2;
 			}
-			
-			//ECHANGE DES PROPS
+
+			// ECHANGE DES PROPS
 			board.exchangeProps(p.getId(), ind1, p2, ind2);
-			
-			//PERFORMER LE TRICK
-			playerIn = p.speak("Performer le trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion d'int en booleen
-			
-			if(playerIn) { //Si le joueur souhaite performer le trick
-				boolean trickSucessfull = board.comparePropsToTrick();
-				if(trickSucessfull) { //Si le joueur a réussi le trick
-					board.showAllProps(p.getId()); //On montre ses cartes
-					
-					//TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus longtemps
-					
-					board.giveTrick(p.getId()); //On lui donne le trick
-					board.hideAllProps(p.getId()); //On cache ses cartes
-				}
-				else { //Si le joueur rate le trick
+
+			// PERFORMER LE TRICK
+			playerIn = p.speak("Performer le trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion
+																										// d'int en
+																										// booleen
+			boolean trickSuccessful = false;
+
+			if (playerIn) { // Si le joueur souhaite performer le trick
+				trickSuccessful = board.comparePropsToTrick();
+				if (trickSuccessful) { // Si le joueur a réussi le trick
+					board.showAllProps(p.getId()); // On montre ses cartes
+
+					// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
+					// longtemps
+
+					board.giveTrick(p.getId()); // On lui donne le trick
+					board.hideAllProps(p.getId()); // On cache ses cartes
+				} else { // Si le joueur rate le trick
 					board.revealProp(p.getId());
 				}
-			}
-			else { //Le joueur ne souhaite pas faire le trick
+			} else { // Le joueur ne souhaite pas faire le trick
 				board.revealProp(p.getId());
 			}
-			
-			//RESTE A FAIRE L'ECHANGE DES CARTES EN CAS DE SUCCES DU TRICK
 
+			// ECHANGE DES CARTES EN CAS DE SUCCES DU TRICK
+			if (trickSuccessful) {
+				System.out.println("Etant donné que vous avez réalisé le tour, vous pouvez échanger vos cartes avec la carte du milieu");
+				System.out.println("La carte du milieu est :");
+				board.getMiddleProp().print();
+				playerChoice = p.speak("Avec quel prop voulez vous échanger le prop du milieu ?", 3, players, 'a', keyboard);
+				if(playerChoice == 0) { //On échange le trick de gauche avec celui du milieu
+					board.exchangeProps(p.getId(), 0, -1, 0);
+				}
+				else if(playerChoice == 1) { //On échange le trick de droite avec celui du milieu
+					board.exchangeProps(p.getId(), 1, -1, 0);
+				}
+				board.hideAllProps(p.getId()); //Au cas où le trick du milieu était visible
+			}
 		}
 
 		else {
