@@ -125,6 +125,7 @@ public class Board {
 
 	public void exchangeProps(int p1, int ind1, int p2, int ind2) { // Echange le prop d'indice ind1 du joueur d'id p1,
 																	// avec le prop d'indice ind2 du joueur p2
+		//On peut échanger des props avec la pile du milieu avec cette méthode, son id est de -1
 	}
 
 	public void giveTrick(int id) { // Donne le trick sur le dessus de depiledTricks au joueur d'id id

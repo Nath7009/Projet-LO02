@@ -37,27 +37,6 @@ public class Player {
 	public void chooseTrick() {
 	}
 	
-	public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
-	//On peut échanger des props avec la pile du milieu avec cette méthode, son id est de -1
-	}
-	
-	public void giveTrick(int id) { //Donne le trick sur le dessus de depiledTricks au joueur d'id id
-	}
-	
-	public boolean comparePropsToTrick() {
-		return false; //TEMPORAIRE
-	}
-	
-	public void revealProp(int id) { //Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on retourne sont other prop.
-	}
-	
-	public void showAllProps(int id) { //Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
-		
-	}
-	
-	public void hideAllProps(int id) { //Retourne face cachée tous les props du joueur en cas de tour réussi
-	}
-
 	//choiceNumb = nombre de réponses possibles
 	// typeOfQuestion = b pour oui/non, 
 	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion, Scanner keyboard) { 
