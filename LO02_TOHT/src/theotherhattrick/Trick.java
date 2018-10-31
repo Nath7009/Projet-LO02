@@ -13,6 +13,15 @@ public class Trick {
 		this.points = points;
 	}
 
+	public Prop[][] getIngredients() {
+		return ingredients;
+	}
+	public Prop getIngredient(int indRL, int ind) {
+		return ingredients[indRL][ind];
+	}
+
+
+
 	public void print() {
 		System.out.println(this.name + " composé de :");
 		for (int i = 0; i < ingredients.length; i++) {

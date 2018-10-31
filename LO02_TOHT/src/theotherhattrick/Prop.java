@@ -28,6 +28,10 @@ public class Prop {
 		return this.name;
 	}
 
+	public int getType() {
+		return this.type;
+	}
+
 	public Prop clone() {
 		try {
 			return (Prop) super.clone();

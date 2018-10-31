@@ -127,11 +127,6 @@ public class Board {
 		}
 	}
 
-	public void exchangeProps(int p1, int ind1, int p2, int ind2) { // Echange le prop d'indice ind1 du joueur d'id p1,
-																	// avec le prop d'indice ind2 du joueur p2
-		//On peut échanger des props avec la pile du milieu avec cette méthode, son id est de -1
-	}
-
 	/*	Echange la position de 2 props 
 	 * 	la version où l'on utilise createCopy() provoque plusieurs erreurs de type java.lang.CloneNotSupportedException
 	 * 	La version où l'on utilise directement les accesseurs est fonctionnelle.
@@ -155,9 +150,58 @@ public class Board {
 	public void giveTrick(int id) { // Donne le trick sur le dessus de depiledTricks au joueur d'id id
 	}
 
-	public boolean comparePropsToTrick() {
-		return false; // TEMPORAIRE
+	/* Compare les prop de la main d'un joueur avec les props figurant sur le sort du dessus du Stack depiledTricks
+	 * 
+	 */
+	public boolean comparePropsToTrick(int id){
+		int iT1= 0;
+		int iT2;
+		boolean match = false;
+		Prop tProp;
+		
+		Prop cmp = players[id].getHand(0);
+		while(match == false && iT1 < 2) {
+			iT2 = 0;
+			while(match == false && iT2 < 2) {
+				tProp = depiledTricks.peek().getIngredient(iT1, iT2);
+				iT2++;
+				if(cmp.getType() == tProp.getType()) {
+					match = true;
+				}
+				
+			}
+			iT1++;
+		}
+		System.out.println(iT1);
+		System.out.println(match);
+		if(match == true) {
+			match = false;
+			cmp = players[id].getHand(1);
+			iT2 = 0;
+			iT1 = iT1% 2; // on va regarder les props du trick encore libres
+			System.out.println(iT1);
+			while(match == false && iT2 < 2) {
+				tProp = depiledTricks.peek().getIngredient(iT1, iT2);
+				if(cmp.getType() == tProp.getType()) {
+					match = true;
+				}
+				iT2++;
+			}
+			if(match == true) {
+				System.out.println("Vous avez réussi le tour ! ");
+				return match;
+			}
+			else {
+				System.out.println("Vous n'avez pas réussi le tour. ");
+				return match;
+			}
+		}
+		else {
+			System.out.println("Vous n'avez pas réussi le tour. ");
+			return match;
+		}
 	}
+}
 
 	public Prop createCopy(Prop prop) {
 		return prop.clone();
