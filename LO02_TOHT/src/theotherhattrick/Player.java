@@ -1,11 +1,13 @@
 package theotherhattrick;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Player {
 	private int id;
 	private String name;
 	private Prop[] hand;
+	private Stack<Trick> successPile = new Stack();
 
 	public Player(String name, int id) {
 		this.name = name;
@@ -17,7 +19,7 @@ public class Player {
 	}
 
 	public void setHand(Prop[] props) {
-		this.props = props;
+		this.hand = props;
 	}
 
 	public void setHand(Prop p, int ind) {
@@ -25,13 +27,23 @@ public class Player {
 	}
 	
 	public Prop getProp(int ind) {
-		return props[ind];
+		return hand[ind];
 	}
 	
 	public int getId() {
 		return this.id;
 	}
+
+	public boolean isEmpty() {
+		return successPile.empty();
+	}
+
+
 	
+	public void pushTrick( Trick trick){
+		successPile.add(trick);
+	}
+
 	public void exchangeProps() {
 	}
 
@@ -171,8 +183,8 @@ public class Player {
 
 	public void printProps() {
 		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
-		for (int i = 0; i < props.length; i++) {
-			props[i].print();
+		for (int i = 0; i < hand.length; i++) {
+			hand[i].print();
 		}
 	}
 

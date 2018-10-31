@@ -30,6 +30,11 @@ public class Board {
 		return tricks.size();
 	}
 
+	public boolean depiledIsEmpty() {
+		return depiledTricks.empty();
+	}
+	
+
 	public Prop getMiddleProp() {
 		return this.middleProp;
 	}
@@ -127,7 +132,8 @@ public class Board {
 		}
 	}
 
-	/*	Echange la position de 2 props 
+	/*	
+	 *	Echange la position de 2 props 
 	 * 	la version où l'on utilise createCopy() provoque plusieurs erreurs de type java.lang.CloneNotSupportedException
 	 * 	La version où l'on utilise directement les accesseurs est fonctionnelle.
 	 */
@@ -147,11 +153,15 @@ public class Board {
 		}
 	}
 
-	public void giveTrick(int id) { // Donne le trick sur le dessus de depiledTricks au joueur d'id id
+	/* 
+	 * 	Donne le trick du dessus de depiledTricks au joueur d'id id
+	 */
+	public void giveTrick(int id) {
+		players[id].pushTrick(depiledTricks.pop());
 	}
 
-	/* Compare les prop de la main d'un joueur avec les props figurant sur le sort du dessus du Stack depiledTricks
-	 * 
+	/* 
+	 * 	Compare les prop de la main d'un joueur avec les props figurant sur le sort du dessus du Stack depiledTricks
 	 */
 	public boolean comparePropsToTrick(int id){
 		int iT1= 0;
@@ -215,6 +225,7 @@ public class Board {
 	}
 
 	public void depile() {
+
 	}
 
 	public void revealProp(int id) { // Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on
