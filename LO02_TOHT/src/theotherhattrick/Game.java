@@ -127,10 +127,10 @@ public class Game {
 				System.out.println("La carte du milieu est :");
 				board.getMiddleProp().print();
 				playerChoice = p.speak("Avec quel prop voulez vous échanger le prop du milieu ?", 3, players, 'a', keyboard);
-				if(playerChoice == 0) { //On échange le trick de gauche avec celui du milieu
+				if(playerChoice == 0) { //On échange le prop de gauche avec celui du milieu
 					board.exchangeProps(p.getId(), 0, -1, 0);
 				}
-				else if(playerChoice == 1) { //On échange le trick de droite avec celui du milieu
+				else if(playerChoice == 1) { //On échange le prop de droite avec celui du milieu
 					board.exchangeProps(p.getId(), 1, -1, 0);
 				}
 				board.hideAllProps(p.getId()); //Au cas où le trick du milieu était visible

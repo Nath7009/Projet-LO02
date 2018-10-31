@@ -34,6 +34,10 @@ public class Board {
 		return this.middleProp;
 	}
 
+	public void setMiddleProp(Prop middleProp){
+		this.middleProp = middleProp;
+	}
+
 	public void distributeCards() {
 		this.playersProps = new Prop[players.length][];
 
@@ -128,6 +132,26 @@ public class Board {
 		//On peut échanger des props avec la pile du milieu avec cette méthode, son id est de -1
 	}
 
+	/*	Echange la position de 2 props 
+	 * 	la version où l'on utilise createCopy() provoque plusieurs erreurs de type java.lang.CloneNotSupportedException
+	 * 	La version où l'on utilise directement les accesseurs est fonctionnelle.
+	 */
+	public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
+		Prop tmp1 = players[p1].getHand(ind1);
+		
+		if(p2 == -1) { // Si on veut échanger le prop du joueur dont c'est le tour avec celui d'un autre joueur
+			players[p1].setHand(this.getMiddleProp() ,ind1);
+			setMiddleProp(tmp1);
+		}
+		else if (p2 == (p1+1)%3 || p2 == (p1+2)%3) { // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu 
+			players[p1].setHand(players[p2].getHand(ind2), ind1);
+			players[p2].setHand(tmp1, ind2);
+		}
+		else {
+			System.out.println("ERROR : undefined p2 value");
+		}
+	}
+
 	public void giveTrick(int id) { // Donne le trick sur le dessus de depiledTricks au joueur d'id id
 	}
 
@@ -150,7 +174,7 @@ public class Board {
 	}
 
 	public void revealProp(int id) { // Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on
-										// retourne sont other prop.
+										// retourne son other prop.
 	}
 
 	public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le

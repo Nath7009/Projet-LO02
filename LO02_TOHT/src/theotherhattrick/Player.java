@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Player {
 	private int id;
 	private String name;
-	private Prop[] props;
+	private Prop[] hand;
 
 	public Player(String name, int id) {
 		this.name = name;
@@ -16,8 +16,12 @@ public class Player {
 		return this.name;
 	}
 
-	public void setProps(Prop[] props) {
+	public void setHand(Prop[] props) {
 		this.props = props;
+	}
+
+	public void setHand(Prop p, int ind) {
+		this.hand[ind] = p;
 	}
 	
 	public Prop getProp(int ind) {
