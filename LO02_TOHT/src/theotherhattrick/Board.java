@@ -228,9 +228,38 @@ public class Board {
 
 	}
 
-	public void revealProp(int id) { // Si le joueur n'a aucun prop révélé, on lui demande son avis, sinon, on
-										// retourne son other prop.
-	}
+	public void revealProp(int id) {
+		int choice = 0, i, hNum = 0;
+		
+		System.out.println("Votre main, " + players[id].getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachés
+		for(i = 0; i < 2; i++) {
+			players[id].getHand(i).print();
+			if(players[id].getHand(i).getState() == false) {
+				hNum ++;
+				if(i == 0) {
+					choice = 0;
+				}
+				else if (i == 1) {
+					choice = 1;
+				}
+				else {
+					System.out.println("ERROR : choice value undefined.");
+					choice = 2;
+				}
+			}
+		} 
+		
+		if(hNum == 2) {
+			choice = players[0].speak("\nQuel prop voulez-vous révéler ?", 2, players, 'p', keyboard);
+			players[id].getHand(choice).unhide();
+		}
+		else if(hNum == 1) {
+			System.out.println("Vous n'avez que le prop " + players[id].getHand(choice).getName() + " qui soit caché. " + players[id].getHand(choice).getName() +" est maintenant visible.");
+			players[id].getHand(choice).unhide();
+		}
+		else {
+			System.out.println("Tous vos props sont déjà visibles. Aucune action n'est effectuée."); 
+		}
 
 	public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le
 										// tour

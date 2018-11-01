@@ -26,7 +26,7 @@ public class Player {
 		this.hand[ind] = p;
 	}
 	
-	public Prop getProp(int ind) {
+	public Prop getHand(int ind) {
 		return hand[ind];
 	}
 	
