@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class Board {
 
@@ -63,7 +64,7 @@ public class Board {
 		this.middleProp = allProps[ind];
 
 		for (int i = 0; i < playersProps.length; i++) {
-			players[i].setProps(playersProps[i]);
+			players[i].setHand(playersProps[i]);
 		}
 	}
 
@@ -110,6 +111,7 @@ public class Board {
 		// de tas
 
 		tricks = new Stack<Trick>();
+		depiledTricks = new Stack<Trick>();
 
 		for (int i = tTricks.size() - 1; i >= 0; i--) { // On parcourt la liste à l'envers pour mettre The Other Hat
 														// Trick en dernier
@@ -130,6 +132,13 @@ public class Board {
 		for (int i = 0; i < arr.length; i++) {
 			arr[i].print();
 		}
+	}
+	
+	public void printTopTrick() {
+		Trick topTrick = this.depiledTricks.pop();
+		System.out.println("Le trick sur le dessus de la pile est :");
+		topTrick.print();
+		this.depiledTricks.push(topTrick);
 	}
 
 	/*	
@@ -211,7 +220,7 @@ public class Board {
 			return match;
 		}
 	}
-}
+
 
 	public Prop createCopy(Prop prop) {
 		return prop.clone();
@@ -225,10 +234,11 @@ public class Board {
 	}
 
 	public void depile() {
-
+		Trick temp = this.tricks.pop();
+		this.depiledTricks.push(temp);
 	}
 
-	public void revealProp(int id) {
+	public void revealProp(int id, Scanner keyboard) {
 		int choice = 0, i, hNum = 0;
 		
 		System.out.println("Votre main, " + players[id].getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachés
@@ -260,6 +270,7 @@ public class Board {
 		else {
 			System.out.println("Tous vos props sont déjà visibles. Aucune action n'est effectuée."); 
 		}
+	}
 
 	public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le
 										// tour

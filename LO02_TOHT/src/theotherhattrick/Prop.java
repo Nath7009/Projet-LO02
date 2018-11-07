@@ -42,8 +42,12 @@ public class Prop {
 		}
 	}
 
-	public void print() {
+	public void printDebug() {
 		System.out.println("nom : " + this.name + " type : " + this.type + " caché ? :" + this.isVisible);
+	}
+	
+	public void print() {
+		System.out.println("nom : " + this.name);
 	}
 
 }
