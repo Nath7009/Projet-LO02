@@ -38,7 +38,7 @@ public class Game {
 		} while (nbHumains > 3);
 
 		for (int i = 0; i < nbHumains; i++) {
-			System.out.println("Entrer le nom du joueur numéro " + (i + 1));
+			System.out.println("Entrer le nom du joueur numï¿½ro " + (i + 1));
 			nom = keyboard.nextLine();
 			players[i] = new Human(nom, i);
 		}
@@ -51,8 +51,8 @@ public class Game {
 		board = new Board(players, rules);
 		board.depile();
 
-		// Gestion du tour de jeu : faire jouer chaque joueur tour aprà¨s tour
-		// jusqu'à  ce
+		// Gestion du tour de jeu : faire jouer chaque joueur tour aprï¿½s tour
+		// jusqu'ï¿½ ce
 		// que la pile de tricks soit vide
 		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
 		// l'affiche
@@ -70,144 +70,231 @@ public class Game {
 		boolean playerIn;
 		int playerChoice = 0;
 
-		//if (p instanceof Human || p instanceof Robot) {
-			System.out.println("C'est le tour de " + p.getName());
-			System.out.println("Votre jeu est :");
-			p.printProps();
-			
-			board.printTopTrick(); //On affiche le trick sur le dessus de la pile pour que le joueur puisse faire son choix
-			playerIn = p.speak("Retourner un trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion
-																		// d'int en booleen
-			// RETOURNER UN TRICK ?
-			if (playerIn) {
-				board.depile();
-			}
+		// if (p instanceof Human || p instanceof Robot) {
+		System.out.println("C'est le tour de " + p.getName());
+		System.out.println("Votre jeu est :");
+		p.printProps();
 
-			// CHOISIR SA CARTE A ECHANGER
-			int ind1 = -1;
-			int ind2 = -1;
-			int p2 = -1;
-			playerChoice = p.speak("Choisir la carte à  échanger", 2, players, 'p', keyboard);
+		board.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
+								// son choix
+		playerIn = p.speak("Retourner un trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion
+		// d'int en booleen
+		// RETOURNER UN TRICK ?
+		if (playerIn) {
+			board.depile();
+		}
 
-			if (playerChoice >= 0) {
-				ind1 = playerChoice;
-			} else {
-				System.out.println("Une erreur est survenue dans la réception des cartes à échanger");
-			}
+		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
+		exchangePlayers(p);
+		p.printProps();
 
-			// CHOISIR LA CARTE ADVERSE A ECHANGER
-			playerChoice = p.speak("Choisir la carte adverse à  échanger", 4, players, 'n', keyboard);
+		// PERFORMER LE TRICK
+		playerIn = p.speak("Performer le trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion
+																									// d'int en
+																									// booleen
+		boolean trickSuccessful = false;
 
-			if (playerChoice >= 0) {
-				p2 = (playerChoice / 2 + 1 + p.getId()) % 3; // Normalement cette ligne fonctionne, mais certains bugs
-																// peuvent venir de là 
-				ind2 = playerChoice % 2;
-			}
+		if (playerIn) { // Si le joueur souhaite performer le trick
 
-			// ECHANGE DES PROPS
-			board.exchangeProps(p.getId(), ind1, p2, ind2);
-			p.printProps();
+			trickSuccessful = board.comparePropsToTrick(p.getId());
 
-			// PERFORMER LE TRICK
-			playerIn = p.speak("Performer le trick ?", 2, players, 'b', keyboard) == 1 ? true : false; // Conversion
-																										// d'int en
-																										// booleen
-			boolean trickSuccessful = false;
+			if (trickSuccessful) { // Si le joueur a rï¿½ussi le trick
+				System.out.println("Vous avez rÃ©ussi le tour");
+				board.showAllProps(p.getId()); // On montre ses cartes
 
-			if (playerIn) { // Si le joueur souhaite performer le trick
-				trickSuccessful = board.comparePropsToTrick(p.getId());
-				if (trickSuccessful) { // Si le joueur a réussi le trick
-					board.showAllProps(p.getId()); // On montre ses cartes
+				// TODO Ajouter un dï¿½lai afin que le joueur montre ses cartes pendant plus
+				// longtemps
 
-					// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
-					// longtemps
+				board.hideAllProps(p.getId()); // On cache ses cartes
+				System.out.print("Vous pouvez Ã©changer l'une de vos cartes avec ");
 
-					board.giveTrick(p.getId()); // On lui donne le trick
-					board.hideAllProps(p.getId()); // On cache ses cartes
-				} else { // Si le joueur rate le trick
+				if (this.rulesSwissKnife) {
+					if (this.rulesCarrot) {
+						if (this.board.contains("Carrot")) {
+							System.out.println("l'une des cartes du milieu ou une carte de vos adversaires");
+							// ECHANGE AVEC TOUT LE MONDE ET LES DEUX CARTES DU MILIEU
+							exchangeWithAll(p);
+						} else { // si on a pas la carte carrot
+							System.out.println("l'une des deux cartes du milieu");
+							// ECHANGE AVEC LES DEUX CARTES DU MILIEU
+							exchangeMiddle2(p);
+						}
+
+					} else { // si on a pas la rÃ¨gle carrot
+						System.out.println("l'une des deux cartes du milieu");
+						// ECHANGE AVEC LES DEUX CARTES DU MILIEU
+						exchangeMiddle2(p);
+					}
+				} else { // si on a pas la variante couteau suisse
+					if (this.rulesCarrot) {
+						if (this.board.contains("Carrot")) {
+							System.out.println("la carte du milieu ou une carte de vos adversaires");
+							// ECHANGE AVEC TOUT LE MONDE ET LA CARTE DU MILIEU
+							exchangePlayersMiddle(p);
+						} else { // si on a pas la carte carrot
+							System.out.println("la carte du milieu");
+							exchangeMiddle(p);
+							// ECHANGLE MILIEU STANDART
+						}
+					} else {
+						System.out.println("la carte du milieu");
+						// ECHANGE MILIEU STANDART
+						exchangeMiddle(p);
+					}
+				}
+
+				// DONNER LE TRICK AU JOUEUR
+				board.giveTrick(p.getId()); // On lui donne le trick
+
+				/*
+				 * System.out.
+				 * println("Etant donnï¿½ que vous avez rï¿½alisï¿½ le tour, vous pouvez ï¿½changer vos cartes avec la carte du milieu"
+				 * ); System.out.println("La carte du milieu est :");
+				 * board.getMiddleProp().print(); playerChoice =
+				 * p.speak("Avec quel prop voulez vous ï¿½changer le prop du milieu ?", 3,
+				 * players, 'a', keyboard); if (playerChoice == 0) { // On ï¿½change le prop de
+				 * gauche avec celui du milieu board.exchangeProps(p.getId(), 0, -1, 0); } else
+				 * if (playerChoice == 1) { // On ï¿½change le prop de droite avec celui du milieu
+				 * board.exchangeProps(p.getId(), 1, -1, 0); } board.hideAllProps(p.getId()); //
+				 * Au cas oï¿½ le trick du milieu ï¿½tait visible
+				 */
+
+			} else { // Si le joueur rate le trick
+				System.out.println("Vous avez Ã©chouÃ© le tour");
+				if (this.rulesLettuce && this.board.contains("Lettuce")) { // Si
+					// retourner props, mais pas forcÃ©ment cacher
+					board.returnProp(p.getId(), this.keyboard);
+
+				} else {
 					board.revealProp(p.getId(), this.keyboard);
 				}
-			} else { // Le joueur ne souhaite pas faire le trick
-				board.revealProp(p.getId(), this.keyboard);
 			}
-			
-			boolean hasCarrot = this.board.contains("Carrot");
 
-			// ECHANGE DES CARTES EN CAS DE SUCCES DU TRICK
-			if (trickSuccessful) {
-				boolean hasCarrot = this.board.contains("Carrot");
-				
-				
-				System.out.println("Etant donné que vous avez réalisé le tour, vous pouvez échanger vos cartes avec la carte du milieu");
-				System.out.println("La carte du milieu est :");
-				board.getMiddleProp().print();
-				playerChoice = p.speak("Avec quel prop voulez vous échanger le prop du milieu ?", 3, players, 'a', keyboard);
-				if(playerChoice == 0) { //On échange le prop de gauche avec celui du milieu
-					board.exchangeProps(p.getId(), 0, -1, 0);
-				}
-				else if(playerChoice == 1) { //On échange le prop de droite avec celui du milieu
-					board.exchangeProps(p.getId(), 1, -1, 0);
-				}
-				board.hideAllProps(p.getId()); //Au cas où le trick du milieu était visible
-			}
-	//	}
+		} else { // Le joueur ne souhaite pas faire le trick
+			board.revealProp(p.getId(), this.keyboard);
+		}
 
-	// else {
-	// System.out.println("Le comportements des robots n'a pas encore été
-	// implémenté");
-	// }
+		boolean hasCarrot = this.board.contains("Carrot");
 
-	this.nextTurn();
+		// ECHANGE DES CARTES EN CAS DE SUCCES DU TRICK
+		if (trickSuccessful) {
+
+		}
+
+		else
+			// }
+
+			// else {
+			// System.out.println("Le comportements des robots n'a pas encore ï¿½tï¿½
+			// implï¿½mentï¿½");
+			// }
+
+			this.nextTurn();
 
 	}
-	
-	public static boolean[] getVariants(){
-		boolean[] variants = new boolean[3];
-		variants[0] = this.rulesSwissKnife;
-		variants[1] = this.rulesCarrot;
-		variants[2] = this.rulesLettuce;
-		return variants;
-	
-	}
 
-	public boolean[] askRules(){
+	/*
+	 * public static boolean[] getVariants() { boolean[] variants = new boolean[3];
+	 * variants[0] = this.rulesSwissKnife; variants[1] = this.rulesCarrot;
+	 * variants[2] = this.rulesLettuce; return variants;
+	 * 
+	 * }
+	 */
+
+	public boolean[] askRules() {
 		boolean[] rules = new boolean[3];
-		
-		System.out.println("Veuillez choisir les règles avec lesquelles vous voulez jouer");
-		
-		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
-		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points à l'exécution du trick");
+
+		System.out.println("Veuillez choisir les rï¿½gles avec lesquelles vous voulez jouer");
+
+		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'ï¿½tre utilisï¿½e pour rï¿½aliser n'importe quel trick");
+		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points ï¿½ l'exï¿½cution du trick");
 		System.out.println("Voulez vous utiliser cette extension ?");
 		rules[0] = this.getBool();
 		this.rulesSwissKnife = rules[0];
-		
-		System.out.println("La Carotte, permet d'échanger un props avec un autre joueur quand un tour est réussi en utilisant une carotte");
-		System.out.println("Voulez vous utiliser cette règle ?");
+
+		System.out.println("La Carotte, permet d'ï¿½changer un props avec un autre joueur quand un tour est rï¿½ussi en utilisant une carotte");
+		System.out.println("Voulez vous utiliser cette rï¿½gle ?");
 		rules[1] = this.getBool();
 		this.rulesCarrot = rules[1];
-		
-		System.out.println("La Laitue, quand un tour est raté, donne le choix au joueur de retourner au choix l'une de ses cartes");
-		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
-		System.out.println("Voulez vous utiliser cette règle ?");
-		
+
+		System.out.println("La Laitue, quand un tour contenant la laitue est ratï¿½, donne le choix au joueur de retourner au choix l'une de ses cartes");
+		System.out.println("Il a donc le choix de cacher une de ses cartes si elle ï¿½tait face visible");
+		System.out.println("Voulez vous utiliser cette rï¿½gle ?");
+
 		rules[2] = this.getBool();
 		this.rulesLettuce = rules[2];
-		
+
+		return rules;
 	}
 
-	public boolean getBool() { // Récupère un booléen du joueur qui crée la
+	public boolean getBool() { // Rï¿½cupï¿½re un boolï¿½en du joueur qui crï¿½e la
 								// partie
-		boolean answer = false;
+		String answer;
 		do {
 			System.out.println("Entrer y pour oui et n pour non : ");
 			answer = keyboard.nextLine();
 			answer.toLowerCase();
-		} while (ans.equals("y") && ans.equals("n"));
-		return answer;
+		} while (answer.equals("y") && answer.equals("n"));
+		return answer.equals("y") ? true : false;
 	}
 
 	private void nextTurn() {
 		this.tour++;
 	}
 
+	private void exchangeWithAll(Player p) { // Ã©change les cartes avec soit un autre joueur, soit avec les deux cartes du
+												// milieu
+		int propToChange, otherProp;
+		this.board.getMiddleProps(0).print();
+		this.board.getMiddleProps(1).print();
+		propToChange = p.speak("Lequel de vos props voulez vous Ã©changer ?", 2, this.players, 'p', this.keyboard);
+		otherProp = p.speak("Avec quel autre carte sur la table voulez vous Ã©changer cette carte ?", 6, players, 'v', keyboard);
+		// 0,1 pour le joueur de gauche
+		// 2,3 pour le joueur de droite
+		// -1,-2 pour les props du milieu
+		if (otherProp >= 0) {
+			int p2 = (otherProp / 2 + 1 + p.getId()) % 3; // Le joueur avec lequel on veut Ã©changer le prop
+			this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
+		} else {
+			this.board.exchangeProps(p.getId(), propToChange, -1, otherProp + 2);
+			// On Ã©change avec un prop du milieu, donc on passe otherProp dans les nombres
+			// positifs
+		}
+	}
+
+	private void exchangeMiddle2(Player p) { // Ã©change les cartes avec les deux cartes du milieu
+		int propToChange, otherProp;
+		propToChange = p.speak("Lequel de vos props voulez vous Ã©changer ?", 2, this.players, 'p', this.keyboard);
+		otherProp = p.speak("Avec quelle carte du milieu voulez vous l'Ã©changer ?", 2, players, 'p', keyboard);
+		this.board.exchangeProps(p.getId(), propToChange, -1, otherProp + 2);
+	}
+
+	private void exchangeMiddle(Player p) { // Ã©change une carte avec celle du milieu
+		int propToChange;
+		propToChange = p.speak("Lequel de vos props voulez vous Ã©changer ?", 2, this.players, 'p', this.keyboard);
+		this.board.exchangeProps(p.getId(), propToChange, -1, 0);
+	}
+
+	private void exchangePlayersMiddle(Player p) { // Ã©change une carte avec un autre joueur ou la carte du milieu
+		int propToChange, otherProp;
+		propToChange = p.speak("Lequel de vos props voulez vous Ã©changer ?", 2, this.players, 'p', this.keyboard);
+		otherProp = p.speak("Avec quelle carte du milieu ou de vos adversaire voulez vous l'Ã©changer ?", 5, players, 'v', keyboard);
+		// 0,1 pour le joueur de gauche
+		// 2,3 pour le joueur de droite
+		// -1 pour le prop du milieu
+		if (otherProp >= 0) {
+			int p2 = (otherProp / 2 + 1 + p.getId()) % 3; // Le joueur avec lequel on veut Ã©changer le prop
+			this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
+		} else {
+			this.board.exchangeProps(p.getId(), propToChange, -1, otherProp + 1);
+		}
+	}
+
+	private void exchangePlayers(Player p) {
+		int propToChange, otherProp;
+		propToChange = p.speak("Lequel de vos props voulez vous Ã©changer ?", 2, this.players, 'p', this.keyboard);
+		otherProp = p.speak("Avec quelle carte de vos adversaires souhaitez vous l'Ã©changer ?", 4, players, 'n', keyboard);
+		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
+		this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
+	}
 }
