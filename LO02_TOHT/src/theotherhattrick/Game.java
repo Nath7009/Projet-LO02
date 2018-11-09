@@ -9,6 +9,9 @@ public class Game {
 	private Player[] players;
 	private int tour; // Le joueur qui doit jouer
 	private Scanner keyboard;
+	private boolean rulesSwissKnife;
+	private boolean rulesCarrot;
+	private boolean rulesLettuce;
 
 	private Game() {
 	}
@@ -43,10 +46,13 @@ public class Game {
 			players[i] = new Robot(i);
 		}
 
-		board = new Board(players);
+		boolean rules[] = this.askRules();
+
+		board = new Board(players, rules);
 		board.depile();
 
-		// Gestion du tour de jeu : faire jouer chaque joueur tour aprà¨s tour jusqu'à  ce
+		// Gestion du tour de jeu : faire jouer chaque joueur tour aprà¨s tour
+		// jusqu'à  ce
 		// que la pile de tricks soit vide
 		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
 		// l'affiche
@@ -64,7 +70,7 @@ public class Game {
 		boolean playerIn;
 		int playerChoice = 0;
 
-		if (p instanceof Human || p instanceof Robot) {
+		//if (p instanceof Human || p instanceof Robot) {
 			System.out.println("C'est le tour de " + p.getName());
 			System.out.println("Votre jeu est :");
 			p.printProps();
@@ -124,9 +130,14 @@ public class Game {
 			} else { // Le joueur ne souhaite pas faire le trick
 				board.revealProp(p.getId(), this.keyboard);
 			}
+			
+			boolean hasCarrot = this.board.contains("Carrot");
 
 			// ECHANGE DES CARTES EN CAS DE SUCCES DU TRICK
 			if (trickSuccessful) {
+				boolean hasCarrot = this.board.contains("Carrot");
+				
+				
 				System.out.println("Etant donné que vous avez réalisé le tour, vous pouvez échanger vos cartes avec la carte du milieu");
 				System.out.println("La carte du milieu est :");
 				board.getMiddleProp().print();
@@ -139,13 +150,60 @@ public class Game {
 				}
 				board.hideAllProps(p.getId()); //Au cas où le trick du milieu était visible
 			}
-		}
+	//	}
 
-		else {
-			System.out.println("Le comportements des robots n'a pas encore été implémenté");
-		}
+	// else {
+	// System.out.println("Le comportements des robots n'a pas encore été
+	// implémenté");
+	// }
 
-		this.nextTurn();
+	this.nextTurn();
+
+	}
+	
+	public static boolean[] getVariants(){
+		boolean[] variants = new boolean[3];
+		variants[0] = this.rulesSwissKnife;
+		variants[1] = this.rulesCarrot;
+		variants[2] = this.rulesLettuce;
+		return variants;
+	
+	}
+
+	public boolean[] askRules(){
+		boolean[] rules = new boolean[3];
+		
+		System.out.println("Veuillez choisir les règles avec lesquelles vous voulez jouer");
+		
+		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
+		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points à l'exécution du trick");
+		System.out.println("Voulez vous utiliser cette extension ?");
+		rules[0] = this.getBool();
+		this.rulesSwissKnife = rules[0];
+		
+		System.out.println("La Carotte, permet d'échanger un props avec un autre joueur quand un tour est réussi en utilisant une carotte");
+		System.out.println("Voulez vous utiliser cette règle ?");
+		rules[1] = this.getBool();
+		this.rulesCarrot = rules[1];
+		
+		System.out.println("La Laitue, quand un tour est raté, donne le choix au joueur de retourner au choix l'une de ses cartes");
+		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
+		System.out.println("Voulez vous utiliser cette règle ?");
+		
+		rules[2] = this.getBool();
+		this.rulesLettuce = rules[2];
+		
+	}
+
+	public boolean getBool() { // Récupère un booléen du joueur qui crée la
+								// partie
+		boolean answer = false;
+		do {
+			System.out.println("Entrer y pour oui et n pour non : ");
+			answer = keyboard.nextLine();
+			answer.toLowerCase();
+		} while (ans.equals("y") && ans.equals("n"));
+		return answer;
 	}
 
 	private void nextTurn() {
