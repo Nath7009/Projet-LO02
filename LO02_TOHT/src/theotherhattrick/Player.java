@@ -6,7 +6,7 @@ import java.util.Stack;
 public class Player {
 	private int id;
 	private String name;
-	private Prop[] hand;
+	private Prop[] hand = new Prop[2];
 	private Stack<Trick> successPile = new Stack<Trick>();
 
 	public Player(String name, int id) {

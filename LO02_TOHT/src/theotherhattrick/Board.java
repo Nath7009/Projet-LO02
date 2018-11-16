@@ -35,8 +35,12 @@ public class Board {
 	}
 	
 
-	public Prop getMiddleProp() {
+	public ArrayList<Prop> getMiddleProp() {
 		return this.middleProp;
+	}
+
+	public Prop getMiddleProp(int i){
+		return this.middleProp.get(i);
 	}
 	
 	public boolean contains(String element) {
@@ -44,39 +48,36 @@ public class Board {
 		//Retourne vrai si le trick visible contient un ÈlÈment de type element
 	}
 
-	public void setMiddleProp(Prop middleProp){
+	public void setMiddleProp(ArrayList<Prop> middleProp){
 		this.middleProp = middleProp;
 	}
 
-	public void distributeCards() {
-		this.playersProps = new Prop[players.length][];
+	public void setMiddleProp(Prop prop, int i){
+		this.middleProp.set(i, prop);
+	}
 
-		for (int i = 0; i < 3; i++) {
-			this.playersProps[i] = new Prop[2];
+	public void distributeProps(boolean[] rules) {
+		middleProp = new ArrayList<Prop>(1);
+		this.middleProp.add(allProps.pop());
+		if(rules[0]) { // Si on joue avec la variante du couteau suisse, on Veut une carte supplÈmentaire au milieu
+			middleProp.ensureCapacity(2);
+			this.middleProp.add(allProps.pop());
 		}
-
-		Collections.shuffle(Arrays.asList(allProps));
-
-		int ind = 0;
-		for (int i = 0; i < playersProps.length; i++) {
-			for (int j = 0; j < 2; j++) {
-				playersProps[i][j] = allProps[ind];
-				ind++;
+		for(int i = 0; i < 2; i++) {
+			for(Player player : players) {
+				player.setHand(allProps.pop(), i);
 			}
-		}
-
-		this.middleProp = allProps[ind];
-
-		for (int i = 0; i < playersProps.length; i++) {
-			players[i].setHand(playersProps[i]);
 		}
 	}
 
-	public void createCards() {
-
-		// Cr√©ation des props
-		allProps = new Prop[7];
-
+	public void createCards(boolean[] rules) {
+		// CrÈation des props
+		if(rules[0]) {
+			allProps = new Stack<Prop>(8);
+		}
+		else {
+			allProps = new Stack<Prop>(7);
+		}
 		Prop carrot = new Prop("Carrot", 1);
 		Prop lettuce = new Prop("Lettuce", 2);
 		Prop hat = new Prop("Hat", 3);
@@ -84,13 +85,17 @@ public class Board {
 		Prop oRabbit = new Prop("The Other Rabbit", 5);
 
 		for (int i = 0; i < 3; i++) {
-			allProps[i] = carrot;
+			allProps.add(carrot);
 		}
-
-		allProps[3] = lettuce;
-		allProps[4] = hat;
-		allProps[5] = rabbit;
-		allProps[6] = oRabbit;
+		allProps.add(lettuce);
+		allProps.add(hat);
+		allProps.add(rabbit);
+		allProps.add(oRabbit);
+		if(rules[0]) {
+			Prop swissKnife = new Prop("Magical Swiss-Army-Knife", 6);
+			allProps.add(swissKnife);
+		}
+		Collections.shuffle(allProps);
 
 		// Cr√©ation des tricks
 		ArrayList<Trick> tTricks = new ArrayList<Trick>(10);
@@ -282,10 +287,15 @@ public class Board {
 
 	public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien r√©aliser le
 										// tour
+		players[id].getHand(0).unhide();
+		players[id].getHand(1).unhide();
+		
 
 	}
 
 	public void hideAllProps(int id) { // Retourne face cach√©e tous les props du joueur en cas de tour r√©ussi
+		players[id].getHand(0).hide();
+		players[id].getHand(1).hide();
 	}
 
 	Prop[] getProps() {
