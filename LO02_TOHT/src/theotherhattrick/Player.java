@@ -7,7 +7,7 @@ public class Player {
 	private int id;
 	private String name;
 	private Prop[] hand;
-	private Stack<Trick> successPile = new Stack();
+	private Stack<Trick> successPile = new Stack<Trick>();
 
 	public Player(String name, int id) {
 		this.name = name;
@@ -38,7 +38,14 @@ public class Player {
 		return successPile.empty();
 	}
 
-
+	public boolean has(String card) {
+		for(int i=0;i<hand.length;i++) {
+			if(hand[i].getName().equals(card)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public void pushTrick( Trick trick){
 		successPile.add(trick);
@@ -55,9 +62,10 @@ public class Player {
 	
 	//choiceNumb = nombre de réponses possibles
 	// typeOfQuestion = b pour oui/non, 
-	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion, Scanner keyboard) { 
+	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion) { 
 		String ans = null;
 		int ansInt = -1;
+		Scanner keyboard = Game.keyboard;
 		System.out.println(text);
 		
 		switch(choiceNumb) {

@@ -20,8 +20,13 @@ public class Trick {
 		return ingredients[indRL][ind];
 	}
 
+	public int getPoints() {
+		return this.points;
+	}
 
-
+	public void decreaseValue() {
+		this.points--;
+	}
 	public void print() {
 		System.out.println(this.name + " composé de :");
 		for (int i = 0; i < ingredients.length; i++) {

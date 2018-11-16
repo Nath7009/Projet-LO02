@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 import java.util.Collections;
-import java.util.Scanner;
 
 public class Board {
 
@@ -38,6 +37,11 @@ public class Board {
 
 	public Prop getMiddleProp() {
 		return this.middleProp;
+	}
+	
+	public boolean contains(String element) {
+		return false; //TEMPORAIRE
+		//Retourne vrai si le trick visible contient un �l�ment de type element
 	}
 
 	public void setMiddleProp(Prop middleProp){
@@ -237,8 +241,12 @@ public class Board {
 		Trick temp = this.tricks.pop();
 		this.depiledTricks.push(temp);
 	}
+	
+	public void returnProp(int id) {
+		
+	}
 
-	public void revealProp(int id, Scanner keyboard) {
+	public void revealProp(int id) {
 		int choice = 0, i, hNum = 0;
 		
 		System.out.println("Votre main, " + players[id].getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachés
@@ -260,7 +268,7 @@ public class Board {
 		} 
 		
 		if(hNum == 2) {
-			choice = players[0].speak("\nQuel prop voulez-vous révéler ?", 2, players, 'p', keyboard);
+			choice = players[0].speak("\nQuel prop voulez-vous révéler ?", 2, players, 'p');
 			players[id].getHand(choice).unhide();
 		}
 		else if(hNum == 1) {
