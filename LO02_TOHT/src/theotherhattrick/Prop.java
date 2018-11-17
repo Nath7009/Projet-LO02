@@ -2,7 +2,7 @@ package theotherhattrick;
 
 public class Prop {
 
-	private int type; // Carrot = 1, Lettuce = 2, Hat = 3, Rabbit = 4, Other rabbit = 5
+	private int type; // Carrot = 1, Lettuce = 2, Hat = 3, Rabbit = 4, Other rabbit = 5, SwissArmyKnife = 
 	private String name;
 	private boolean isVisible; // false pour carte cachée et true pour carte visible
 

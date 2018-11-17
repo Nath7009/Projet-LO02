@@ -16,10 +16,10 @@ public class Board {
 
 	private Player[] players;
 
-	public Board(Player[] players) {
+	public Board(Player[] players, boolean[] rules) {
 		this.players = players;
-		this.createCards();
-		this.distributeCards();
+		this.createCards(rules);
+		this.distributeCards(rules);
 	}
 
 	public Prop[] getCardsOfPlayer(int id) {
@@ -175,6 +175,7 @@ public class Board {
 	 * 	Donne le trick du dessus de depiledTricks au joueur d'id id
 	 */
 	public void giveTrick(int id) {
+
 		players[id].pushTrick(depiledTricks.pop());
 	}
 
@@ -182,51 +183,53 @@ public class Board {
 	 * 	Compare les prop de la main d'un joueur avec les props figurant sur le sort du dessus du Stack depiledTricks
 	 */
 	public boolean comparePropsToTrick(int id){
-		int iT1= 0;
-		int iT2;
-		boolean match = false;
-		Prop tProp;
-		
-		Prop cmp = players[id].getHand(0);
-		while(match == false && iT1 < 2) {
+		int iT1= 0, iT2, ind = 0;
+		boolean match1 = false, match2 = false;
+		Prop tProp; // Les props figurant sur la carte Trick
+		ArrayList<Prop> comp = players[id].getHand(); // Les props dans la main du joueur
+		for(Prop prop : comp) {
+//			prop.print();
+			if(prop.getType() == 6) {
+				ind = comp.indexOf(prop);
+				match2 = true;
+			}
+		}
+		// On rentrera toujours dans cette boucle,
+		while(match1 == false && iT1 < 2) {
+//											System.out.println("it1 = " + iT1 + "\t" + match1 + "\t" + match2);
 			iT2 = 0;
-			while(match == false && iT2 < 2) {
+			while(match1 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
+//											System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2);
 				tProp = depiledTricks.peek().getIngredient(iT1, iT2);
-				iT2++;
-				if(cmp.getType() == tProp.getType()) {
-					match = true;
+//				tProp.print();
+				if(comp.get((ind+1)%2).getType() == tProp.getType()) {
+					match1 = true;
 				}
-				
+				iT2++;
+//											System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " + (ind+1)%2);
 			}
 			iT1++;
 		}
-		System.out.println(iT1);
-		System.out.println(match);
-		if(match == true) {
-			match = false;
-			cmp = players[id].getHand(1);
+		
+		if(match1 == true && match2 == false) { // Si on a pas le couteau suisse et que notre premier prop est bon
 			iT2 = 0;
 			iT1 = iT1% 2; // on va regarder les props du trick encore libres
-			System.out.println(iT1);
-			while(match == false && iT2 < 2) {
+			System.out.println("\nit1 = "+ iT1 +"\n");
+			while(match2 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
 				tProp = depiledTricks.peek().getIngredient(iT1, iT2);
-				if(cmp.getType() == tProp.getType()) {
-					match = true;
+				if(comp.get(ind).getType() == tProp.getType()) {
+					match2 = true;
 				}
 				iT2++;
-			}
-			if(match == true) {
-				System.out.println("Vous avez réussi le tour ! ");
-				return match;
-			}
-			else {
-				System.out.println("Vous n'avez pas réussi le tour. ");
-				return match;
+//				System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " +  ind);
 			}
 		}
-		else {
-			System.out.println("Vous n'avez pas réussi le tour. ");
-			return match;
+		
+		if(match1 == true && match2 == true) {
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 

@@ -2,11 +2,11 @@ package theotherhattrick;
 
 import java.util.Scanner;
 import java.util.Stack;
-
+import java.util.ArrayList;
 public class Player {
 	private int id;
 	private String name;
-	private Prop[] hand = new Prop[2];
+	private ArrayList<Prop> hand = new ArrayList<Prop>(2);
 	private Stack<Trick> successPile = new Stack<Trick>();
 
 	public Player(String name, int id) {
@@ -22,14 +22,26 @@ public class Player {
 		this.hand = props;
 	}
 
+	public void setHand(ArrayList<Prop> props) {
+		this.hand = props; //AR
+	}
+
 	public void setHand(Prop p, int ind) {
-		this.hand[ind] = p;
+		this.hand.add(ind, prop);
 	}
 	
+	public int getSize() {
+		return hand.size();
+	}
+
 	public Prop getHand(int ind) {
-		return hand[ind];
+		return hand.get(ind); 
 	}
-	
+
+	public ArrayList<Prop> getHand(){
+		return hand; 
+	}
+
 	public int getId() {
 		return this.id;
 	}
@@ -39,25 +51,16 @@ public class Player {
 	}
 
 	public boolean has(String card) {
-		for(int i=0;i<hand.length;i++) {
-			if(hand[i].getName().equals(card)) {
+		for(int i=0;i<hand.size();i++) {
+			if(hand.get(i).getName().equals(card)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public void pushTrick( Trick trick){
+	public void pushTrick(Trick trick){
 		successPile.add(trick);
-	}
-
-	public void exchangeProps() {
-	}
-
-	public void performTrick() {
-	}
-
-	public void chooseTrick() {
 	}
 	
 	//choiceNumb = nombre de réponses possibles
@@ -177,21 +180,9 @@ public class Player {
 	}
 
 
-
-	/**	ChooseProptoChange
-	*	
-	*
-	*
-	*
-	**/
-	public int choosePropToChange() { // Retourne l'indice dans Player.props[] de la carte que le joueur souhaite
-										// échanger
-		return 0; // Temporaire
-	}
-
 	public void printProps() {
 		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
-		for (int i = 0; i < hand.length; i++) {
+		for (int i = 0; i < hand.size(); i++) {
 			hand[i].print();
 		}
 	}
