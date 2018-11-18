@@ -11,6 +11,10 @@ public class Game {
 
 	public Game() {
 	}
+	
+
+	
+	
 
 	public static Game createGame() {
 		Game game = new Game();
@@ -21,7 +25,7 @@ public class Game {
 		// 3 pour la variante lettuce
 		variant = askRules();
 
-		// On utilise le polymorphisme pour gérer les variantes
+		// On utilise le polymorphisme pour gï¿½rer les variantes
 		switch (variant) {
 		case 0:
 			return new Game();
@@ -63,7 +67,7 @@ public class Game {
 			players[i] = new Robot(i);
 		}
 
-		board = new Board(players);
+		board = new Board(players, null);
 		board.depile();
 
 		// Gestion du tour de jeu : faire jouer chaque joueur tour aprï¿½s tour
@@ -88,7 +92,7 @@ public class Game {
 	}
 
 	protected void realizeTrick(Player p) {
-		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
+		// Gï¿½re l'enchainement des actions qui se rï¿½alisent quand on rï¿½alise un trick
 		boolean trickSuccessful = board.comparePropsToTrick(p.getId());
 
 		if (trickSuccessful) { // Si le joueur a rï¿½ussi le trick
@@ -102,6 +106,9 @@ public class Game {
 			System.out.println("Vous pouvez Ã©changer l'une de vos cartes avec la carte du milieu");
 
 			exchangeMiddle(p);
+			
+			// DONNER LE TRICK AU JOUEUR
+			board.giveTrick(p.getId()); // On lui donne le trick
 
 			/*
 			 * if (this.rulesSwissKnife) { if (this.rulesCarrot) { if
@@ -124,7 +131,6 @@ public class Game {
 			 * MILIEU STANDART } } else { System.out.println("la carte du milieu"); //
 			 * ECHANGE MILIEU STANDART exchangeMiddle(p); } }
 			 */
-
 		}
 
 		else {
@@ -134,8 +140,7 @@ public class Game {
 			board.revealProp(p.getId());
 		}
 
-		// DONNER LE TRICK AU JOUEUR
-		board.giveTrick(p.getId()); // On lui donne le trick
+
 	}
 
 	private void playTurn() {
@@ -148,7 +153,7 @@ public class Game {
 
 		board.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
-		// Demande à l'utilisateur si il souhaite dépiler un trick
+		// Demande ï¿½ l'utilisateur si il souhaite dï¿½piler un trick
 		depileTrick(p);
 
 		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
@@ -182,7 +187,7 @@ public class Game {
 		System.out.println("Il a donc le choix de cacher une de ses cartes si elle ï¿½tait face visible");
 
 		do {
-			System.out.println("Veullez choisir la règle que vous voulez utiliser");
+			System.out.println("Veullez choisir la rï¿½gle que vous voulez utiliser");
 			System.out.println("Entrer 0 pour jouer sans variantes, 1 pour jouer avec le Couteau Suisse, 2 pour jouer avec la Carotte, 3 pour jouer avec la Laitue");
 			choice = keyboard.nextInt();
 		} while (choice < 0 || choice > 3);
@@ -204,6 +209,19 @@ public class Game {
 	private void nextTurn() {
 		this.tour++;
 	}
+	
+	public int getVariant() {
+		if(this instanceof GameVarSwissKnife) {
+			return 1;
+		}
+		else if(this instanceof GameVarCarrot) {
+			return 2;
+		}
+		else if(this instanceof GameVarLettuce) {
+			return 3;
+		}
+		return 0;
+	}
 
 	protected void exchangeMiddle(Player p) { // Ã©change une carte avec celle du milieu
 		int propToChange;
@@ -213,8 +231,8 @@ public class Game {
 	
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
-		propToChange = p.speak("Lequel de vos props voulez vous échanger ?", 2, this.players, 'p');
-		otherProp = p.speak("Avec quelle carte de vos adversaires souhaitez vous l'échanger ?", 4, players, 'n');
+		propToChange = p.speak("Lequel de vos props voulez vous ï¿½changer ?", 2, this.players, 'p');
+		otherProp = p.speak("Avec quelle carte de vos adversaires souhaitez vous l'ï¿½changer ?", 4, players, 'n');
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 	}

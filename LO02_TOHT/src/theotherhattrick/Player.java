@@ -3,6 +3,7 @@ package theotherhattrick;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Iterator;
 public class Player {
 	private int id;
 	private String name;
@@ -19,7 +20,9 @@ public class Player {
 	}
 
 	public void setHand(Prop[] props) {
-		this.hand = props;
+		for(int i=0;i<props.length;i++) {
+			this.hand.add(props[i]);
+		}
 	}
 
 	public void setHand(ArrayList<Prop> props) {
@@ -27,7 +30,7 @@ public class Player {
 	}
 
 	public void setHand(Prop p, int ind) {
-		this.hand.add(ind, prop);
+		this.hand.add(ind, p);
 	}
 	
 	public int getSize() {
@@ -182,8 +185,8 @@ public class Player {
 
 	public void printProps() {
 		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
-		for (int i = 0; i < hand.size(); i++) {
-			hand[i].print();
+		for (Iterator<Prop> it = hand.iterator();it.hasNext();) {
+			it.next().print();
 		}
 	}
 
