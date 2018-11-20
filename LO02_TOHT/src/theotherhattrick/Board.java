@@ -13,7 +13,7 @@ package theotherhattrick;
 		private Stack<Prop> allProps = new Stack<Prop>();
 //		private Prop[][] playersProps;
 		private ArrayList <Prop> middleProp;
-			private int variant;
+		private int variant;
 		private Player[] players;
 
 		public Board(Player[] players, int variant) {
@@ -57,7 +57,7 @@ package theotherhattrick;
 			this.middleProp.set(i, prop);
 		}
 
-		public void distributeProps(int variant) {
+		public void distributeProps(int rule) {
 			middleProp = new ArrayList<Prop>(1);
 			this.middleProp.add(allProps.pop());
 			if(variant == 1) { // Si on joue avec la variante du couteau suisse, on Veut une carte supplémentaire au milieu
@@ -71,65 +71,25 @@ package theotherhattrick;
 			}
 		}
 
-		public void createCards(int variant) {
-			// Création des props
-			/*
-			if(rules[0]) {
-				allProps = new Stack<Prop>(8);
-			}
-			else {
-				allProps = new Stack<Prop>(7);
-			}*/
-			Prop carrot = new Prop("Carrot", 1);
-			Prop lettuce = new Prop("Lettuce", 2);
-			Prop hat = new Prop("Hat", 3);
-			Prop rabbit = new Prop("The Rabbit", 4);
-			Prop oRabbit = new Prop("The Other Rabbit", 5);
-
-			for (int i = 0; i < 3; i++) {
-				allProps.add(carrot);
-			}
-			allProps.add(lettuce);
-			allProps.add(hat);
-			allProps.add(rabbit);
-			allProps.add(oRabbit);
-			if(variant == 1) {
-				Prop swissKnife = new Prop("Magical Swiss-Army-Knife", 6);
-				allProps.add(swissKnife);
+		public void createCards(int rule) {
+			for(int i = 0; i < Prop.values().length - (rule == 1 ? 0 : 1); i++) {
+				allProps.push(Prop.values()[i]);
+				if(i == 0) {
+					allProps.push(Prop.values()[i]);
+					allProps.push(Prop.values()[i]);
+				}
 			}
 			Collections.shuffle(allProps);
-
-			// CrÃ©ation des tricks
-			ArrayList<Trick> tTricks = new ArrayList<Trick>(10);
-			// Liste permettant de stocker les tricks, on utilise une liste parcequ'elle
-			// peut Ãªtre mÃ©langÃ©e
-			// Ensuite, on place l'arraylist dans une pile
-
-			tTricks.add(new Trick("The Hungry Rabbit", new Prop[][] { { rabbit, oRabbit }, { carrot, lettuce } }, 1));
-			tTricks.add(new Trick("The Bunch of Carrots", new Prop[][] { { carrot }, { carrot } }, 2));
-			tTricks.add(new Trick("The Vegetable Patch", new Prop[][] { { carrot }, { lettuce } }, 3));
-			tTricks.add(
-					new Trick("The Rabbit That Didn't Like Carrots", new Prop[][] { { rabbit, oRabbit }, { lettuce } }, 4));
-			tTricks.add(new Trick("The Pair of Rabbits", new Prop[][] { { rabbit }, { oRabbit } }, 5));
-			tTricks.add(new Trick("The Vegetable Hat Trick", new Prop[][] { { hat }, { carrot, lettuce } }, 2));
-			tTricks.add(new Trick("The Carrot Hat Trick", new Prop[][] { { hat }, { carrot } }, 3));
-			tTricks.add(new Trick("The Slightly Easier Hat Trick", new Prop[][] { { hat }, { rabbit, oRabbit } }, 4));
-			tTricks.add(new Trick("The Hat Trick", new Prop[][] { { hat }, { rabbit } }, 5));
-
-			Collections.shuffle(tTricks); // MÃ©lange des cartes
-			tTricks.add(new Trick("The Other Hat Trick", new Prop[][] { { hat }, { oRabbit } }, 6));
-			// Ajout de cette carte Ã  la fin pour qu'on soit sure qu'elle se trouve en fin
-			// de tas
-
-			tricks = new Stack<Trick>();
-			depiledTricks = new Stack<Trick>();
-
-			for (int i = tTricks.size() - 1; i >= 0; i--) { // On parcourt la liste Ã  l'envers pour mettre The Other Hat
-															// Trick en dernier
-				tricks.push(tTricks.get(i));
+			
+			Stack<Trick> temp = new Stack<Trick>();
+			for(int i = 0; i < Trick.values().length - 1; i++) {
+				temp.push(Trick.values()[i]);
 			}
-
-			// printTricks();
+			Collections.shuffle(temp);
+			temp.push(Trick.values()[Trick.values().length - 1]);
+			for(int i = 0; i < Trick.values().length; i++) {
+				tricks.push(temp.pop());
+			}
 		}
 
 		public Prop[] getCardsOfPlayer(int id, int numProp) {
@@ -159,14 +119,17 @@ package theotherhattrick;
 		 */
 		public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
 			Prop tmp1 = players[p1].getHand(ind1);
-//			int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
+			players[p1].getHand().remove(ind1);
+	//		int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
 			
 			if(p2 == -1) {  // Si on veut Ã©changer le prop du joueur dont c'est le tour avec celui du milieu 
 				players[p1].setHand(this.middleProp.get(ind2) ,ind1);
-				setMiddleProp(tmp1, ind2);
+				middleProp.remove(tmp1);
+				middleProp.set(ind2, tmp1);
 			}
 			else if (p2 == (p1+1)%3 || p2 == (p1+2)%3) { // Si on veut Ã©changer le prop du joueur dont c'est le tour avec celui d'un autre joueur
 				players[p1].setHand(players[p2].getHand(ind2), ind1);
+				players[p2].getHand().remove(ind2);
 				players[p2].setHand(tmp1, ind2);
 			}
 			else {
@@ -191,7 +154,7 @@ package theotherhattrick;
 			Prop tProp; // Les props figurant sur la carte Trick
 			ArrayList<Prop> comp = players[id].getHand(); // Les props dans la main du joueur
 			for(Prop prop : comp) {
-//				prop.print();
+	//			prop.print();
 				if(prop.getType() == 6) {
 					ind = comp.indexOf(prop);
 					match2 = true;
@@ -199,17 +162,17 @@ package theotherhattrick;
 			}
 			// On rentrera toujours dans cette boucle,
 			while(match1 == false && iT1 < 2) {
-//												System.out.println("it1 = " + iT1 + "\t" + match1 + "\t" + match2);
+	//											System.out.println("it1 = " + iT1 + "\t" + match1 + "\t" + match2);
 				iT2 = 0;
 				while(match1 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
-//												System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2);
+	//											System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2);
 					tProp = depiledTricks.peek().getIngredient(iT1, iT2);
-//					tProp.print();
+	//				tProp.print();
 					if(comp.get((ind+1)%2).getType() == tProp.getType()) {
 						match1 = true;
 					}
 					iT2++;
-//												System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " + (ind+1)%2);
+	//											System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " + (ind+1)%2);
 				}
 				iT1++;
 			}
@@ -224,7 +187,7 @@ package theotherhattrick;
 						match2 = true;
 					}
 					iT2++;
-//					System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " +  ind);
+	//				System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " +  ind);
 				}
 			}
 			
@@ -261,8 +224,9 @@ package theotherhattrick;
 			int choice = 0, i, hNum = 0;
 			
 			System.out.println("Votre main, " + players[id].getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
+			System.out.println(players[id]);
 			for(i = 0; i < 2; i++) {
-				players[id].getHand(i).print();
+	//			players[id].getHand(i).printDebug();
 				if(players[id].getHand(i).getState() == false) {
 					hNum ++;
 					if(i == 0) {

@@ -1,17 +1,24 @@
 package theotherhattrick;
 
-public class Prop {
-
-	private int type; // Carrot = 1, Lettuce = 2, Hat = 3, Rabbit = 4, Other rabbit = 5, SwissArmyKnife = 
-	private String name;
-	private boolean isVisible; // false pour carte cachée et true pour carte visible
-
-	public Prop(String name, int type) {
-		this.name = name;
+public enum Prop {
+	
+	CARROT("Carrot", 1, false),
+	LETTUCE("Lettuce", 2, false),
+	HAT("Hat", 3, false),
+	RABBIT("Rabbit", 4, false),
+	THE_OTHER_RABBIT("The Other Rabbit", 5, false), 
+	SWISS_ARMY_KNIFE("Swiss Army Knife", 6, false);
+	
+	private String name ="";
+	private int type = 0;
+	private boolean isVisible = false;
+	
+	Prop(String name, int type, boolean isVisible){
+		this.name  = name; 
 		this.type = type;
 		this.isVisible = false;
 	}
-
+	
 	public void hide() {
 		this.isVisible = false;
 	}
@@ -19,35 +26,29 @@ public class Prop {
 	public void unhide() {
 		this.isVisible = true;
 	}
-
+	
 	public boolean getState() {
 		return this.isVisible;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
+	
 	public int getType() {
-		return this.type;
+		return type;
 	}
-
-	public Prop clone() {
-		try {
-			return (Prop) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+	
+	public String getName() {
+		return name;
 	}
-
+	
 	public void printDebug() {
-		System.out.println("nom : " + this.name + " type : " + this.type + " caché ? :" + this.isVisible);
+		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
 	}
 	
 	public void print() {
 		System.out.println("nom : " + this.name);
 	}
-
+	
+	public String toString() {
+		return name + (isVisible == false? " -> caché " : " -> visible");
+	}
 }
