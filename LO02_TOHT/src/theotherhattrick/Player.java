@@ -75,9 +75,9 @@ public class Player {
 		System.out.println(text);
 		
 		switch(choiceNumb) {
-		case 2 : 
+		case 2 : // On a  le choix entre deux actions
 			switch(typeOfQuestion) {
-			case 'b' : 
+			case 'b' : // On a un choix oui/non
 				do {
 					System.out.println("Entrer y pour oui et n pour non : ");
 					ans = keyboard.nextLine();
@@ -95,7 +95,7 @@ public class Player {
 				}
 				break; 
 				
-			case 'p' : 
+			case 'p' : // On choisit un Prop
 				do {
 					System.out.println("Entrer g pour la prop de gauche et d pour la prop de droite : ");
 					ans = keyboard.nextLine();
@@ -118,7 +118,7 @@ public class Player {
 			}
 			break;
 			
-		case 3 : 
+		case 3 : // On a un choix entre 3 actions : choix de props à remettre au milieu après un succès
 			do {
 				System.out.println("Entrer g, pour le prop de gauche, d pour le prop de droite, r pour garder les mêmes props : ");
 				ans = keyboard.nextLine();
@@ -139,7 +139,7 @@ public class Player {
 			}
 			break;
 		
-		case 4 : 
+		case 4 : // On a le choix entre 4 actions : choisir le prop adverse avec qui échanger son prop
 			switch(typeOfQuestion) {
 			case 'n' : // n stands for neutral
 				do {
@@ -173,7 +173,19 @@ public class Player {
 				ans = "error";
 			}
 			break;
-		
+		case 5 : // On joue la règle de la carrote : on a le choix entre le prop du milieu ou un des props des joueurs
+			switch(typeOfQuestion){
+				case 'v' : 
+					do{
+						System.out.println("Entrer 0 ou 1 pour les props de gauche ou droite de " + players[(this.id+1)%3].name + ", 2 ou 3 pour le props de gauche ou droite de " + players[(this.id + 2)%3].name + " ou -1 pour le prop du milieu : " );
+						ansInt = keyboard.nextInt();
+					} while(ansInt > 3 && ansInt < -1)
+					break;
+
+				default : 
+					ans = "error"; 
+					break;
+			}
 		default : 
 			ans  = "error";
 			break;

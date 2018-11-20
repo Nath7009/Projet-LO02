@@ -20,6 +20,11 @@ public class Trick {
 		return ingredients[indRL][ind];
 	}
 
+	public int getLength(int ind) {
+		return ingredients[ind].length;
+	}
+
+
 	public int getPoints() {
 		return this.points;
 	}

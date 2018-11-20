@@ -67,7 +67,7 @@ public class Game {
 			players[i] = new Robot(i);
 		}
 
-		board = new Board(players, null);
+		board = new Board(players, getVariant());
 		board.depile();
 
 		// Gestion du tour de jeu : faire jouer chaque joueur tour apr�s tour
