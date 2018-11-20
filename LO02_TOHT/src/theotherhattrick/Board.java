@@ -13,7 +13,7 @@ package theotherhattrick;
 		private Stack<Prop> allProps = new Stack<Prop>();
 //		private Prop[][] playersProps;
 		private ArrayList <Prop> middleProp;
-		private int variant;
+			private int variant;
 		private Player[] players;
 
 		public Board(Player[] players, int variant) {
