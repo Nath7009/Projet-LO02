@@ -7,12 +7,19 @@ import java.util.Iterator;
 public class Player {
 	private int id;
 	private String name;
+	private Date birthD;
 	private ArrayList<Prop> hand = new ArrayList<Prop>(2);
 	private Stack<Trick> successPile = new Stack<Trick>();
 
 	public Player(String name, int id) {
 		this.name = name;
 		this.id = id;
+	}
+
+	public Player(String name, int id, Date birthD) {
+		this.name = name;
+		this.id = id;
+		this.birthD = birthD;
 	}
 
 	public String getName() {
@@ -47,6 +54,14 @@ public class Player {
 
 	public int getId() {
 		return this.id;
+	}
+
+	public void SetBirthD(Date birthD) {
+		this.birthD = birthD;
+	}
+	
+	public Date getBirthD() {
+		return birthD;
 	}
 
 	public boolean isEmpty() {

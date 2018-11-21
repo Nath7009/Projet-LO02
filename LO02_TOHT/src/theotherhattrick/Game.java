@@ -236,4 +236,20 @@ public class Game {
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 	}
+
+	protected Player[] sortPlayers(Player[] players) {
+		Player temp = new Player("", -1);
+		int ind;
+		for(int i = 1; i < players.length ; i++) {
+			temp = players[i];
+			ind  = i-1;
+			while(ind >= 0 && players[ind].getBirthD().isUnder(players[ind+1].getBirthD())) {
+				temp = players[i];
+				players[ind + 1] = players[ind];
+				ind --;
+			}
+			players[ind + 1] = temp;
+		}
+		return players;
+	}
 }

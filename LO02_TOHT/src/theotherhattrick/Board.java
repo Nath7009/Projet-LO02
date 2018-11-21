@@ -199,14 +199,14 @@ package theotherhattrick;
 			}
 		}
 
-
+/*
 		public Prop createCopy(Prop prop) {
 			return prop.clone();
 		}
 
 		public Trick createCopy(Trick trick) {
 			return trick.clone();
-		}
+		}*/
 
 		public void replace() {
 		}
@@ -217,14 +217,24 @@ package theotherhattrick;
 		}
 		
 		public void returnProp(int id) {
-			
+			System.out.println("Main de " + players[id].getName() + " => ");
+			System.out.println(players[id].getHand());
+			int ind = players[id].speak("Quel prop voulez vous retourner ? \n", players[0].getHand().size(), players, 'p');
+			if(players[id].getHand(ind).getState()) {
+				players[id].getHand(ind).hide();
+			}
+			else {
+				players[id].getHand(ind).unhide();
+			}
+			System.out.println("Nouvelle main => " );
+			System.out.println(players[id].getHand());
 		}
 
 		public void revealProp(int id) {
 			int choice = 0, i, hNum = 0;
 			
 			System.out.println("Votre main, " + players[id].getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
-			System.out.println(players[id]);
+			System.out.println(players[id].getHand());
 			for(i = 0; i < 2; i++) {
 	//			players[id].getHand(i).printDebug();
 				if(players[id].getHand(i).getState() == false) {
