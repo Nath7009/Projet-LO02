@@ -8,6 +8,7 @@ public class Player {
 	private int id;
 	private String name;
 	private Date birthD;
+	private int score;
 	private ArrayList<Prop> hand = new ArrayList<Prop>(2);
 	private Stack<Trick> successPile = new Stack<Trick>();
 
@@ -39,7 +40,16 @@ public class Player {
 	public void setHand(Prop p, int ind) {
 		this.hand.add(ind, p);
 	}
+
+	public int getScore() {
+		return this.score;
+	}
 	
+	public void increaseScore(int points) {
+		this.score += points;
+		System.out.println("Vous gagnez >" + points + "< points. Vous avez désormais >" + this.score + "< points." );
+	}
+
 	public int getSize() {
 		return hand.size();
 	}

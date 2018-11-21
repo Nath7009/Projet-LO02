@@ -91,19 +91,19 @@ package theotherhattrick;
 				tricks.push(temp.pop());
 			}
 		}
-
+/*
 		public Prop[] getCardsOfPlayer(int id, int numProp) {
 			return null;
-		}
+		}*/
 
-		public void printTricks() {
+/*		public void printTricks() {
 			Trick[] arr = new Trick[tricks.size()];
 			tricks.toArray(arr);
 
 			for (int i = 0; i < arr.length; i++) {
 				arr[i].print();
 			}
-		}
+		}*/
 		
 		public void printTopTrick() {
 			Trick topTrick = this.depiledTricks.pop();
@@ -141,7 +141,11 @@ package theotherhattrick;
 		 * 	Donne le trick du dessus de depiledTricks au joueur d'id id
 		 */
 		public void giveTrick(int id) {
-			
+			if(players[id].getHand().contains(Prop.SWISS_ARMY_KNIFE)) {
+				System.out.println("! ! Vous avez réalisé le tour <" + depiledTricks.peek().getName() +"> avec le couteau suisse magique ! !\n");
+				depiledTricks.peek().decreaseValue();
+			}
+			players[id].increaseScore(depiledTricks.peek().getPoints());
 			players[id].pushTrick(depiledTricks.pop());
 		}
 
@@ -153,26 +157,20 @@ package theotherhattrick;
 			boolean match1 = false, match2 = false;
 			Prop tProp; // Les props figurant sur la carte Trick
 			ArrayList<Prop> comp = players[id].getHand(); // Les props dans la main du joueur
-			for(Prop prop : comp) {
-	//			prop.print();
-				if(prop.getType() == 6) {
-					ind = comp.indexOf(prop);
-					match2 = true;
-				}
+			
+			if(players[id].getHand().contains(Prop.SWISS_ARMY_KNIFE)) {
+				ind  = players[id].getHand().indexOf(Prop.SWISS_ARMY_KNIFE);
+				match2 = true;
 			}
 			// On rentrera toujours dans cette boucle,
 			while(match1 == false && iT1 < 2) {
-	//											System.out.println("it1 = " + iT1 + "\t" + match1 + "\t" + match2);
 				iT2 = 0;
 				while(match1 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
-	//											System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2);
 					tProp = depiledTricks.peek().getIngredient(iT1, iT2);
-	//				tProp.print();
 					if(comp.get((ind+1)%2).getType() == tProp.getType()) {
 						match1 = true;
 					}
 					iT2++;
-	//											System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " + (ind+1)%2);
 				}
 				iT1++;
 			}
@@ -180,14 +178,12 @@ package theotherhattrick;
 			if(match1 == true && match2 == false) { // Si on a pas le couteau suisse et que notre premier prop est bon
 				iT2 = 0;
 				iT1 = iT1% 2; // on va regarder les props du trick encore libres
-				System.out.println("\nit1 = "+ iT1 +"\n");
 				while(match2 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
 					tProp = depiledTricks.peek().getIngredient(iT1, iT2);
 					if(comp.get(ind).getType() == tProp.getType()) {
 						match2 = true;
 					}
 					iT2++;
-	//				System.out.println("it2 = " + iT2 + "\t" + match1 + "\t" + match2 + "\t ind = " +  ind);
 				}
 			}
 			
@@ -206,10 +202,10 @@ package theotherhattrick;
 
 		public Trick createCopy(Trick trick) {
 			return trick.clone();
-		}*/
+		}
 
 		public void replace() {
-		}
+		}*/
 
 		public void depile() {
 			Trick temp = this.tricks.pop();
@@ -265,12 +261,9 @@ package theotherhattrick;
 			}
 		}
 
-		public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien rÃ©aliser le
-											// tour
+		public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien rÃ©aliser le tour
 			players[id].getHand(0).unhide();
 			players[id].getHand(1).unhide();
-			
-
 		}
 
 		public void hideAllProps(int id) { // Retourne face cachÃ©e tous les props du joueur en cas de tour rÃ©ussi
@@ -283,15 +276,4 @@ package theotherhattrick;
 			// specific code.
 			return this.allProps;
 		}
-
-/*		void setProps(Prop[] value) {
-			// Automatically generated method. Please delete this comment before entering
-			// specific code.
-			this.allProps.get(i). = value;
-		}*/
-		
-		void print() { //Affiche toutes les cartes des joueurs en fonction de leur visibilitÃ©
-			
-		}
-
 }

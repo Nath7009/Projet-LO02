@@ -39,10 +39,10 @@ public enum Trick {
 	}
 	
 	public void print() {
-		System.out.println(this.name + " composé de :");
+		System.out.println("<" + this.name + "> :");
 		for (int i = 0; i < ingredients.length; i++) {
 			for (int j = 0; j < ingredients[i].length; j++) {
-				ingredients[i][j].print();
+				System.out.println("[" + ingredients[i][j].getName() + "]");
 			}
 			System.out.println();
 		}
