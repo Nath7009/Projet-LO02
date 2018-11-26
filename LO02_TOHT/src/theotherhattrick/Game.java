@@ -11,10 +11,6 @@ public class Game {
 
 	public Game() {
 	}
-	
-
-	
-	
 
 	public static Game createGame() {
 		Game game = new Game();
@@ -48,6 +44,7 @@ public class Game {
 	public void start() {
 		int nbHumains = 0;
 		String nom;
+		Date date;
 		keyboard = new Scanner(System.in);
 
 		// Instanciation de tous les joueurs humains ou robots
@@ -61,11 +58,16 @@ public class Game {
 		for (int i = 0; i < nbHumains; i++) {
 			System.out.println("Entrer le nom du joueur numï¿½ro " + (i + 1));
 			nom = keyboard.nextLine();
-			players[i] = new Human(nom, i);
+			date = this.askBirthDate();
+			players[i] = new Human(nom, i, date);
 		}
+		
 		for (int i = nbHumains; i < 3; i++) {
-			players[i] = new Robot(i);
+			date = new Date();
+			players[i] = new Robot(i, date);
 		}
+		
+		this.sortPlayers();
 
 		board = new Board(players, getVariant());
 		board.depile();
@@ -77,8 +79,13 @@ public class Game {
 		// l'affiche
 		this.tour = 0;
 
-		while (board.getTrickPileLength() > 0 && this.tour < 100) {
+		while (this.tour < 100 && !this.isFinished()) {
 			this.playTurn();
+		}
+		
+		if(this.isFinished()) {
+			int winner = this.getWinner();
+			System.out.println("Le joueur " + players[winner].getName() + " a gagné, BRAVO !");
 		}
 
 		keyboard.close();
@@ -92,7 +99,8 @@ public class Game {
 	}
 
 	protected void realizeTrick(Player p) {
-		// Gï¿½re l'enchainement des actions qui se rï¿½alisent quand on rï¿½alise un trick
+		// Gï¿½re l'enchainement des actions qui se rï¿½alisent quand on rï¿½alise un
+		// trick
 		boolean trickSuccessful = board.comparePropsToTrick(p.getId());
 
 		if (trickSuccessful) { // Si le joueur a rï¿½ussi le trick
@@ -106,31 +114,10 @@ public class Game {
 			System.out.println("Vous pouvez Ã©changer l'une de vos cartes avec la carte du milieu");
 
 			exchangeMiddle(p);
-			
+
 			// DONNER LE TRICK AU JOUEUR
 			board.giveTrick(p.getId()); // On lui donne le trick
 
-			/*
-			 * if (this.rulesSwissKnife) { if (this.rulesCarrot) { if
-			 * (this.board.contains("Carrot")) { System.out.
-			 * println("l'une des cartes du milieu ou une carte de vos adversaires"); //
-			 * ECHANGE AVEC TOUT LE MONDE ET LES DEUX CARTES DU MILIEU exchangeWithAll(p); }
-			 * else { // si on a pas la carte carrot
-			 * System.out.println("l'une des deux cartes du milieu"); // ECHANGE AVEC LES
-			 * DEUX CARTES DU MILIEU exchangeMiddle2(p); }
-			 * 
-			 * } else { // si on a pas la rÃ¨gle carrot
-			 * System.out.println("l'une des deux cartes du milieu"); // ECHANGE AVEC LES
-			 * DEUX CARTES DU MILIEU exchangeMiddle2(p); } } else { // si on a pas la
-			 * variante couteau suisse if (this.rulesCarrot) { if
-			 * (this.board.contains("Carrot")) {
-			 * System.out.println("la carte du milieu ou une carte de vos adversaires"); //
-			 * ECHANGE AVEC TOUT LE MONDE ET LA CARTE DU MILIEU exchangePlayersMiddle(p); }
-			 * else { // si on a pas la carte carrot
-			 * System.out.println("la carte du milieu"); exchangeMiddle(p); // ECHANGLE
-			 * MILIEU STANDART } } else { System.out.println("la carte du milieu"); //
-			 * ECHANGE MILIEU STANDART exchangeMiddle(p); } }
-			 */
 		}
 
 		else {
@@ -139,7 +126,6 @@ public class Game {
 
 			board.revealProp(p.getId());
 		}
-
 
 	}
 
@@ -162,8 +148,8 @@ public class Game {
 
 		// PERFORMER LE TRICK
 		playerIn = p.speak("Performer le trick ?", 2, players, 'b') == 1 ? true : false; // Conversion
-																									// d'int en
-																									// booleen
+																							// d'int en
+																							// booleen
 		if (playerIn) { // Si le joueur souhaite performer le trick
 			realizeTrick(p);
 		} else { // Le joueur ne souhaite pas faire le trick
@@ -209,15 +195,13 @@ public class Game {
 	private void nextTurn() {
 		this.tour++;
 	}
-	
+
 	public int getVariant() {
-		if(this instanceof GameVarSwissKnife) {
+		if (this instanceof GameVarSwissKnife) {
 			return 1;
-		}
-		else if(this instanceof GameVarCarrot) {
+		} else if (this instanceof GameVarCarrot) {
 			return 2;
-		}
-		else if(this instanceof GameVarLettuce) {
+		} else if (this instanceof GameVarLettuce) {
 			return 3;
 		}
 		return 0;
@@ -228,7 +212,7 @@ public class Game {
 		propToChange = p.speak("Lequel de vos props voulez vous Ã©changer ?", 2, this.players, 'p');
 		this.board.exchangeProps(p.getId(), propToChange, -1, 0);
 	}
-	
+
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
 		propToChange = p.speak("Lequel de vos props voulez vous ï¿½changer ?", 2, this.players, 'p');
@@ -237,16 +221,45 @@ public class Game {
 		this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 	}
 
-	protected Player[] sortPlayers(Player[] players) {
+	protected boolean isFinished() {
+		return this.board.getTrickPileLength() <= 0;
+	}
+
+	public Date askBirthDate() {
+		int day = 0, month = 0, year = 0;
+		do {
+			System.out.println("Entrer votre jour de naissance");
+			day = keyboard.nextInt();
+			System.out.println("Entrer votre mois de naissance");
+			month = keyboard.nextInt();
+			System.out.println("Entrer votre année de naissance");
+			year = keyboard.nextInt();
+
+		} while (day < 0 || month < 0 || year < 1910 || day > 31 || month > 12 || year > 2010);
+		
+		return new Date(year, month, day);
+	}
+	
+	protected int getWinner() {
+		int bestPlayer = 0;
+		for(int i=0;i<players.length;i++) {
+			if(players[i].getScore() > players[bestPlayer].getScore()) {
+				bestPlayer=i;
+			}
+		}
+		return bestPlayer;
+	}
+
+	protected Player[] sortPlayers() {
 		Player temp = new Player("", -1);
 		int ind;
-		for(int i = 1; i < players.length ; i++) {
+		for (int i = 1; i < players.length; i++) {
 			temp = players[i];
-			ind  = i-1;
-			while(ind >= 0 && players[ind].getBirthD().isUnder(players[ind+1].getBirthD())) {
+			ind = i - 1;
+			while (ind >= 0 && players[ind].getBirthD().isUnder(players[ind + 1].getBirthD())) {
 				temp = players[i];
 				players[ind + 1] = players[ind];
-				ind --;
+				ind--;
 			}
 			players[ind + 1] = temp;
 		}

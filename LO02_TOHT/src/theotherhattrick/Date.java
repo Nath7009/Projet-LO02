@@ -10,6 +10,13 @@ package theotherhattrick;
 			this.month = month;
 			this.year = year;
 		}
+		
+		public Date() {
+			this.day =  (int)Math.floor(Math.random()*31)+1;
+			this.month =  (int)Math.floor(Math.random()*31)+1;
+			this.year =  (int)Math.floor(Math.random()*100) + 1910;
+
+		}
 
 		public int getYear() {
 			return year;

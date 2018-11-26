@@ -1,9 +1,11 @@
 package theotherhattrick;
 
+
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 public class Player {
 	private int id;
 	private String name;
@@ -40,10 +42,6 @@ public class Player {
 	public void setHand(Prop p, int ind) {
 		this.hand.add(ind, p);
 	}
-
-	public int getScore() {
-		return this.score;
-	}
 	
 	public void increaseScore(int points) {
 		this.score += points;
@@ -52,6 +50,10 @@ public class Player {
 
 	public int getSize() {
 		return hand.size();
+	}
+	
+	public int getScore() {
+		return this.score;
 	}
 
 	public Prop getHand(int ind) {
