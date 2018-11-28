@@ -7,8 +7,8 @@ package theotherhattrick;
 
 	public class Board {
 
-		private Stack<Trick> tricks;
-		private Stack<Trick> depiledTricks;
+		private Stack<Trick> tricks = new Stack<Trick>();
+		private Stack<Trick> depiledTricks = new Stack<Trick>();
 
 		private Stack<Prop> allProps = new Stack<Prop>();
 //		private Prop[][] playersProps;
