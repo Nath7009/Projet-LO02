@@ -43,6 +43,10 @@ public class Player {
 		this.hand.add(ind, p);
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public void increaseScore(int points) {
 		this.score += points;
 		System.out.println("Vous gagnez >" + points + "< points. Vous avez désormais >" + this.score + "< points." );

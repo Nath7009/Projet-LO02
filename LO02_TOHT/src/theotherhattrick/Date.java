@@ -56,7 +56,7 @@ package theotherhattrick;
 						isUnder = false;
 					}
 					else {
-						System.out.println("Les 2 joueurs sont nés le même jour, on ne change pas l'ordre\n");
+						//System.out.println("Les 2 joueurs sont nés le même jour, on ne change pas l'ordre\n");
 					}
 				}
 			}

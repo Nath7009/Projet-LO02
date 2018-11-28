@@ -12,7 +12,7 @@ public class Robot extends Player {
 		super("Robot", id, birthDate);
 	}
 	
-	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion, Scanner keyboard) { 
+	public int speak(String text, int choiceNumb, Player[] players, char typeOfQuestion) { 
 		int choice = (int) Math.floor(Math.random()*choiceNumb);
 		return choice;
 	}

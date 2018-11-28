@@ -42,12 +42,43 @@ public class Game {
 	 */
 
 	public void start() {
-		int nbHumains = 0;
-		String nom;
-		Date date;
+
 		keyboard = new Scanner(System.in);
 
 		// Instanciation de tous les joueurs humains ou robots
+		this.createPlayers();
+		
+		board = new Board(players, getVariant());
+		board.depile();
+
+		// Gestion du tour de jeu : faire jouer chaque joueur tour apr�s tour
+		// jusqu'� ce
+		// que la pile de tricks soit vide
+		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
+		// l'affiche
+		this.tour = 0;
+
+		while (this.tour < 100 && !this.isFinished()) {
+			this.playTurn();
+			this.nextTurn();
+			if (board.depiledIsEmpty()) {
+				board.depile();
+			}
+		}
+
+		if (this.isFinished()) {
+			int winner = this.getWinner();
+			System.out.println("Le joueur " + players[winner].getName() + " a gagné avec un score de " + players[winner].getScore() + "points, BRAVO !");
+		}
+
+		keyboard.close();
+	}
+
+	private void createPlayers() {
+		int nbHumains = 0;
+		String nom;
+		Date date;
+		
 		players = new Player[3];
 		do {
 			System.out.println("Entrer le nombre de joueurs humains voulant participer au jeu");
@@ -61,34 +92,17 @@ public class Game {
 			date = this.askBirthDate();
 			players[i] = new Human(nom, i, date);
 		}
-		
+
 		for (int i = nbHumains; i < 3; i++) {
 			date = new Date();
 			players[i] = new Robot(i, date);
 		}
-		
+
 		this.sortPlayers();
 
-		board = new Board(players, getVariant());
-		board.depile();
-
-		// Gestion du tour de jeu : faire jouer chaque joueur tour apr�s tour
-		// jusqu'� ce
-		// que la pile de tricks soit vide
-		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
-		// l'affiche
-		this.tour = 0;
-
-		while (this.tour < 100 && !this.isFinished()) {
-			this.playTurn();
+		for (int i = 0; i < players.length; i++) {
+			players[i].setId(i);
 		}
-		
-		if(this.isFinished()) {
-			int winner = this.getWinner();
-			System.out.println("Le joueur " + players[winner].getName() + " a gagn�, BRAVO !");
-		}
-
-		keyboard.close();
 	}
 
 	protected void depileTrick(Player p) {
@@ -155,16 +169,14 @@ public class Game {
 		} else { // Le joueur ne souhaite pas faire le trick
 			board.revealProp(p.getId());
 		}
-
-		this.nextTurn();
 	}
 
 	public static int askRules() {
 		int choice = 0;
 
-		System.out.println("Veuillez choisir les r�gles avec lesquelles vous voulez jouer");
+		System.out.println("Veuillez choisir les règles avec lesquelles vous voulez jouer");
 
-		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'�tre utilis�e pour r�aliser n'importe quel trick");
+		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'être utilisé pour réaliser n'importe quel trick");
 		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points � l'ex�cution du trick");
 
 		System.out.println("La Carotte, permet d'�changer un props avec un autre joueur quand un tour est r�ussi en utilisant une carotte");
@@ -232,37 +244,42 @@ public class Game {
 			day = keyboard.nextInt();
 			System.out.println("Entrer votre mois de naissance");
 			month = keyboard.nextInt();
-			System.out.println("Entrer votre ann�e de naissance");
+			System.out.println("Entrer votre ann�e de naissance");
 			year = keyboard.nextInt();
 
 		} while (day < 0 || month < 0 || year < 1910 || day > 31 || month > 12 || year > 2010);
-		
+
 		return new Date(year, month, day);
 	}
-	
+
 	protected int getWinner() {
 		int bestPlayer = 0;
-		for(int i=0;i<players.length;i++) {
-			if(players[i].getScore() > players[bestPlayer].getScore()) {
-				bestPlayer=i;
+		for (int i = 0; i < players.length; i++) {
+			if (players[i].getScore() > players[bestPlayer].getScore()) {
+				bestPlayer = i;
 			}
 		}
 		return bestPlayer;
 	}
 
-	protected Player[] sortPlayers() {
-		Player temp = new Player("", -1);
-		int ind;
-		for (int i = 1; i < players.length; i++) {
-			temp = players[i];
-			ind = i - 1;
-			while (ind >= 0 && players[ind].getBirthD().isUnder(players[ind + 1].getBirthD())) {
-				temp = players[i];
-				players[ind + 1] = players[ind];
-				ind--;
+	protected void sortPlayers() {
+		Player[] newPlayers = new Player[players.length];
+		int indMax = 0;
+		int bestInd = 0;
+		while (indMax < newPlayers.length) {
+			for (int i = 0; i < newPlayers.length; i++) {
+				if (players[i] != null && players[bestInd] != null && players[bestInd].getBirthD().isUnder(players[i].getBirthD())) {
+					bestInd = i;
+				}
 			}
-			players[ind + 1] = temp;
+			newPlayers[indMax] = players[bestInd];
+			players[bestInd] = null;
+			indMax++;
+			bestInd = 0;
+			while (bestInd < players.length && players[bestInd] == null) {
+				bestInd++;
+			}
 		}
-		return players;
+		players = newPlayers;
 	}
 }
