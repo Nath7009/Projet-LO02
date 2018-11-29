@@ -56,7 +56,13 @@ package theotherhattrick;
 		public void setMiddleProp(Prop prop, int i){
 			this.middleProp.set(i, prop);
 		}
-
+		
+		/**
+		 * Cette méthode distribue les Props générés dans la méthode createCards.
+		 * Créé un ArrayList de la taille nécessaire à la variante jouée (2 si on joue avec le couteau suisse, 1 sinon).
+		 * Chaque joueur reçoit 2 cartes, le milieu reçoit 1 ou 2 prop(s).
+		 * @param rule
+		 */
 		public void distributeProps(int rule) {
 			middleProp = new ArrayList<Prop>(1);
 			this.middleProp.add(allProps.pop());
@@ -70,11 +76,17 @@ package theotherhattrick;
 				}
 			}
 		}
-
+		
+		/**
+		 * Cette méthode créé les cartes (Props et Tricks) en fonction de la version du jeu à laquelle on joue.
+		 * Utilise la méthode shuffle(Stack<\E> stack) pour mélanger les piles de cartes. On distribue les props avec la méthode distributeProps(int rule).
+		 * On verse le contenu du Stack de Trick dans un second stack dans le fond duquel on a mis "The Other Hat Trick".
+		 * @param rule
+		 */
 		public void createCards(int rule) {
-			for(int i = 0; i < Prop.values().length - (rule == 1 ? 0 : 1); i++) {
+			for(int i = 0; i < Prop.values().length - (rule == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
 				allProps.push(Prop.values()[i]);
-				if(i == 0) {
+				if(i == 0) { // Il y a 3 carrotes dans le jeu
 					allProps.push(Prop.values()[i]);
 					allProps.push(Prop.values()[i]);
 				}
@@ -107,7 +119,7 @@ package theotherhattrick;
 		
 		public void printTopTrick() {
 			Trick topTrick = this.depiledTricks.pop();
-			System.out.println("Le trick sur le dessus de la pile est :");
+//			System.out.println("Le trick sur le dessus de la pile est :");
 			topTrick.print();
 			this.depiledTricks.push(topTrick);
 		}
@@ -275,5 +287,15 @@ package theotherhattrick;
 			// Automatically generated method. Please delete this comment before entering
 			// specific code.
 			return this.allProps;
+		}
+		
+		public void printOthersHand(int id) {
+			System.out.println("Voici les cartes visibles sur le terrain :");
+			for(Player p : players) {
+				if(p.getId() != id) {
+					System.out.println(p.getName());
+					p.printVisible();
+				}
+			}
 		}
 }

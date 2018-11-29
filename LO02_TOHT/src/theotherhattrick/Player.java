@@ -115,10 +115,10 @@ public class Player {
 					ans.toLowerCase();
 				}while(ans.equals("y") && ans.equals("n"));
 				
-				if(ans.equals("y")) {
+				if(ans.equals("n")) {
 					ansInt = 0;
 				}
-				else if(ans.equals("n")) {
+				else if(ans.equals("y")) {
 					ansInt = 1;
 				}
 				else {
@@ -227,9 +227,15 @@ public class Player {
 
 
 	public void printProps() {
-		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
+//		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
 		for (Iterator<Prop> it = hand.iterator();it.hasNext();) {
-			it.next().print();
+			System.out.println(it.next());
+		}
+	}
+	
+	public void printVisible() {
+		for(Prop p : hand) {
+			p.printIfVisible();
 		}
 	}
 

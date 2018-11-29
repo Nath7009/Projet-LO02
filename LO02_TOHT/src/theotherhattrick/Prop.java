@@ -49,6 +49,10 @@ public enum Prop {
 	}
 	
 	public String toString() {
-		return "[" + name + (isVisible == false? " -> caché " : " -> visible") + "]";
+		return "[" + name + (isVisible == false? " -> caché" : " -> visible") + "]";
+	}
+	
+	public void printIfVisible() {
+		System.out.println(isVisible == true ? this.toString() : "[?????]");
 	}
 }

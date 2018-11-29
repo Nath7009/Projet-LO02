@@ -19,6 +19,7 @@ public class Game {
 		// 1 pour la variante swissKnife
 		// 2 pour la variante carrot
 		// 3 pour la variante lettuce
+		System.out.println("==[==========]==[==========]== THE OTHER RABBIT ==[==========]==[==========]==\n\n");
 		variant = askRules();
 
 		// On utilise le polymorphisme pour g�rer les variantes
@@ -52,7 +53,7 @@ public class Game {
 		board.depile();
 
 		// Gestion du tour de jeu : faire jouer chaque joueur tour apr�s tour
-		// jusqu'� ce
+		// jusqu'à ce
 		// que la pile de tricks soit vide
 		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
 		// l'affiche
@@ -83,13 +84,14 @@ public class Game {
 		do {
 			System.out.println("Entrer le nombre de joueurs humains voulant participer au jeu");
 			nbHumains = keyboard.nextInt();
-			keyboard.nextLine();
+			keyboard.nextLine(); // La prochaine saisie ne sera pas un int
 		} while (nbHumains > 3);
 
 		for (int i = 0; i < nbHumains; i++) {
 			System.out.println("Entrer le nom du joueur num�ro " + (i + 1));
 			nom = keyboard.nextLine();
 			date = this.askBirthDate();
+			keyboard.nextLine(); // La prochaine saisie ne sera pas un int
 			players[i] = new Human(nom, i, date);
 		}
 
@@ -109,6 +111,8 @@ public class Game {
 		boolean playerIn = p.speak("Retourner un trick ?", 2, players, 'b') == 1 ? true : false; // Conversion
 		if (playerIn) {
 			board.depile();
+			System.out.println("Le nouveau Trick est : ");
+			board.printTopTrick();
 		}
 	}
 
@@ -144,21 +148,24 @@ public class Game {
 	}
 
 	private void playTurn() {
-		System.out.println("\nTOUR N°" + tour + "\n");
+		System.out.println("\n]=====||=====||=====||=====[TOUR N°" + tour + "]=====||=====||=====||=====[\n");
 		Player p = players[tour % 3];
 		boolean playerIn;
 		// if (p instanceof Human || p instanceof Robot) {
-		System.out.println("C'est le tour de " + p.getName());
-		System.out.println("Votre jeu est :");
+		System.out.println(p.getName() + " joue");
+		System.out.println("\nVotre jeu est :");
 		p.printProps();
-
+		board.printOthersHand(p.getId());
+		System.out.println("\nLe trick à réaliser est : ");
 		board.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
 		// Demande à l'utilisateur si il souhaite dépiler un trick
 		depileTrick(p);
 
 		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
+		
 		exchangePlayers(p);
+		System.out.println("\nVotre nouvelle main :");
 		p.printProps();
 
 		// PERFORMER LE TRICK
@@ -249,6 +256,7 @@ public class Game {
 			month = keyboard.nextInt();
 			System.out.println("Entrer votre ann�e de naissance");
 			year = keyboard.nextInt();
+//			keyboard.nextLine();
 
 		} while (day < 0 || month < 0 || year < 1910 || day > 31 || month > 12 || year > 2010);
 
