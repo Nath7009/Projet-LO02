@@ -1,22 +1,23 @@
 package theotherhattrick;
 
-public enum Prop {
+
+public class Prop {
+	private String name;
+	private int type;
+	private boolean isVisible;
 	
-	CARROT("Carrot", 1, false),
-	LETTUCE("Lettuce", 2, false),
-	HAT("Hat", 3, false),
-	RABBIT("Rabbit", 4, false),
-	THE_OTHER_RABBIT("The Other Rabbit", 5, false), 
-	SWISS_ARMY_KNIFE("Swiss Army Knife", 6, false);
-	
-	private String name ="";
-	private int type = 0;
-	private boolean isVisible = false;
-	
-	Prop(String name, int type, boolean isVisible){
-		this.name  = name; 
-		this.type = type;
+	public Prop(PropEnum prop) {
+		this.name = prop.getName();
+		this.type = prop.getType();
 		this.isVisible = false;
+	}
+	
+	public int getType() {
+		return type;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void hide() {
@@ -30,15 +31,6 @@ public enum Prop {
 	public boolean getState() {
 		return this.isVisible;
 	}
-
-	
-	public int getType() {
-		return type;
-	}
-	
-	public String getName() {
-		return name;
-	}
 	
 	public void printDebug() {
 		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
@@ -49,10 +41,11 @@ public enum Prop {
 	}
 	
 	public String toString() {
-		return "[" + name + (isVisible == false? " -> caché" : " -> visible") + "]";
+		return "[" + name + (isVisible == false? " -> caché " : " -> visible") + "]";
 	}
 	
 	public void printIfVisible() {
 		System.out.println(isVisible == true ? this.toString() : "[?????]");
 	}
+
 }

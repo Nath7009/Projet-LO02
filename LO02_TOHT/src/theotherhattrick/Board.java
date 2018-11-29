@@ -1,6 +1,6 @@
 package theotherhattrick;
 
-	import java.util.ArrayList;
+	import java.util.ArrayList; 
 	import java.util.Arrays;
 	import java.util.Stack;
 	import java.util.Collections;
@@ -84,22 +84,22 @@ package theotherhattrick;
 		 * @param rule
 		 */
 		public void createCards(int rule) {
-			for(int i = 0; i < Prop.values().length - (rule == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
-				allProps.push(Prop.values()[i]);
+			for(int i = 0; i < PropEnum.values().length - (rule == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
+				allProps.push(new Prop(PropEnum.values()[i]));
 				if(i == 0) { // Il y a 3 carrotes dans le jeu
-					allProps.push(Prop.values()[i]);
-					allProps.push(Prop.values()[i]);
+					allProps.push(new Prop(PropEnum.values()[i]));
+					allProps.push(new Prop(PropEnum.values()[i]));
 				}
 			}
 			Collections.shuffle(allProps);
 			
 			Stack<Trick> temp = new Stack<Trick>();
-			for(int i = 0; i < Trick.values().length - 1; i++) {
-				temp.push(Trick.values()[i]);
+			for(int i = 0; i < TrickEnum.values().length - 1; i++) {
+				temp.push(new Trick(TrickEnum.values()[i]));
 			}
 			Collections.shuffle(temp);
-			temp.push(Trick.values()[Trick.values().length - 1]);
-			for(int i = 0; i < Trick.values().length; i++) {
+			temp.push(new Trick(TrickEnum.values()[TrickEnum.values().length - 1]));
+			for(int i = 0; i < TrickEnum.values().length; i++) {
 				tricks.push(temp.pop());
 			}
 		}
@@ -153,7 +153,7 @@ package theotherhattrick;
 		 * 	Donne le trick du dessus de depiledTricks au joueur d'id id
 		 */
 		public void giveTrick(int id) {
-			if(players[id].getHand().contains(Prop.SWISS_ARMY_KNIFE)) {
+			if(players[id].getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
 				System.out.println("! ! Vous avez réalisé le tour <" + depiledTricks.peek().getName() +"> avec le couteau suisse magique ! !\n");
 				depiledTricks.peek().decreaseValue();
 			}
@@ -170,15 +170,15 @@ package theotherhattrick;
 			Prop tProp; // Les props figurant sur la carte Trick
 			ArrayList<Prop> comp = players[id].getHand(); // Les props dans la main du joueur
 			
-			if(players[id].getHand().contains(Prop.SWISS_ARMY_KNIFE)) {
-				ind  = players[id].getHand().indexOf(Prop.SWISS_ARMY_KNIFE);
+			if(players[id].getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
+				ind  = players[id].getHand().indexOf(new Prop(PropEnum.SWISS_ARMY_KNIFE));
 				match2 = true;
 			}
 			// On rentrera toujours dans cette boucle,
 			while(match1 == false && iT1 < 2) {
 				iT2 = 0;
 				while(match1 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
-					tProp = depiledTricks.peek().getIngredient(iT1, iT2);
+					tProp = new Prop(depiledTricks.peek().getIngredient(iT1, iT2));
 					if(comp.get((ind+1)%2).getType() == tProp.getType()) {
 						match1 = true;
 					}
@@ -191,7 +191,7 @@ package theotherhattrick;
 				iT2 = 0;
 				iT1 = iT1% 2; // on va regarder les props du trick encore libres
 				while(match2 == false && iT2 < depiledTricks.peek().getLength(iT1)) {
-					tProp = depiledTricks.peek().getIngredient(iT1, iT2);
+					tProp = new Prop(depiledTricks.peek().getIngredient(iT1, iT2));
 					if(comp.get(ind).getType() == tProp.getType()) {
 						match2 = true;
 					}
