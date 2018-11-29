@@ -68,7 +68,7 @@ public class Game {
 
 		if (this.isFinished()) {
 			int winner = this.getWinner();
-			System.out.println("Le joueur " + players[winner].getName() + " a gagné avec un score de " + players[winner].getScore() + "points, BRAVO !");
+			System.out.println("Le joueur " + players[winner].getName() + " a gagné avec un score de >" + players[winner].getScore() + "< points, BRAVO !");
 		}
 
 		keyboard.close();
@@ -121,7 +121,7 @@ public class Game {
 			System.out.println("Vous avez réussi le tour");
 			board.showAllProps(p.getId()); // On montre ses cartes
 
-			// TODO Ajouter un d�lai afin que le joueur montre ses cartes pendant plus
+			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
 			// longtemps
 
 			board.hideAllProps(p.getId()); // On cache ses cartes
@@ -144,6 +144,7 @@ public class Game {
 	}
 
 	private void playTurn() {
+		System.out.println("\nTOUR N°" + tour + "\n");
 		Player p = players[tour % 3];
 		boolean playerIn;
 		// if (p instanceof Human || p instanceof Robot) {
@@ -153,7 +154,7 @@ public class Game {
 
 		board.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
-		// Demande � l'utilisateur si il souhaite d�piler un trick
+		// Demande à l'utilisateur si il souhaite dépiler un trick
 		depileTrick(p);
 
 		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
@@ -177,15 +178,15 @@ public class Game {
 		System.out.println("Veuillez choisir les règles avec lesquelles vous voulez jouer");
 
 		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'être utilisé pour réaliser n'importe quel trick");
-		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points � l'ex�cution du trick");
+		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points à l'exécution du trick");
 
-		System.out.println("La Carotte, permet d'�changer un props avec un autre joueur quand un tour est r�ussi en utilisant une carotte");
+		System.out.println("La Carotte, permet d'échanger un props avec un autre joueur quand un tour est réussi en utilisant une carotte");
 
-		System.out.println("La Laitue, quand un tour contenant la laitue est rat�, donne le choix au joueur de retourner au choix l'une de ses cartes");
-		System.out.println("Il a donc le choix de cacher une de ses cartes si elle �tait face visible");
+		System.out.println("La Laitue, quand un tour contenant la laitue est raté, donne le choix au joueur de retourner au choix l'une de ses cartes");
+		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
 
 		do {
-			System.out.println("Veullez choisir la r�gle que vous voulez utiliser");
+			System.out.println("Veullez choisir la règle que vous voulez utiliser");
 			System.out.println("Entrer 0 pour jouer sans variantes, 1 pour jouer avec le Couteau Suisse, 2 pour jouer avec la Carotte, 3 pour jouer avec la Laitue");
 			choice = keyboard.nextInt();
 		} while (choice < 0 || choice > 3);
@@ -221,14 +222,16 @@ public class Game {
 
 	protected void exchangeMiddle(Player p) { // échange une carte avec celle du milieu
 		int propToChange;
-		propToChange = p.speak("Lequel de vos props voulez vous échanger ?", 2, this.players, 'p');
-		this.board.exchangeProps(p.getId(), propToChange, -1, 0);
+		propToChange = p.speak("Quel prop voulez-vous replacer au milieu ?", 3, this.players, 'p');
+		if(propToChange != 2) { // dans speak, on renvoie 2 si on veut garder nos 2 props.
+			this.board.exchangeProps(p.getId(), propToChange, -1, 0);
+		}
 	}
 
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
-		propToChange = p.speak("Lequel de vos props voulez vous �changer ?", 2, this.players, 'p');
-		otherProp = p.speak("Avec quelle carte de vos adversaires souhaitez vous l'�changer ?", 4, players, 'n');
+		propToChange = p.speak("Lequel de vos props voulez vous échanger ?", 2, this.players, 'p');
+		otherProp = p.speak("Avec quelle carte de vos adversaires souhaitez vous l'échanger ?", 4, players, 'n');
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 	}

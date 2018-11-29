@@ -166,7 +166,7 @@ public class Player {
 				ansInt = 2;
 			}
 			else {
-				ansInt = -1;
+				ansInt = -1;// s'il y a une erreur
 			}
 			break;
 		

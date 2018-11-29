@@ -6,7 +6,7 @@ public class GameVarSwissKnife extends Game{
 	}
 	
 	protected void realizeTrick(Player p) {
-		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
+		// Gï¿½re l'enchainement des actions qui se rï¿½alisent quand on rï¿½alise un trick
 		boolean trickSuccessful = board.comparePropsToTrick(p.getId());
 
 		if (trickSuccessful) { // Si le joueur a rï¿½ussi le trick
@@ -21,7 +21,7 @@ public class GameVarSwissKnife extends Game{
 			// DONNER LE TRICK AU JOUEUR
 			board.giveTrick(p.getId()); // On lui donne le trick
 			
-			System.out.println("Vous pouvez échanger l'une de vos cartes avec l'une des cartes du milieu");
+			System.out.println("Vous pouvez Ã©changer l'une de vos cartes avec l'une des cartes du milieu");
 
 			super.exchangeMiddle(p);
 			p.printProps();
