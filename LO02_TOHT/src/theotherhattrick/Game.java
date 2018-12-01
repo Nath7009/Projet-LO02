@@ -19,7 +19,7 @@ public class Game {
 		// 1 pour la variante swissKnife
 		// 2 pour la variante carrot
 		// 3 pour la variante lettuce
-		System.out.println("==[==========]==[==========]== THE OTHER RABBIT ==[==========]==[==========]==\n\n");
+		System.out.println("==[==========]==[==========]== THE OTHER HAT TRICK ==[==========]==[==========]==\n\n");
 		variant = askRules();
 
 		// On utilise le polymorphisme pour g�rer les variantes
@@ -88,7 +88,7 @@ public class Game {
 		} while (nbHumains > 3);
 
 		for (int i = 0; i < nbHumains; i++) {
-			System.out.println("Entrer le nom du joueur num�ro " + (i + 1));
+			System.out.println("Entrer le nom du joueur numéro " + (i + 1));
 			nom = keyboard.nextLine();
 			date = this.askBirthDate();
 			keyboard.nextLine(); // La prochaine saisie ne sera pas un int
@@ -117,11 +117,11 @@ public class Game {
 	}
 
 	protected void realizeTrick(Player p) {
-		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un
+		// Gère l'enchainement des actions qui se réalisent quand on réalise un
 		// trick
 		boolean trickSuccessful = board.comparePropsToTrick(p.getId());
 
-		if (trickSuccessful) { // Si le joueur a r�ussi le trick
+		if (trickSuccessful) { // Si le joueur a réussi le trick
 			System.out.println("Vous avez réussi le tour");
 			board.showAllProps(p.getId()); // On montre ses cartes
 
@@ -169,7 +169,7 @@ public class Game {
 		p.printProps();
 
 		// PERFORMER LE TRICK
-		playerIn = p.speak("Performer le trick ?", 2, players, 'b') == 1 ? true : false; // Conversion
+		playerIn = p.speak("Voulez-vous réaliser le trick ?", 2, players, 'b') == 1 ? true : false; // Conversion
 																							// d'int en
 																							// booleen
 		if (playerIn) { // Si le joueur souhaite performer le trick
@@ -182,26 +182,26 @@ public class Game {
 	public static int askRules() {
 		int choice = 0;
 
-		System.out.println("Veuillez choisir les règles avec lesquelles vous voulez jouer");
+		System.out.println("Voici les différentes règles du jeu : \n");
 
-		System.out.println("Le Couteau Suisse, ajout d'une nouvelle carte capable d'être utilisé pour réaliser n'importe quel trick");
-		System.out.println("Attention, l'utilisation du couteau suisse vous fera gagner moins de points à l'exécution du trick");
+		System.out.println("***** Le Couteau Suisse *****\nAjout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
+		System.out.println("Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick");
 
-		System.out.println("La Carotte, permet d'échanger un props avec un autre joueur quand un tour est réussi en utilisant une carotte");
+		System.out.println("\n***** Les Carottes Magiques *****\nPermet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte");
 
-		System.out.println("La Laitue, quand un tour contenant la laitue est raté, donne le choix au joueur de retourner au choix l'une de ses cartes");
+		System.out.println("\n***** La Laitue Magique *****\nRater un tour où figure une laitue offre la possibilité de retourner un de vos props");
 		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
 
 		do {
-			System.out.println("Veullez choisir la règle que vous voulez utiliser");
-			System.out.println("Entrer 0 pour jouer sans variantes, 1 pour jouer avec le Couteau Suisse, 2 pour jouer avec la Carotte, 3 pour jouer avec la Laitue");
+			System.out.println("\nVeuillez choisir la règle que vous voulez utiliser :");
+			System.out.println("Entrez 0 pour jouer sans variantes, 1 pour jouer avec le Couteau Suisse, 2 pour jouer avec la Carotte, 3 pour jouer avec la Laitue");
 			choice = keyboard.nextInt();
 		} while (choice < 0 || choice > 3);
 
 		return choice;
 	}
 
-	public boolean getBool() { // R�cup�re un bool�en du joueur qui cr�e la
+	public boolean getBool() { // Récupère un booléen du joueur qui créé la
 								// partie
 		String answer;
 		do {

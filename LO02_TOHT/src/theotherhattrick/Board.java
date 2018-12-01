@@ -261,19 +261,19 @@ package theotherhattrick;
 			} 
 			
 			if(hNum == 2) {
-				choice = players[0].speak("\nQuel prop voulez-vous rÃ©vÃ©ler ?", 2, players, 'p');
+				choice = players[id].speak("\nQuel prop voulez-vous révéler ?", 2, players, 'p');
 				players[id].getHand(choice).unhide();
 			}
 			else if(hNum == 1) {
-				System.out.println("Vous n'avez que le prop " + players[id].getHand(choice).getName() + " qui soit cachÃ©. " + players[id].getHand(choice).getName() +" est maintenant visible.");
+				System.out.println("Vous n'avez que le prop " + players[id].getHand(choice).getName() + " qui soit caché. " + players[id].getHand(choice).getName() +" est maintenant visible.");
 				players[id].getHand(choice).unhide();
 			}
 			else {
-				System.out.println("Tous vos props sont dÃ©jÃ  visibles. Aucune action n'est effectuÃ©e."); 
+				System.out.println("Tous vos props sont déjà  visibles. Aucune action n'est effectuée."); 
 			}
 		}
 
-		public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien rÃ©aliser le tour
+		public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
 			players[id].getHand(0).unhide();
 			players[id].getHand(1).unhide();
 		}
