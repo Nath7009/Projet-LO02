@@ -250,13 +250,18 @@ public class Game {
 	public Date askBirthDate() {
 		int day = 0, month = 0, year = 0;
 		do {
-			System.out.println("Entrer votre jour de naissance");
-			day = keyboard.nextInt();
-			System.out.println("Entrer votre mois de naissance");
-			month = keyboard.nextInt();
-			System.out.println("Entrer votre ann�e de naissance");
-			year = keyboard.nextInt();
-//			keyboard.nextLine();
+			try {
+				System.out.println("Entrer votre jour de naissance");
+				day = keyboard.nextInt();
+				System.out.println("Entrer votre mois de naissance");
+				month = keyboard.nextInt();
+				System.out.println("Entrer votre année de naissance");
+				year = keyboard.nextInt();
+				
+			}catch(Exception e) {
+				keyboard.nextLine(); 
+				return askBirthDate();
+			};
 
 		} while (day < 0 || month < 0 || year < 1910 || day > 31 || month > 12 || year > 2010);
 
