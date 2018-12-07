@@ -145,6 +145,7 @@ package theotherhattrick;
 				players[p2].setHand(tmp1, ind2);
 			}
 			else {
+				System.out.println(p2);
 				System.out.println("ERROR : undefined p2 value");
 			}
 		}
@@ -278,7 +279,7 @@ package theotherhattrick;
 			players[id].getHand(1).unhide();
 		}
 
-		public void hideAllProps(int id) { // Retourne face cachÃ©e tous les props du joueur en cas de tour rÃ©ussi
+		public void hideAllProps(int id) { // Retourne face cachée tous les props du joueur en cas de tour réussi
 			players[id].getHand(0).hide();
 			players[id].getHand(1).hide();
 		}

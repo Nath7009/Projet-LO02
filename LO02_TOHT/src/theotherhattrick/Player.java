@@ -210,7 +210,7 @@ public class Player {
 					do{
 						System.out.println("Entrer 0 ou 1 pour les props de gauche ou droite de " + players[(this.id+1)%3].name + ", 2 ou 3 pour le props de gauche ou droite de " + players[(this.id + 2)%3].name + " ou -1 pour le prop du milieu : " );
 						ansInt = keyboard.nextInt();
-					} while(ansInt > 3 && ansInt < -1);
+					} while(ansInt >= 3 || ansInt <= -1);
 					break;
 
 				default : 

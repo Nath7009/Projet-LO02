@@ -6,7 +6,7 @@ public class GameVarCarrot extends Game {
 	}
 
 	protected void realizeTrick(Player p) {
-		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un trick
+		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un trick
 		boolean trickSuccessful = board.comparePropsToTrick(p.getId());
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
@@ -49,10 +49,17 @@ public class GameVarCarrot extends Game {
 		// 0,1 pour le joueur de gauche
 		// 2,3 pour le joueur de droite
 		// -1 pour le prop du milieu
-		if (otherProp >= 0) {
-			int p2 = (otherProp / 2 + 1 + p.getId()) % 3; // Le joueur avec lequel on veut échanger le prop
+		if (otherProp >= 0 && otherProp < 2) { // échange avec le joueur d'après
+			int p2 = (p.getId() + 1)%3; // Le joueur avec lequel on veut échanger le prop
+			System.out.println(p2 + "\t" + p.getId());
 			this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
-		} else {
+		}else if(otherProp >= 2 && otherProp <= 3) { //échange avec le joueur d'avant
+			int p2 = (p.getId() + 2) % 3; // Le joueur avec lequel on veut échanger le prop
+			System.out.println(p2 + "\t" + p.getId());
+			this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
+		}
+		else {
+			System.out.println(otherProp);
 			this.board.exchangeProps(p.getId(), propToChange, -1, otherProp + 1);
 		}
 	}
