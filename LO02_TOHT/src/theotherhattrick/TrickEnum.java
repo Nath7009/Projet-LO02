@@ -11,6 +11,7 @@ public enum TrickEnum {
 	THE_CARROT_HAT_TRICK("The Carrot Hat Trick", new PropEnum[][] {{PropEnum.HAT} , {PropEnum.CARROT}}, 3),
 	THE_SLIGHTLY_EASIER_HAT_TRICK("The Slightly Easier Hat Trick", new PropEnum[][] {{PropEnum.HAT} , {PropEnum.RABBIT, PropEnum.THE_OTHER_RABBIT}}, 4),
 	THE_HAT_TRICK("The Hat Trick", new PropEnum[][] {{PropEnum.HAT} , {PropEnum.RABBIT}}, 5),
+	
 	THE_OTHER_HAT_TRICK("The Other Hat Trick", new PropEnum[][] {{PropEnum.HAT} , {PropEnum.THE_OTHER_RABBIT}}, 6); 
 	
 	String name = "";

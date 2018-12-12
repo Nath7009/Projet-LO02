@@ -6,39 +6,40 @@ public class GameVarCarrot extends Game {
 	}
 
 	protected void realizeTrick(Player p) {
-		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un trick
-		boolean trickSuccessful = board.comparePropsToTrick(p.getId());
+		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
+		boolean trickSuccessful = this.depiledTricks.peek().compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");
-			board.showAllProps(p.getId()); // On montre ses cartes
+			this.showAllProps(p.getId()); // On montre ses cartes
 
-			// TODO Ajouter un d�lai afin que le joueur montre ses cartes pendant plus
+			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
 			// longtemps
 
-			board.hideAllProps(p.getId()); // On cache ses cartes
+			this.hideAllProps(p.getId()); // On cache ses cartes
 			
-			// DONNER LE TRICK AU JOUEUR
-			board.giveTrick(p.getId()); // On lui donne le trick
+			
 			
 			System.out.print("Vous pouvez échanger l'une de vos cartes avec");
 
-			if (this.board.contains("Carrot")) {
-				System.out.println("la carte du milieu ou une carte de vos adversaires");
+			if (this.depiledTricks.peek().contains(new Prop(PropEnum.CARROT))) {
+				System.out.println(" la carte du milieu ou une carte de vos adversaires : ");
 				// ECHANGE AVEC TOUT LE MONDE ET LA CARTE DU MILIEU
 				exchangePlayers(p);
 			} else { // si on a pas la carte carrot
-				System.out.println("la carte du milieu");
+				System.out.println(" la carte du milieu :");
 				super.exchangeMiddle(p);
 				// ECHANGLE MILIEU STANDART
 			}
+			// DONNER LE TRICK AU JOUEUR
+			this.giveTrick(p.getId()); // On lui donne le trick
 		}
 
 		else {
 			// Si le joueur rate le trick
 			System.out.println("Vous avez échoué le tour");
 
-			board.revealProp(p.getId());
+			this.revealProp(p.getId());
 		}
 	}
 
@@ -52,15 +53,15 @@ public class GameVarCarrot extends Game {
 		if (otherProp >= 0 && otherProp < 2) { // échange avec le joueur d'après
 			int p2 = (p.getId() + 1)%3; // Le joueur avec lequel on veut échanger le prop
 			System.out.println(p2 + "\t" + p.getId());
-			this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
+			this.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 		}else if(otherProp >= 2 && otherProp <= 3) { //échange avec le joueur d'avant
 			int p2 = (p.getId() + 2) % 3; // Le joueur avec lequel on veut échanger le prop
 			System.out.println(p2 + "\t" + p.getId());
-			this.board.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
+			this.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 		}
 		else {
 			System.out.println(otherProp);
-			this.board.exchangeProps(p.getId(), propToChange, -1, otherProp + 1);
+			this.exchangeProps(p.getId(), propToChange, -1, otherProp + 1);
 		}
 	}
 }
