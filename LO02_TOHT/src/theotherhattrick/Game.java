@@ -162,7 +162,7 @@ public class Game {
 	}
 
 	protected void depileTrick(Player p) {
-		boolean playerIn = p.speak("Retourner un trick ?", 2, players, 'b') == 1 ? true : false; // Conversion
+		boolean playerIn = p.revealNewTrick(); // Conversion
 		if (playerIn) {
 			this.depile();
 			System.out.println("Le nouveau Trick est : ");
@@ -177,18 +177,18 @@ public class Game {
 
 		if (trickSuccessful) { // Si le joueur a réussi le trick
 			System.out.println("Vous avez réussi le tour");
-			this.showAllProps(p.getId()); // On montre ses cartes
+			this.showAllProps(p); // On montre ses cartes
 
 			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
 			// longtemps
 
-			this.hideAllProps(p.getId()); // On cache ses cartes
+			this.hideAllProps(p); // On cache ses cartes
 			System.out.println("Vous pouvez échanger l'une de vos cartes avec la carte du milieu");
 
 			exchangeMiddle(p);
 
 			// DONNER LE TRICK AU JOUEUR
-			this.giveTrick(p.getId()); // On lui donne le trick
+			this.giveTrick(p); // On lui donne le trick
 
 		}
 
@@ -196,7 +196,7 @@ public class Game {
 			// Si le joueur rate le trick
 			System.out.println("Vous avez échoué le tour");
 
-			this.revealProp(p.getId());
+			this.revealProp(p);
 		}
 
 	}
@@ -233,13 +233,11 @@ public class Game {
 		p.printProps();
 
 		// PERFORMER LE TRICK
-		playerIn = p.speak("Voulez-vous réaliser le trick ?", 2, players, 'b') == 1 ? true : false; // Conversion
-																							// d'int en
-																							// booleen
+		playerIn = p.performTrick();
 		if (playerIn) { // Si le joueur souhaite performer le trick
 			realizeTrick(p);
 		} else { // Le joueur ne souhaite pas faire le trick
-			this.revealProp(p.getId());
+			this.revealProp(p);
 		}
 	}
 
@@ -298,19 +296,19 @@ public class Game {
 	/* 
 	 * 	Donne le trick du dessus de depiledTricks au joueur d'id id
 	 */
-	public void giveTrick(int id) {
-		if(players[id].getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
+	public void giveTrick(Player p) {
+		if(p.getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
 			System.out.println("! ! Vous avez réalisé le tour <" + depiledTricks.peek().getName() +"> avec le couteau suisse magique ! !\n");
 			depiledTricks.peek().decreaseValue();
 		}
-		players[id].increaseScore(depiledTricks.peek().getPoints());
-		players[id].pushTrick(depiledTricks.pop());
+		p.increaseScore(depiledTricks.peek().getPoints());
+		p.pushTrick(depiledTricks.pop());
 	}
 	
 
 	protected void exchangeMiddle(Player p) { // échange une carte avec celle du milieu
 		int propToChange;
-		propToChange = p.speak("Quel prop voulez-vous replacer au milieu ?", 3, this.players, 'p');
+		propToChange = p.chooseMiddle();
 		if(propToChange != 2) { // dans speak, on renvoie 2 si on veut garder nos 2 props.
 			this.exchangeProps(p.getId(), propToChange, -1, 0);
 		}
@@ -318,15 +316,15 @@ public class Game {
 	
 	/*	
 	 *	Echange la position de 2 props 
-	 * 	la version oÃ¹ l'on utilise createCopy() provoque plusieurs erreurs de type java.lang.CloneNotSupportedException
-	 * 	La version oÃ¹ l'on utilise directement les accesseurs est fonctionnelle.
+	 * 	la version où l'on utilise createCopy() provoque plusieurs erreurs de type java.lang.CloneNotSupportedException
+	 * 	La version où l'on utilise directement les accesseurs est fonctionnelle.
 	 */
 	public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
 		Prop tmp1 = players[p1].getHand(ind1);
 		players[p1].getHand().remove(ind1);
 //		int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
 		
-		if(p2 == -1) {  // Si on veut Ã©changer le prop du joueur dont c'est le tour avec celui du milieu 
+		if(p2 == -1) {  // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu 
 			players[p1].setHand(this.middleProp.get(ind2) ,ind1);
 			middleProp.remove(tmp1);
 			middleProp.set(ind2, tmp1);
@@ -342,24 +340,24 @@ public class Game {
 		}
 	}
 	
-	public void returnProp(int id) {
-		System.out.println("Main de " + players[id].getName() + " => ");
-		System.out.println(players[id].getHand());
-		int ind = players[id].speak("Quel prop voulez vous retourner ? \n", players[0].getHand().size(), players, 'p');
-		if(players[id].getHand(ind).getState()) {
-			players[id].getHand(ind).hide();
+	public void returnProp(Player p) {
+		System.out.println("Main de " + p.getName() + " => ");
+		System.out.println(p.getHand());
+		int ind = p.revealProp();
+		if(p.getHand(ind).getState()) {
+			p.getHand(ind).hide();
 		}
 		else {
-			players[id].getHand(ind).unhide();
+			p.getHand(ind).unhide();
 		}
 		System.out.println("Nouvelle main => " );
-		System.out.println(players[id].getHand());
+		System.out.println(p.getHand());
 	}
 
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
-		propToChange = p.speak("Lequel de vos props voulez vous échanger ?", 2, this.players, 'p');
-		otherProp = p.speak("Avec quelle carte de vos adversaires souhaitez vous l'échanger ?", 4, players, 'n');
+		propToChange = p.chooseOwnProp();
+		otherProp = p.chooseOtherProp(players);
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
 	}
@@ -399,14 +397,14 @@ public class Game {
 		return bestPlayer;
 	}
 	
-	public void revealProp(int id) {
+	public void revealProp(Player p) {
 		int choice = 0, i, hNum = 0;
 		
-		System.out.println("Votre main, " + players[id].getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
-		System.out.println(players[id].getHand());
+		System.out.println("Votre main, " + p.getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
+		System.out.println(p.getHand());
 		for(i = 0; i < 2; i++) {
 //			players[id].getHand(i).printDebug();
-			if(players[id].getHand(i).getState() == false) {
+			if(p.getHand(i).getState() == false) {
 				hNum ++;
 				if(i == 0) {
 					choice = 0;
@@ -421,12 +419,12 @@ public class Game {
 			}
 		}
 		if(hNum == 2) {
-			choice = players[id].speak("\nQuel prop voulez-vous révéler ?", 2, players, 'p');
-			players[id].getHand(choice).unhide();
+			choice = p.revealProp();
+			p.getHand(choice).unhide();
 		}
 		else if(hNum == 1) {
-			System.out.println("Vous n'avez que le prop " + players[id].getHand(choice).getName() + " qui soit caché. " + players[id].getHand(choice).getName() +" est maintenant visible.");
-			players[id].getHand(choice).unhide();
+			System.out.println("Vous n'avez que le prop " + p.getHand(choice).getName() + " qui soit caché. " + p.getHand(choice).getName() +" est maintenant visible.");
+			p.getHand(choice).unhide();
 		}
 		else {
 			System.out.println("Tous vos props sont déjà  visibles. Aucune action n'est effectuée."); 
@@ -447,14 +445,14 @@ public class Game {
 		this.depiledTricks.peek().print();
 	}
 	
-	public void showAllProps(int id) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
-		players[id].getHand(0).unhide();
-		players[id].getHand(1).unhide();
+	public void showAllProps(Player p) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
+		p.getHand(0).unhide();
+		p.getHand(1).unhide();
 	}
 
-	public void hideAllProps(int id) { // Retourne face cachée tous les props du joueur en cas de tour réussi
-		players[id].getHand(0).hide();
-		players[id].getHand(1).hide();
+	public void hideAllProps(Player p) { // Retourne face cachée tous les props du joueur en cas de tour réussi
+		p.getHand(0).hide();
+		p.getHand(1).hide();
 	}
 
 	protected void sortPlayers() {

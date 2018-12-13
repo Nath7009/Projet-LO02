@@ -11,12 +11,12 @@ public class GameVarCarrot extends Game {
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");
-			this.showAllProps(p.getId()); // On montre ses cartes
+			this.showAllProps(p); // On montre ses cartes
 
 			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
 			// longtemps
 
-			this.hideAllProps(p.getId()); // On cache ses cartes
+			this.hideAllProps(p); // On cache ses cartes
 			
 			
 			
@@ -32,21 +32,21 @@ public class GameVarCarrot extends Game {
 				// ECHANGLE MILIEU STANDART
 			}
 			// DONNER LE TRICK AU JOUEUR
-			this.giveTrick(p.getId()); // On lui donne le trick
+			this.giveTrick(p); // On lui donne le trick
 		}
 
 		else {
 			// Si le joueur rate le trick
 			System.out.println("Vous avez échoué le tour");
 
-			this.revealProp(p.getId());
+			this.revealProp(p);
 		}
 	}
 
 	protected void exchangePlayers(Player p) { // échange une carte avec un autre joueur ou la carte du milieu
 		int propToChange, otherProp;
-		propToChange = p.speak("Lequel de vos props voulez vous échanger ?", 2, this.players, 'p');
-		otherProp = p.speak("Avec quelle carte du milieu ou de vos adversaire voulez vous l'échanger ?", 5, players, 'v');
+		propToChange = p.chooseOwnProp();
+		otherProp = p.chooseMiddleVarCarrot(players);
 		// 0,1 pour le joueur de gauche
 		// 2,3 pour le joueur de droite
 		// -1 pour le prop du milieu

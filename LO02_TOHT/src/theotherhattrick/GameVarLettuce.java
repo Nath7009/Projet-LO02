@@ -11,16 +11,16 @@ public class GameVarLettuce extends Game {
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");
-			this.showAllProps(p.getId()); // On montre ses cartes
+			this.showAllProps(p); // On montre ses cartes
 
 			// TODO Ajouter un d�lai afin que le joueur montre ses cartes pendant plus
 			// longtemps
 
-			this.hideAllProps(p.getId()); // On cache ses cartes
+			this.hideAllProps(p); // On cache ses cartes
 			
 
 			// DONNER LE TRICK AU JOUEUR
-			this.giveTrick(p.getId()); // On lui donne le trick
+			this.giveTrick(p); // On lui donne le trick
 			
 			System.out.println("Vous pouvez échanger l'une de vos cartes avec la carte du milieu");
 
@@ -32,9 +32,9 @@ public class GameVarLettuce extends Game {
 			System.out.println("Vous avez échoué le tour");
 			if (depiledTricks.peek().contains(new Prop(PropEnum.LETTUCE))) {
 				System.out.println("Etant donné que le tour échoué contenait une laitue, vous pouvez retourner une carte");
-				this.returnProp(p.getId());
+				this.returnProp(p);
 			} else {
-				this.revealProp(p.getId());
+				this.revealProp(p);
 			}
 		}
 

@@ -43,7 +43,9 @@ public class Prop {
 	public String toString() {
 		return "[" + name + (isVisible == false? " -> caché " : " -> visible") + "]";
 	}
-	
+	public String toStringIfVisible() {
+		return isVisible == true ? this.toString() : "[?????]";
+	}
 	public void printIfVisible() {
 		System.out.println(isVisible == true ? this.toString() : "[?????]");
 	}
