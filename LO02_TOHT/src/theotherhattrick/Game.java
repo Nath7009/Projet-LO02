@@ -2,7 +2,6 @@ package theotherhattrick;
 
 import java.util.Scanner;
 import java.util.ArrayList; 
-import java.util.Arrays;
 import java.util.Stack;
 import java.util.Collections;
 
@@ -12,9 +11,9 @@ public class Game {
 	protected int var;
 	
 	protected Player[] players;
-	protected ArrayList<Prop> middleProp = new ArrayList<Prop>();
+	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
-	protected Stack<Trick> depiledTricks = new Stack<Trick>();
+	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
 	protected Stack<Prop> allProps = new Stack<Prop>();
 
 	public Game() {
@@ -66,7 +65,7 @@ public class Game {
 		// l'affiche
 		this.tour = 0;
 
-		while (this.tour < 100 && !this.isFinished()) {
+		while (this.tour < 10000 && !this.isFinished()) {
 			this.playTurn();
 			this.nextTurn();
 			if (this.depiledIsEmpty()) {
@@ -149,10 +148,10 @@ public class Game {
 	 */
 	public void distributeProps() {
 		middleProp = new ArrayList<Prop>(1);
-		this.middleProp.add(allProps.pop());
+		middleProp.add(allProps.pop());
 		if(this.getVariant() == 1) { // Si on joue avec la variante du couteau suisse, on Veut une carte supplémentaire au milieu
 			middleProp.ensureCapacity(2);
-			this.middleProp.add(allProps.pop());
+			middleProp.add(allProps.pop());
 		}
 		for(int i = 0; i < 2; i++) {
 			for(Player player : players) {
@@ -205,10 +204,18 @@ public class Game {
 	 */
 	public void depile() {
 		Trick temp = this.tricks.pop();
-		this.depiledTricks.push(temp);
+		depiledTricks.push(temp);
 	}
 	public boolean depiledIsEmpty() {
 		return depiledTricks.empty();
+	}
+	
+	public static Trick getTopTrick() {
+		return depiledTricks.peek();
+	}
+	
+	public static ArrayList<Prop> getMiddleProp() {
+		return middleProp;
 	}
 
 	private void playTurn() {
@@ -325,7 +332,7 @@ public class Game {
 //		int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
 		
 		if(p2 == -1) {  // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu 
-			players[p1].setHand(this.middleProp.get(ind2) ,ind1);
+			players[p1].setHand(middleProp.get(ind2) ,ind1);
 			middleProp.remove(tmp1);
 			middleProp.set(ind2, tmp1);
 		}
@@ -442,7 +449,7 @@ public class Game {
 	}
 	
 	public void printTopTrick() {
-		this.depiledTricks.peek().print();
+		depiledTricks.peek().print();
 	}
 	
 	public void showAllProps(Player p) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour

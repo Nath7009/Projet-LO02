@@ -7,7 +7,7 @@ public class GameVarCarrot extends Game {
 
 	protected void realizeTrick(Player p) {
 		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
-		boolean trickSuccessful = this.depiledTricks.peek().compareToProps(p.getHand());
+		boolean trickSuccessful = depiledTricks.peek().compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");
@@ -22,7 +22,7 @@ public class GameVarCarrot extends Game {
 			
 			System.out.print("Vous pouvez échanger l'une de vos cartes avec");
 
-			if (this.depiledTricks.peek().contains(new Prop(PropEnum.CARROT))) {
+			if (depiledTricks.peek().contains(new Prop(PropEnum.CARROT))) {
 				System.out.println(" la carte du milieu ou une carte de vos adversaires : ");
 				// ECHANGE AVEC TOUT LE MONDE ET LA CARTE DU MILIEU
 				exchangePlayers(p);

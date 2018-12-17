@@ -1,29 +1,38 @@
 package theotherhattrick;
 
-public class StratDefault implements Decision{
-	
+public class StratDefault implements Decision {
+
+	// Dans cette stratégie, le joueur va choisir au hasard
+
 	public boolean revealNewTrick() {
-		
-		return false;
+		return Math.random() >= 0.5 ? true : false;
 	}
+
 	public int chooseOwnProp() {
-		
-		return 0;
+		return Math.random() >= 0.5 ? 0 : 1;
 	}
+
 	public int chooseOtherProp(Player[] players) {
-		return 0;
+		int choice = (int) Math.floor(Math.random() * 4);
+		return choice;
 	}
+
 	public boolean performTrick() {
-		return false;
+		return Math.random() >= 0.5 ? true : false;
 	}
+
 	public int revealProp() {
-		return 0;
+		return Math.random() >= 0.5 ? 0 : 1;
 	}
+
 	public int chooseMiddle() {
-		return 0;
+		int choice = (int) Math.floor(Math.random() * 3);
+		return choice;
 	}
+
 	public int chooseMiddleVarCarrot(Player[] players) {
-		return 0;
+		int choice = (int) Math.floor(Math.random() * 5);
+		return choice;
 	}
 
 }

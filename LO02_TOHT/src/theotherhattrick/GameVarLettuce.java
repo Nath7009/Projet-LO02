@@ -7,7 +7,7 @@ public class GameVarLettuce extends Game {
 
 	protected void realizeTrick(Player p) {
 		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un trick
-		boolean trickSuccessful = this.depiledTricks.peek().compareToProps(p.getHand());
+		boolean trickSuccessful = depiledTricks.peek().compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");

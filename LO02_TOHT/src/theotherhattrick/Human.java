@@ -121,7 +121,7 @@ public class Human extends Player {
 			if(i == 1) {
 				System.out.println("\nSaisie incorrecte. Veuillez respecter les consignes : ");
 			}
-			System.out.println("Entrez 0 pour le Prop : "+ this.getHand(0).getName() +", 1 pour le Prop : " + this.getHand(1).getName() + ", ou 2 pour garder les mÃªmes Props : ");
+			System.out.println("Entrez 0 pour le Prop : "+ this.getHand(0).getName() +", 1 pour le Prop : " + this.getHand(1).getName() + ", ou 2 pour garder les mêmes Props : ");
 			ans = keyboard.nextInt();
 			i++;
 		}while(ans !=0 && ans != 1 && ans != 2);

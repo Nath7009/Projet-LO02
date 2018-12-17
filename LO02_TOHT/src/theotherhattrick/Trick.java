@@ -1,7 +1,8 @@
 package theotherhattrick;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
+
 
 public class Trick {
 	String name;
@@ -59,6 +60,27 @@ public class Trick {
 			}
 		}
 		return match;
+	}
+	
+	public int getMatchingTricks(ArrayList<Prop> hand) {
+		//Retourne le nombre de tricks en commun avec le trick courant
+		int matching = 0;
+
+		if(compareToProps(hand)) {
+			return 2;
+		}
+		
+		for(Iterator<Prop> it = hand.iterator();it.hasNext();) {
+			if(this.contains(it.next())) {
+				matching++;
+			}
+		}
+		//Si on a trouvé plus de 2 cartes qui fonctionnent et que compareToProps n'a pas renvoyé vrai,
+		//Il est impossible que l'on pait plus de 2 matchs
+		if(matching>=2) {
+			matching = 1;
+		}
+		return matching;
 	}
 	
 	public boolean compareToProps(ArrayList<Prop> hand) {
