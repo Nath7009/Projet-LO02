@@ -1,14 +1,14 @@
 package theotherhattrick;
 
 import java.util.Scanner;
+import java.io.Serializable;
 import java.util.ArrayList; 
 import java.util.Stack;
 import java.util.Collections;
 
-public class Game {
-	protected int tour; // Le joueur qui doit jouer
+public class Game implements Serializable{
+	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
-	protected int var;
 	
 	protected Player[] players;
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
@@ -21,6 +21,7 @@ public class Game {
 
 	public static Game createGame() {
 		Game game = new Game();
+		Game.keyboard = new Scanner(System.in);
 		int variant = 0;
 		// 0 pour le jeu de base
 		// 1 pour la variante swissKnife
@@ -51,7 +52,7 @@ public class Game {
 
 	public void start() {
 
-		keyboard = new Scanner(System.in);
+		//keyboard = new Scanner(System.in);
 
 		// Instanciation de tous les joueurs humains ou robots
 		this.createPlayers();
