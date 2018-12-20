@@ -55,9 +55,9 @@ public class StratConservative implements Decision {
 		int ind = 0;
 
 		for (int i = 0; i < players.length; i++) {
-			if (players[i].id != this.id) { // On ne vérifie pas les cartes de soi même
+			if (players[i].id != this.id) { // On ne vérifie pas ses propres cartes
 				for (Iterator<Prop> it = players[i].getHand().iterator(); it.hasNext();) {
-					int val = it.next().getType();
+					int val = it.next().getTypeSecure();
 					if (val > bestOtherProp) {
 						bestOtherProp = val;
 						indBestOtherProp = ind;
@@ -71,6 +71,7 @@ public class StratConservative implements Decision {
 				throw new Exception("Erreur dans la sélection du prop le plus rare résultat = " + indBestOtherProp);
 			} catch (java.lang.Exception e) {
 				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -95,7 +96,7 @@ public class StratConservative implements Decision {
 		
 		//On récupère le meilleur prop du milieu
 		for (Iterator<Prop> it = middle.iterator(); it.hasNext();) {
-			if (it.next().getType() > middle.get(indBest).getType()) {
+			if (it.next().getTypeSecure() > middle.get(indBest).getTypeSecure()) {
 				indBest = ind;
 			}
 			ind++;
@@ -103,7 +104,7 @@ public class StratConservative implements Decision {
 		
 		//Si le meilleur prop du milieu est moins bon que le pire prop, on n'échange pas
 		
-		if (middle.get(indBest).getType() < this.hand.get(toChange).getType()) {
+		if (middle.get(indBest).getTypeSecure() < this.hand.get(toChange).getTypeSecure()) {
 			return 2;
 		}
 

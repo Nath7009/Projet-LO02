@@ -2,38 +2,41 @@ package theotherhattrick;
 
 public class StratRisky implements Decision {
 	
-	//Dans cette stratégie, le joueur va toujours essaier de faire le trick qui est retourné
+	StratDefault sd;
+	//Dans cette stratï¿½gie, le joueur va toujours essaier de faire le trick qui est retournï¿½
 	//Il va essayer de prendre les cartes les plus rares aux autres joueurs
+	//Il ne retourne jamais le tas de tricks
 	
+	public StratRisky() {
+		this.sd = new StratDefault();
+	}
 
 	public boolean revealNewTrick() {
-
 		return false;
 	}
 
 	public int chooseOwnProp() {
-
-		return 0;
+		return sd.chooseOwnProp();
 	}
 
 	public int chooseOtherProp(Player[] players) {
-		return 0;
+		return sd.chooseOtherProp(players);
 	}
 
 	public boolean performTrick() {
-		return false;
+		return true;
 	}
 
 	public int revealProp() {
-		return 0;
+		return sd.revealProp();
 	}
 
 	public int chooseMiddle() {
-		return 0;
+		return sd.chooseMiddle();
 	}
 
 	public int chooseMiddleVarCarrot(Player[] players) {
-		return 0;
+		return sd.chooseMiddleVarCarrot(players);
 	}
 
 }

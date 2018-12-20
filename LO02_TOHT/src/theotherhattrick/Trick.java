@@ -8,6 +8,7 @@ public class Trick {
 	String name;
 	int points;
 	PropEnum[][] ingredients = {{} , {}};
+	int lifeLength = 0;
 	
 	public Trick(TrickEnum trick){
 		this.name = trick.getName();
@@ -28,6 +29,14 @@ public class Trick {
 	
 	public void decreaseValue() {
 		this.points--;
+	}
+	
+	public void age() {
+		this.lifeLength++;
+	}
+	
+	public boolean isTooOld() {
+		return this.lifeLength > 5;
 	}
 	
 	public void print() {

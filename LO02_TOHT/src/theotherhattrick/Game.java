@@ -2,15 +2,16 @@ package theotherhattrick;
 
 import java.util.Scanner;
 import java.io.Serializable;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.Stack;
+
 import java.util.Collections;
 
-public class Game implements Serializable{
+public class Game implements Serializable {
 	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
-	
-	protected Player[] players;
+
+	protected static Player[] players;
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
 	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
@@ -45,14 +46,9 @@ public class Game implements Serializable{
 		return game;
 	}
 
-	/*
-	 * public static Game newGame() { if (game == null) { game = new Game(); return
-	 * game; } return game; }
-	 */
-
 	public void start() {
 
-		//keyboard = new Scanner(System.in);
+		// keyboard = new Scanner(System.in);
 
 		// Instanciation de tous les joueurs humains ou robots
 		this.createPlayers();
@@ -74,8 +70,12 @@ public class Game implements Serializable{
 			}
 		}
 
-		if(this.isFinished()) {
+		if (this.isFinished()) {
 			int winner = this.getWinner();
+			System.out.println("Félicitations aux joueurs qui ont partcipé :");
+			for(int i=0;i<players.length;i++) {
+				System.out.println("Le joueur " + players[i].getName() + " avec un score de " + players[i].getScore() + " points");
+			}
 			System.out.println("Le joueur " + players[winner].getName() + " a gagné avec un score de >" + players[winner].getScore() + "< points, BRAVO !");
 		}
 
@@ -86,7 +86,7 @@ public class Game implements Serializable{
 		int nbHumains = 0;
 		String nom;
 		Date date;
-		
+
 		players = new Player[3];
 		do {
 			System.out.println("Entrer le nombre de joueurs humains voulant participer au jeu");
@@ -113,49 +113,55 @@ public class Game implements Serializable{
 			players[i].setId(i);
 		}
 	}
-	
+
 	/**
-	 * Cette méthode créé les cartes (Props et Tricks) en fonction de la version du jeu à laquelle on joue.
-	 * Utilise la méthode shuffle(Stack<\E> stack) pour mélanger les piles de cartes. On distribue les props avec la méthode distributeProps(int rule).
-	 * On verse le contenu du Stack de Trick dans un second stack dans le fond duquel on a mis "The Other Hat Trick".
+	 * Cette méthode créé les cartes (Props et Tricks) en fonction de la version du
+	 * jeu à laquelle on joue. Utilise la méthode shuffle(Stack<\E> stack) pour
+	 * mélanger les piles de cartes. On distribue les props avec la méthode
+	 * distributeProps(int rule). On verse le contenu du Stack de Trick dans un
+	 * second stack dans le fond duquel on a mis "The Other Hat Trick".
+	 * 
 	 * @param rule
 	 */
 	public void createCards() {
-		for(int i = 0; i < PropEnum.values().length - (this.getVariant() == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
+		for (int i = 0; i < PropEnum.values().length - (this.getVariant() == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
 			allProps.push(new Prop(PropEnum.values()[i]));
-			if(i == 0) { // Il y a 3 carrotes dans le jeu
+			if (i == 0) { // Il y a 3 carrotes dans le jeu
 				allProps.push(new Prop(PropEnum.values()[i]));
 				allProps.push(new Prop(PropEnum.values()[i]));
 			}
 		}
 		Collections.shuffle(allProps);
-		
+
 		Stack<Trick> temp = new Stack<Trick>();
-		for(int i = 0; i < TrickEnum.values().length - 1; i++) {
+		for (int i = 0; i < TrickEnum.values().length - 1; i++) {
 			temp.push(new Trick(TrickEnum.values()[i]));
 		}
 		Collections.shuffle(temp);
 		temp.push(new Trick(TrickEnum.values()[TrickEnum.values().length - 1]));
-		for(int i = 0; i < TrickEnum.values().length; i++) {
+		for (int i = 0; i < TrickEnum.values().length; i++) {
 			tricks.push(temp.pop());
 		}
 	}
-	
+
 	/**
-	 * Cette méthode distribue les Props générés dans la méthode createCards.
-	 * Créé un ArrayList de la taille nécessaire à la variante jouée (2 si on joue avec le couteau suisse, 1 sinon).
-	 * Chaque joueur reçoit 2 cartes, le milieu reçoit 1 ou 2 prop(s).
+	 * Cette méthode distribue les Props générés dans la méthode createCards. Créé
+	 * un ArrayList de la taille nécessaire à la variante jouée (2 si on joue avec
+	 * le couteau suisse, 1 sinon). Chaque joueur reçoit 2 cartes, le milieu reçoit
+	 * 1 ou 2 prop(s).
+	 * 
 	 * @param rule
 	 */
 	public void distributeProps() {
 		middleProp = new ArrayList<Prop>(1);
 		middleProp.add(allProps.pop());
-		if(this.getVariant() == 1) { // Si on joue avec la variante du couteau suisse, on Veut une carte supplémentaire au milieu
+		if (this.getVariant() == 1) { // Si on joue avec la variante du couteau suisse, on Veut une carte
+										// supplémentaire au milieu
 			middleProp.ensureCapacity(2);
 			middleProp.add(allProps.pop());
 		}
-		for(int i = 0; i < 2; i++) {
-			for(Player player : players) {
+		for (int i = 0; i < 2; i++) {
+			for (Player player : players) {
 				player.setHand(allProps.pop(), i);
 			}
 		}
@@ -200,21 +206,24 @@ public class Game implements Serializable{
 		}
 
 	}
+
 	/**
-	 * reverse le trick du dessus de la pile de tricks cachés sur le dessus de la pile de tricks dévouverts. 
+	 * reverse le trick du dessus de la pile de tricks cachés sur le dessus de la
+	 * pile de tricks dévouverts.
 	 */
 	public void depile() {
 		Trick temp = this.tricks.pop();
 		depiledTricks.push(temp);
 	}
+
 	public boolean depiledIsEmpty() {
 		return depiledTricks.empty();
 	}
-	
+
 	public static Trick getTopTrick() {
 		return depiledTricks.peek();
 	}
-	
+
 	public static ArrayList<Prop> getMiddleProp() {
 		return middleProp;
 	}
@@ -235,7 +244,7 @@ public class Game implements Serializable{
 		depileTrick(p);
 
 		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
-		
+
 		exchangePlayers(p);
 		System.out.println("\nVotre nouvelle main :");
 		p.printProps();
@@ -271,6 +280,38 @@ public class Game implements Serializable{
 		return choice;
 	}
 
+	public static int getBestPlayer() {
+		boolean exAequo = false;
+		int bestPlayer = 0;
+		for (int i = 0; i < players.length; i++) {
+			if (players[bestPlayer].score < players[i].score) {
+				bestPlayer = i;
+			} else if (bestPlayer != i && players[bestPlayer].score == players[i].score) {
+				exAequo = true;
+			}
+		}
+		if (exAequo) {
+			return -1;
+		}
+		return bestPlayer;
+	}
+
+	public static int getWorstPlayer() {
+		boolean exAequo = false;
+		int worstPlayer = 0;
+		for (int i = 0; i < players.length; i++) {
+			if (players[worstPlayer].score > players[i].score) {
+				worstPlayer = i;
+			} else if (worstPlayer != i && players[worstPlayer].score == players[i].score) {
+				exAequo = true;
+			}
+		}
+		if (exAequo) {
+			return -1;
+		}
+		return worstPlayer;
+	}
+
 	public boolean getBool() { // Récupère un booléen du joueur qui créé la
 								// partie
 		String answer;
@@ -284,6 +325,13 @@ public class Game implements Serializable{
 
 	private void nextTurn() {
 		this.tour++;
+		if (!this.tricks.isEmpty()) {
+			this.tricks.peek().age();
+			if (this.tricks.peek().isTooOld()) {
+				System.out.println("Personne n'a réussi à réaliser le trick, on en retourne un nouveau");
+				this.depile();
+			}
+		}
 	}
 
 	public int getVariant() {
@@ -296,69 +344,67 @@ public class Game implements Serializable{
 		}
 		return 0;
 	}
-	
+
 	public int getTrickPileLength() {
 		return tricks.size();
 	}
-	
-	/* 
-	 * 	Donne le trick du dessus de depiledTricks au joueur d'id id
+
+	/*
+	 * Donne le trick du dessus de depiledTricks au joueur d'id id
 	 */
 	public void giveTrick(Player p) {
-		if(p.getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
-			System.out.println("! ! Vous avez réalisé le tour <" + depiledTricks.peek().getName() +"> avec le couteau suisse magique ! !\n");
+		if (p.getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
+			System.out.println("! ! Vous avez réalisé le tour <" + depiledTricks.peek().getName() + "> avec le couteau suisse magique ! !\n");
 			depiledTricks.peek().decreaseValue();
 		}
 		p.increaseScore(depiledTricks.peek().getPoints());
 		p.pushTrick(depiledTricks.pop());
 	}
-	
 
 	protected void exchangeMiddle(Player p) { // échange une carte avec celle du milieu
 		int propToChange;
 		propToChange = p.chooseMiddle();
-		if(propToChange != 2) { // dans speak, on renvoie 2 si on veut garder nos 2 props.
+		if (propToChange != 2) { // dans speak, on renvoie 2 si on veut garder nos 2 props.
 			this.exchangeProps(p.getId(), propToChange, -1, 0);
 		}
 	}
-	
-	/*	
-	 *	Echange la position de 2 props 
-	 * 	la version où l'on utilise createCopy() provoque plusieurs erreurs de type java.lang.CloneNotSupportedException
-	 * 	La version où l'on utilise directement les accesseurs est fonctionnelle.
+
+	/*
+	 * Echange la position de 2 props la version où l'on utilise createCopy()
+	 * provoque plusieurs erreurs de type java.lang.CloneNotSupportedException La
+	 * version où l'on utilise directement les accesseurs est fonctionnelle.
 	 */
-	public void exchangeProps(int p1, int ind1, int p2, int ind2) { //Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2 du joueur p2 
+	public void exchangeProps(int p1, int ind1, int p2, int ind2) { // Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2
+																	// du joueur p2
 		Prop tmp1 = players[p1].getHand(ind1);
 		players[p1].getHand().remove(ind1);
 //		int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
-		
-		if(p2 == -1) {  // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu 
-			players[p1].setHand(middleProp.get(ind2) ,ind1);
+
+		if (p2 == -1) { // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu
+			players[p1].setHand(middleProp.get(ind2), ind1);
 			middleProp.remove(tmp1);
 			middleProp.set(ind2, tmp1);
-		}
-		else if (p2 == (p1+1)%3 || p2 == (p1+2)%3) { // Si on veut Ã©changer le prop du joueur dont c'est le tour avec celui d'un autre joueur
+		} else if (p2 == (p1 + 1) % 3 || p2 == (p1 + 2) % 3) { // Si on veut Ã©changer le prop du joueur dont c'est le tour avec celui d'un
+																// autre joueur
 			players[p1].setHand(players[p2].getHand(ind2), ind1);
 			players[p2].getHand().remove(ind2);
 			players[p2].setHand(tmp1, ind2);
-		}
-		else {
+		} else {
 			System.out.println(p2);
 			System.out.println("ERROR : undefined p2 value");
 		}
 	}
-	
+
 	public void returnProp(Player p) {
 		System.out.println("Main de " + p.getName() + " => ");
 		System.out.println(p.getHand());
 		int ind = p.revealProp();
-		if(p.getHand(ind).getState()) {
+		if (p.getHand(ind).getState()) {
 			p.getHand(ind).hide();
-		}
-		else {
+		} else {
 			p.getHand(ind).unhide();
 		}
-		System.out.println("Nouvelle main => " );
+		System.out.println("Nouvelle main => ");
 		System.out.println(p.getHand());
 	}
 
@@ -384,11 +430,12 @@ public class Game implements Serializable{
 				month = keyboard.nextInt();
 				System.out.println("Entrer votre année de naissance");
 				year = keyboard.nextInt();
-				
-			}catch(Exception e) {
-				keyboard.nextLine(); 
+
+			} catch (Exception e) {
+				keyboard.nextLine();
 				return askBirthDate();
-			};
+			}
+			;
 
 		} while (day < 0 || month < 0 || year < 1910 || day > 31 || month > 12 || year > 2010);
 
@@ -404,56 +451,53 @@ public class Game implements Serializable{
 		}
 		return bestPlayer;
 	}
-	
+
 	public void revealProp(Player p) {
 		int choice = 0, i, hNum = 0;
-		
+
 		System.out.println("Votre main, " + p.getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
 		System.out.println(p.getHand());
-		for(i = 0; i < 2; i++) {
+		for (i = 0; i < 2; i++) {
 //			players[id].getHand(i).printDebug();
-			if(p.getHand(i).getState() == false) {
-				hNum ++;
-				if(i == 0) {
+			if (p.getHand(i).getState() == false) {
+				hNum++;
+				if (i == 0) {
 					choice = 0;
-				}
-				else if (i == 1) {
+				} else if (i == 1) {
 					choice = 1;
-				}
-				else {
+				} else {
 					System.out.println("ERROR : choice value undefined.");
 					choice = 2;
 				}
 			}
 		}
-		if(hNum == 2) {
+		if (hNum == 2) {
 			choice = p.revealProp();
 			p.getHand(choice).unhide();
-		}
-		else if(hNum == 1) {
-			System.out.println("Vous n'avez que le prop " + p.getHand(choice).getName() + " qui soit caché. " + p.getHand(choice).getName() +" est maintenant visible.");
+		} else if (hNum == 1) {
+			System.out.println("Vous n'avez que le prop " + p.getHand(choice).getName() + " qui soit caché. " + p.getHand(choice).getName() + " est maintenant visible.");
 			p.getHand(choice).unhide();
-		}
-		else {
-			System.out.println("Tous vos props sont déjà  visibles. Aucune action n'est effectuée."); 
+		} else {
+			System.out.println("Tous vos props sont déjà  visibles. Aucune action n'est effectuée.");
 		}
 	}
-	
+
 	public void printOthersHand(int id) {
 		System.out.println("Voici les cartes visibles sur le terrain :");
-		for(Player p : players) {
-			if(p.getId() != id) {
+		for (Player p : players) {
+			if (p.getId() != id) {
 				System.out.println(p.getName());
 				p.printVisible();
 			}
 		}
 	}
-	
+
 	public void printTopTrick() {
 		depiledTricks.peek().print();
 	}
-	
-	public void showAllProps(Player p) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le tour
+
+	public void showAllProps(Player p) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le
+											// tour
 		p.getHand(0).unhide();
 		p.getHand(1).unhide();
 	}

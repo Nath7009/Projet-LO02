@@ -2,10 +2,11 @@ package theotherhattrick;
 
 public class StratDefault implements Decision {
 
-	// Dans cette stratégie, le joueur va choisir au hasard
+	// Dans cette stratï¿½gie, le joueur va choisir au hasard
 
 	public boolean revealNewTrick() {
-		return Math.random() >= 0.5 ? true : false;
+		// On multiplie 2 Math.random pour que les parties soient plus longues
+		return Math.random() * Math.random() * Math.random() >= 0.5 ? true : false;
 	}
 
 	public int chooseOwnProp() {
