@@ -1,10 +1,10 @@
 package theotherhattrick;
 
-public class Interface implements Observer{
+public class GameView implements Observer{
 
 	private Game game;
 	
-	public Interface(Game game) {
+	public GameView(Game game) {
 		this.game = game;
 	}
 }
