@@ -14,7 +14,8 @@ public class Game implements Serializable {
 	protected static Player[] players;
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
-	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
+	// protected static Stack<Trick> depiledTricks = new Stack<Trick>();
+	protected static Trick depiledTrick;
 	protected Stack<Prop> allProps = new Stack<Prop>();
 
 	public Game() {
@@ -61,19 +62,37 @@ public class Game implements Serializable {
 		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
 		// l'affiche
 		this.tour = 0;
-
-		while (this.tour < 10000 && !this.isFinished()) {
+		boolean gameisFinished = false;
+		while (this.tour < 10000 && !gameisFinished) {
+			gameisFinished = this.isFinished();
 			this.playTurn();
+			System.out.println("La taille de la pile de tricks est " + this.tricks.size());
+
 			this.nextTurn();
-			if (this.depiledIsEmpty()) {
+			if (this.depiledIsEmpty() || depiledTrick.isTooOld()) {
+				System.out.println("Plus de tricks à réaliser, on en tire un nouveau ");
 				this.depile();
+				if (depiledIsEmpty()) { // Le joueur a réussi TheOtherHatTrick du premier coup
+					gameisFinished = true;
+					System.out.println("Le joueur a réussi The Other Hat Trick, la partie est terminée");
+				} else {
+					System.out.println("Le nouveau trick est ");
+					depiledTrick.print();
+				}
+				// System.out.println("La taille de la pile de tricks est maintenant " +
+				// this.tricks.size());
+			}
+
+			if (this.tricks.size() == 0 || depiledTrick.name.equals("The Other Hat Trick")) {
+				this.playLastTurn();
+				gameisFinished = true;
 			}
 		}
 
-		if (this.isFinished()) {
+		if (gameisFinished) {
 			int winner = this.getWinner();
-			System.out.println("Félicitations aux joueurs qui ont partcipé :");
-			for(int i=0;i<players.length;i++) {
+			System.out.println("Félicitations aux joueurs qui ont participé :");
+			for (int i = 0; i < players.length; i++) {
 				System.out.println("Le joueur " + players[i].getName() + " avec un score de " + players[i].getScore() + " points");
 			}
 			System.out.println("Le joueur " + players[winner].getName() + " a gagné avec un score de >" + players[winner].getScore() + "< points, BRAVO !");
@@ -126,7 +145,7 @@ public class Game implements Serializable {
 	public void createCards() {
 		for (int i = 0; i < PropEnum.values().length - (this.getVariant() == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
 			allProps.push(new Prop(PropEnum.values()[i]));
-			if (i == 0) { // Il y a 3 carrotes dans le jeu
+			if (i == 0) { // Il y a 3 carrots dans le jeu
 				allProps.push(new Prop(PropEnum.values()[i]));
 				allProps.push(new Prop(PropEnum.values()[i]));
 			}
@@ -176,10 +195,31 @@ public class Game implements Serializable {
 		}
 	}
 
+	protected void playLastTurn() {
+		System.out.println("On joue le dernier tour");
+		depiledTrick.print();
+		boolean finished = false;
+		for (int i = 0; i < players.length; i++) {
+			ArrayList<Prop> hand = players[i].getHand();
+			System.out.println(hand.size());
+			if (!depiledIsEmpty() && depiledTrick.compareToProps(hand)) {
+				System.out.println("Le joueur " + players[i].getName() + " a réussi The Other Hat Trick, il gagne 6 points");
+				giveTrick(players[i]);
+				finished = false;
+			} else if (hand.contains(new Prop(PropEnum.THE_OTHER_RABBIT)) && !finished) {
+				System.out.println("Le joueur " + players[i].getName() + "  possède The Other Rabbit, il perd 3 points");
+				players[i].score -= 3;
+			} else if (hand.contains(new Prop(PropEnum.HAT)) && !finished) {
+				System.out.println("Le joueur " + players[i].getName() + "  possède The Hat, il perd 3 points");
+				players[i].score -= 3;
+			}
+		}
+	}
+
 	protected void realizeTrick(Player p) {
 		// Gère l'enchainement des actions qui se réalisent quand on réalise un
 		// trick
-		boolean trickSuccessful = depiledTricks.peek().compareToProps(p.getHand());
+		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a réussi le trick
 			System.out.println("Vous avez réussi le tour");
@@ -212,16 +252,20 @@ public class Game implements Serializable {
 	 * pile de tricks dévouverts.
 	 */
 	public void depile() {
-		Trick temp = this.tricks.pop();
-		depiledTricks.push(temp);
+		try {
+			Trick temp = this.tricks.pop();
+			depiledTrick = temp;
+		} catch (Exception e) {
+			System.out.println("Impossible de retirer un trick, puisque la pile est vide");
+		}
 	}
 
 	public boolean depiledIsEmpty() {
-		return depiledTricks.empty();
+		return depiledTrick == null ? true : false;
 	}
 
 	public static Trick getTopTrick() {
-		return depiledTricks.peek();
+		return depiledTrick;
 	}
 
 	public static ArrayList<Prop> getMiddleProp() {
@@ -325,12 +369,16 @@ public class Game implements Serializable {
 
 	private void nextTurn() {
 		this.tour++;
-		if (!this.tricks.isEmpty()) {
-			this.tricks.peek().age();
-			if (this.tricks.peek().isTooOld()) {
-				System.out.println("Personne n'a réussi à réaliser le trick, on en retourne un nouveau");
-				this.depile();
-			}
+		if (!depiledIsEmpty()) {
+			depiledTrick.age();
+			/*
+			 * System.out.println("Le trick " +depiledTricks.peek().name + " a un age de " +
+			 * depiledTricks.peek().lifeLength); if (depiledTricks.peek().isTooOld()) {
+			 * System.out.
+			 * println("Personne n'a réussi à réaliser le trick, on en retourne un nouveau"
+			 * ); this.depile(); System.out.println("Le nouveau trick est " +
+			 * depiledTricks.peek().name); }
+			 */
 		}
 	}
 
@@ -354,11 +402,12 @@ public class Game implements Serializable {
 	 */
 	public void giveTrick(Player p) {
 		if (p.getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
-			System.out.println("! ! Vous avez réalisé le tour <" + depiledTricks.peek().getName() + "> avec le couteau suisse magique ! !\n");
-			depiledTricks.peek().decreaseValue();
+			System.out.println("! ! Vous avez réalisé le tour <" + depiledTrick.getName() + "> avec le couteau suisse magique ! !\n");
+			depiledTrick.decreaseValue();
 		}
-		p.increaseScore(depiledTricks.peek().getPoints());
-		p.pushTrick(depiledTricks.pop());
+		p.increaseScore(depiledTrick.getPoints());
+		p.pushTrick(depiledTrick);
+		depiledTrick = null;
 	}
 
 	protected void exchangeMiddle(Player p) { // échange une carte avec celle du milieu
@@ -417,7 +466,10 @@ public class Game implements Serializable {
 	}
 
 	protected boolean isFinished() {
-		return this.getTrickPileLength() <= 0;
+		if (this.getTrickPileLength() <= 0 && depiledTrick.isTooOld()) {
+			return true;
+		}
+		return false;
 	}
 
 	public Date askBirthDate() {
@@ -493,7 +545,7 @@ public class Game implements Serializable {
 	}
 
 	public void printTopTrick() {
-		depiledTricks.peek().print();
+		depiledTrick.print();
 	}
 
 	public void showAllProps(Player p) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le

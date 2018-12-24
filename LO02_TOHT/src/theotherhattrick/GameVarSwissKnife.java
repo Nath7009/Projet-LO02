@@ -7,7 +7,7 @@ public class GameVarSwissKnife extends Game{
 	
 	protected void realizeTrick(Player p) {
 		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
-		boolean trickSuccessful = depiledTricks.peek().compareToProps(p.getHand());
+		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");

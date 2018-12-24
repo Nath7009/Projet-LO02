@@ -7,7 +7,7 @@ public class GameVarLettuce extends Game {
 
 	protected void realizeTrick(Player p) {
 		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un trick
-		boolean trickSuccessful = depiledTricks.peek().compareToProps(p.getHand());
+		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a r�ussi le trick
 			System.out.println("Vous avez réussi le tour");
@@ -30,7 +30,7 @@ public class GameVarLettuce extends Game {
 		else {
 			// Si le joueur rate le trick
 			System.out.println("Vous avez échoué le tour");
-			if (depiledTricks.peek().contains(new Prop(PropEnum.LETTUCE))) {
+			if (depiledTrick.contains(new Prop(PropEnum.LETTUCE))) {
 				System.out.println("Etant donné que le tour échoué contenait une laitue, vous pouvez retourner une carte");
 				this.returnProp(p);
 			} else {
