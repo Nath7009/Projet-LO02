@@ -1,6 +1,6 @@
 package theotherhattrick;
 
-import java.util.Scanner;
+import java.util.Scanner; 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -8,8 +8,11 @@ import java.util.Stack;
 import java.util.Collections;
 
 public class Game implements Serializable {
+	
 	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
+	public static String NAME = "THE OTHER HAT TRICK";
+	
 
 	protected static Player[] players;
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
