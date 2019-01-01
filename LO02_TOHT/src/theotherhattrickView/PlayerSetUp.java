@@ -21,6 +21,10 @@ public class PlayerSetUp extends JPanel{
 	private JLabel nameL, natureOfPlayer;
 	private JTextField name;
 	
+	private JPanel natureOfPlayerPane = new JPanel();
+	private JPanel namePane = new JPanel();
+	private JPanel datePane = new JPanel();
+	
 	public PlayerSetUp(int i) {
 		this.initComponent(i);
 	}
@@ -31,6 +35,7 @@ public class PlayerSetUp extends JPanel{
 		this.setBorder(BorderFactory.createTitledBorder("Joueur n°" + (i+1)));
 		
 		this.nameL = new JLabel("Nom du joueur :");
+		this.natureOfPlayer = new JLabel("Type de joueur : ");
 		this.name = new JTextField();
 		this.human = new JRadioButton("Humain");
 		this.human.addActionListener(new HumanButtonListener());
@@ -41,11 +46,18 @@ public class PlayerSetUp extends JPanel{
 		this.human.setSelected(true);			
 		this.bg.add(this.human);
 		this.bg.add(this.AI);
+		this.natureOfPlayerPane.setLayout(new BoxLayout(this.natureOfPlayerPane, BoxLayout.X_AXIS));
+		this.natureOfPlayerPane.add(natureOfPlayer);
+		this.natureOfPlayerPane.add(this.human);
+		this.natureOfPlayerPane.add(this.AI);
 		
-		this.add(this.AI);
-		this.add(this.human);
-		this.add(this.nameL);
-		this.add(this.name);
+		this.namePane.setLayout(new BoxLayout(this.namePane, BoxLayout.X_AXIS));
+		this.namePane.add(nameL);
+		this.namePane.add(name);
+		
+		
+		this.add(this.natureOfPlayerPane);
+		this.add(this.namePane);
 	}
 	
 	class IAButtonListener implements ActionListener {

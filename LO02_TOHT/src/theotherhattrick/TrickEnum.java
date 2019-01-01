@@ -1,5 +1,9 @@
 package theotherhattrick;
-
+/**
+ * 
+ * @author amall
+ *
+ */
 public enum TrickEnum {
 	
 	THE_HUNGRY_RABBIT("The Hungry Rabbit", new PropEnum[][] {{PropEnum.RABBIT, PropEnum.THE_OTHER_RABBIT} , {PropEnum.CARROT, PropEnum.LETTUCE}}, 1),

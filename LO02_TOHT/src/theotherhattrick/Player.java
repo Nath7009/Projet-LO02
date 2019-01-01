@@ -6,6 +6,11 @@ import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * 
+ * @author amall
+ *
+ */
 public abstract class Player implements Decision {
 	
 	protected int id;

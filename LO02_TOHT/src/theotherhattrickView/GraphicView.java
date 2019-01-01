@@ -65,22 +65,22 @@ public class GraphicView extends JFrame implements Observer{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.LIGHT_GRAY);
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		JPanel pane = new JPanel();
+		pane.setBackground(Color.LIGHT_GRAY);
+		frame.getContentPane().add(pane, BorderLayout.NORTH);
 		
 		JLabel title = new JLabel("New label");
 		title.setHorizontalAlignment(JLabel.CENTER);
 		title.setText(Game.NAME);
-		panel.add(title);
+		pane.add(title);
 		
-		JPanel menu = new JPanel();
+		JPanel launchPane = new JPanel();
 		JButton gameLauncher = new JButton("New Game");
 		gameLauncher.addActionListener(sbl);
 		
-		menu.setPreferredSize(new Dimension(50, 225));
-		menu.add(gameLauncher);
-		frame.getContentPane().add(menu, BorderLayout.CENTER);
+		launchPane.setPreferredSize(new Dimension(50, 225));
+		launchPane.add(gameLauncher);
+		frame.getContentPane().add(launchPane, BorderLayout.SOUTH);
 		
 		
 	}

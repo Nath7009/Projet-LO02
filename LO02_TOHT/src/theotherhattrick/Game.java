@@ -7,11 +7,29 @@ import java.util.Stack;
 
 import java.util.Collections;
 
+/**
+ * 
+ * @author Antoine Mallet, Nathan Cantat
+ *
+ */
 public class Game implements Serializable {
 	
 	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
+	
 	public static String NAME = "THE OTHER HAT TRICK";
+	public static String RULE_SWISS_ARMY_KNIFE = 
+			"***** Le Couteau Suisse *****\n"
+			+ "Ajout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick\n"
+			+ "Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick.\n";
+	public static String RULE_LETTUCE = 
+			"***** Les Carottes Magiques *****\n"
+			+ "Permet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte.\n";
+	public static String RULE_CARROT = 
+			"***** La Laitue Magique *****\n"
+			+ "Rater un tour où figure une laitue offre la possibilité de retourner un de vos props\n"
+			+ "Il a donc le choix de cacher une de ses cartes si elle était face visible.\n";
+			
 	
 
 	protected static Player[] players;
@@ -309,14 +327,17 @@ public class Game implements Serializable {
 		int choice = 0;
 
 		System.out.println("Voici les différentes règles du jeu : \n");
-
-		System.out.println("***** Le Couteau Suisse *****\nAjout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
-		System.out.println("Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick");
-
-		System.out.println("\n***** Les Carottes Magiques *****\nPermet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte");
-
-		System.out.println("\n***** La Laitue Magique *****\nRater un tour où figure une laitue offre la possibilité de retourner un de vos props");
-		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
+		
+		System.out.println(Game.RULE_SWISS_ARMY_KNIFE);
+//		System.out.println("***** Le Couteau Suisse *****\nAjout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
+//		System.out.println("Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick");
+		
+		System.out.println(Game.RULE_CARROT);
+//		System.out.println("\n***** Les Carottes Magiques *****\nPermet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte");
+		
+		System.out.println(Game.RULE_LETTUCE);
+//		System.out.println("\n***** La Laitue Magique *****\nRater un tour où figure une laitue offre la possibilité de retourner un de vos props");
+//		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
 
 		do {
 			System.out.println("\nVeuillez choisir la règle que vous voulez utiliser :");
