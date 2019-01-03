@@ -1,6 +1,8 @@
 package theotherhattrick;
 
-public class Prop {
+import java.util.Observable;
+
+public class Prop extends Observable{
 	private String name;
 	private int type;
 	private boolean isVisible;
@@ -28,10 +30,14 @@ public class Prop {
 
 	public void hide() {
 		this.isVisible = false;
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public void unhide() {
 		this.isVisible = true;
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public boolean getState() {

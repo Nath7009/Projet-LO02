@@ -9,8 +9,8 @@ import java.util.Scanner;
  */
 public class Human extends Player {
 
-	public Human(String name, int id, Date birthDate) {
-		super(name, id, birthDate);
+	public Human(String name, Date birthDate) {
+		super(name, birthDate);
 	}
 	
 	public boolean revealNewTrick() {

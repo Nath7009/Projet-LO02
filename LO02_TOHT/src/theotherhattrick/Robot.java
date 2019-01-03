@@ -8,8 +8,8 @@ public class Robot extends Player implements Decision {
 	// On implémente décision pour étre sur que les méthodes que l'on apelle sont
 	// présentes dans l'interface
 
-	public Robot(int id, Date birthDate) {
-		super("Robot" + id, id, birthDate);
+	public Robot(Date birthDate) {
+		super("Robot", birthDate);
 		// strategy = new StratConservative(this.hand, this.id);
 		strategy = new StratDefault();
 	}

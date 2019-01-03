@@ -1,18 +1,18 @@
 package theotherhattrick;
 
-import java.util.Scanner; 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Stack;
-
 import java.util.Collections;
+import java.util.Observable;
+import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * 
  * @author Antoine Mallet, Nathan Cantat
  *
  */
-public class Game implements Serializable {
+public class Game extends Observable implements Serializable {
 	
 	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
@@ -30,9 +30,26 @@ public class Game implements Serializable {
 			+ "Rater un tour où figure une laitue offre la possibilité de retourner un de vos props\n"
 			+ "Il a donc le choix de cacher une de ses cartes si elle était face visible.\n";
 			
-	
+	protected int variant;
+	protected int nbOfHuman;
+
+	public int getNbOfHuman() {
+		return nbOfHuman;
+	}
+
+	public void setNbOfHuman(int nbOfHuman) {
+		this.nbOfHuman = nbOfHuman;
+	}
+
+	public void setVariant(int variant) {
+		this.variant = variant;
+//		this.createGame(variant);
+	}
 
 	protected static Player[] players;
+	protected Player newPlayer;
+	
+
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
 	// protected static Stack<Trick> depiledTricks = new Stack<Trick>();
@@ -42,18 +59,16 @@ public class Game implements Serializable {
 	public Game() {
 	}
 
-	public static Game createGame() {
+	public static Game createGame(int variant) {
 		Game game = new Game();
-		Game.keyboard = new Scanner(System.in);
-		int variant = 0;
+//		Game.keyboard = new Scanner(System.in);
 		// 0 pour le jeu de base
 		// 1 pour la variante swissKnife
 		// 2 pour la variante carrot
 		// 3 pour la variante lettuce
-		System.out.println("==[==========]==[==========]== THE OTHER HAT TRICK ==[==========]==[==========]==\n\n");
-		variant = askRules();
+//		variant = askRules();
 
-		// On utilise le polymorphisme pour g�rer les variantes
+		// On utilise le polymorphisme pour gérer les variantes
 		switch (variant) {
 		case 0:
 			return new Game();
@@ -123,28 +138,29 @@ public class Game implements Serializable {
 	}
 
 	private void createPlayers() {
-		int nbHumains = 0;
 		String nom;
 		Date date;
-
 		players = new Player[3];
-		do {
-			System.out.println("Entrer le nombre de joueurs humains voulant participer au jeu");
-			nbHumains = keyboard.nextInt();
-			keyboard.nextLine(); // La prochaine saisie ne sera pas un int
-		} while (nbHumains > 3);
-
-		for (int i = 0; i < nbHumains; i++) {
-			System.out.println("Entrer le nom du joueur numéro " + (i + 1));
+//		System.out.println("nb d'observer : " + this.countObservers());
+		this.setChanged();
+		this.notifyObservers("nbOfPlayers");
+		
+		for (int i = 0; i < nbOfHuman; i++) {
+			System.out.println("bouclette " + i + " sur " + nbOfHuman);
+			this.setChanged();
+			this.notifyObservers("identityOfPLayer");
+			/*
 			nom = keyboard.nextLine();
 			date = this.askBirthDate();
 			keyboard.nextLine(); // La prochaine saisie ne sera pas un int
 			players[i] = new Human(nom, i, date);
+			*/
+			this.players[i] = this.newPlayer;
 		}
 
-		for (int i = nbHumains; i < 3; i++) {
+		for (int i = nbOfHuman; i < 3; i++) {
 			date = new Date();
-			players[i] = new Robot(i, date);
+			players[i] = new Robot(date);
 		}
 
 		this.sortPlayers();
@@ -292,7 +308,15 @@ public class Game implements Serializable {
 	public static ArrayList<Prop> getMiddleProp() {
 		return middleProp;
 	}
-
+	
+	public Player getNewPlayer() {
+		return newPlayer;
+	}
+	
+	public void setNewPlayer(Player newPlayer) {
+		this.newPlayer = newPlayer;
+	}
+	
 	private void playTurn() {
 		System.out.println("\n]=====||=====||=====||=====[TOUR N°" + tour + "]=====||=====||=====||=====[\n");
 		Player p = players[tour % 3];

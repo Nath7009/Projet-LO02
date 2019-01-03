@@ -1,10 +1,11 @@
 package theotherhattrick;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Iterator;
+import java.util.Observable;
 
 
-public class Trick {
+public class Trick extends Observable {
 	String name;
 	int points;
 	PropEnum[][] ingredients = {{} , {}};
@@ -29,6 +30,8 @@ public class Trick {
 	
 	public void decreaseValue() {
 		this.points--;
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	public void age() {

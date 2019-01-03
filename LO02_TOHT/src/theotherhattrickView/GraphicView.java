@@ -6,16 +6,16 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Observer.Observer;
 import theotherhattrick.Game;
 import theotherhattrickControler.GameControler;
-import javax.swing.JMenu;
 
 public class GraphicView extends JFrame implements Observer{
 
@@ -28,11 +28,8 @@ public class GraphicView extends JFrame implements Observer{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				Game game = new Game();
-				GameControler gc = new GameControler(game);
 				try {
-					GraphicView window = new GraphicView(gc);
-					window.frame.setVisible(true);
+					VueTexte vt = new VueTexte();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,8 +41,8 @@ public class GraphicView extends JFrame implements Observer{
 	 * Create the application.
 	 */
 	public GraphicView(GameControler gc) {
-		initialize();
 		this.controler = gc;
+		initialize();
 	}
 
 	/**
@@ -84,12 +81,15 @@ public class GraphicView extends JFrame implements Observer{
 		
 		
 	}
-
+	
 	@Override
-	public void update(String str) {
+	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	
 	
 	class NewGameButtonListener implements ActionListener{
 
@@ -98,9 +98,5 @@ public class GraphicView extends JFrame implements Observer{
 			Menu menu = new Menu();
 			
 		}
-		
 	}
-	
-	
-
 }

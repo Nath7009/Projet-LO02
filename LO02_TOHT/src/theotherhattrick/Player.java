@@ -1,17 +1,18 @@
 package theotherhattrick;
 
 
-import java.util.Scanner;
-import java.util.Stack;
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Stack;
+
 
 /**
  * 
  * @author amall
  *
  */
-public abstract class Player implements Decision {
+public abstract class Player extends Observable implements Decision {
 	
 	protected int id;
 	protected String name;
@@ -20,9 +21,8 @@ public abstract class Player implements Decision {
 	protected ArrayList<Prop> hand = new ArrayList<Prop>(2);
 	protected Stack<Trick> successPile = new Stack<Trick>();
 
-	public Player(String name, int id, Date birthD) {
+	public Player(String name, Date birthD) {
 		this.name = name;
-		this.id = id;
 		this.birthD = birthD;
 	}
 
@@ -60,17 +60,24 @@ public abstract class Player implements Decision {
 	
 	public void setId(int id) {
 		this.id = id;
+		if(this instanceof Robot) {
+			this.name = this.name + id;
+		}
 	}
 	
 	public void increaseScore(int points) {
 		this.score += points;
 		System.out.println("Vous gagnez >" + points + "< points. Vous avez désormais >" + this.score + "< points." );
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 
 
 	public void SetBirthD(Date birthD) {
 		this.birthD = birthD;
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	public Date getBirthD() {
@@ -83,6 +90,8 @@ public abstract class Player implements Decision {
 	
 	public void pushTrick(Trick trick){
 		successPile.add(trick);
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public void printProps() {
