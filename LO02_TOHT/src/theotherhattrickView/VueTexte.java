@@ -65,8 +65,32 @@ public class VueTexte implements Observer{
 					break;
 			}
 		}
+		
 		if(o instanceof Player) {
+		
+			switch((String)arg1){
 			
+				case "revealNewTrick" :
+					break;
+			
+				case "chooseOwnProp" : 
+					break;
+			
+				case "chooseOtherProp" : 
+					break;
+			
+				case "chooseMiddleVarCarrot" : 
+					break;
+			
+				case "performTrick" : 
+					break;
+			
+				case "revealProp" :
+					break;
+			
+				case "chooseMiddle" : 
+					break;
+			}
 		}
 		
 		if(o instanceof Trick) {
@@ -77,12 +101,6 @@ public class VueTexte implements Observer{
 			
 		}
 	}
-	
-	
-	
-	
-	
-	
 	
 	private void askIdentity() {
 		System.out.println("Entrez le nom du joueur : ");
@@ -106,8 +124,6 @@ public class VueTexte implements Observer{
 		 
 		this.gc.setNewPlayer(name, day, month, year);
 	}
-
-
 	
 	private boolean readBool() {
 		boolean value = false;

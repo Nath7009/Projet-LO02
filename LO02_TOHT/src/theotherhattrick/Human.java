@@ -7,17 +7,20 @@ import java.util.Scanner;
  * @author amall
  *
  */
+@SuppressWarnings("deprecation")
 public class Human extends Player {
 
 	public Human(String name, Date birthDate) {
 		super(name, birthDate);
 	}
 	
+	
 	public boolean revealNewTrick() {
 		Scanner keyboard = Game.keyboard;
 		String ans = null;
 		int i = 0;
-		
+		this.setChanged();
+		this.notifyObservers("revealNewTrick");
 		System.out.println("Voulez-vous retourner un nouveau Trick ?");
 		do {
 			if(i == 1) {
@@ -36,6 +39,9 @@ public class Human extends Player {
 		Scanner keyboard = Game.keyboard;
 		int ans = -1, i = 0;
 		
+		this.setChanged();
+		this.notifyObservers("chooseOwnProp");
+		
 		System.out.println("Lequel de vos Props choissisez-vous ?");
 		do {
 			if(i == 1) {
@@ -52,6 +58,9 @@ public class Human extends Player {
 	public int chooseOtherProp(Player[] players) {
 		Scanner keyboard = Game.keyboard;
 		int ans = 0, i = 0;
+		
+		this.setChanged();
+		this.notifyObservers("chooseOtherProp");
 		System.out.println("Avec quel Prop des autres joueurs voulez-vous faire l'échange ?");
 		do {
 			if(i == 1) {
@@ -68,6 +77,11 @@ public class Human extends Player {
 	public int chooseMiddleVarCarrot(Player[] players) {
 		Scanner keyboard = Game.keyboard;
 		int ans = 0, i = 0;
+		
+		this.setChanged();
+		this.notifyObservers("chooseMiddleVarCarrot");
+		
+		
 		System.out.println("Avec quel Prop voulez-vous faire l'échange ?");
 		do {
 			if(i == 1) {
@@ -87,6 +101,9 @@ public class Human extends Player {
 		String ans = null;
 		int i = 0;
 		
+		this.setChanged();
+		this.notifyObservers("performTrick");
+		
 		System.out.println("Voulez-vous tenter de réalsier le Trick ?");
 		do {
 			if(i == 1) {
@@ -105,6 +122,9 @@ public class Human extends Player {
 		Scanner keyboard = Game.keyboard;
 		int ans = -1, i = 0;
 		
+		this.setChanged();
+		this.notifyObservers("revealProp");
+		
 		System.out.println("Lequel de vos Props souhaitez-vous retourner ?");
 		do {
 			if(i == 1) {
@@ -121,6 +141,11 @@ public class Human extends Player {
 	public int chooseMiddle() {
 		Scanner keyboard = Game.keyboard;
 		int ans = -1, i = 0;
+		
+		
+		this.setChanged();
+		this.notifyObservers("chooseMiddle");
+		
 		System.out.println("Quel Prop voulez-vous replacer au milieu");
 		do {
 			if(i == 1) {
