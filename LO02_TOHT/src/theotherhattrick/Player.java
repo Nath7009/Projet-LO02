@@ -20,6 +20,66 @@ public abstract class Player extends Observable implements Decision {
 	protected int score;
 	protected ArrayList<Prop> hand = new ArrayList<Prop>(2);
 	protected Stack<Trick> successPile = new Stack<Trick>();
+	
+	protected int ownProp = 0, otherProp = 0, middleProp = 0, middleVarCarrot = 0, revealProp;
+	protected boolean newTrick = false, performTrick = false;
+	
+	public int getOwnProp() {
+		return ownProp;
+	}
+
+	public void setOwnProp(int ownProp) {
+		ownProp = ownProp;
+	}
+
+	public int getOtherProp() {
+		return otherProp;
+	}
+
+	public void setOtherProp(int otherProp) {
+		otherProp = otherProp;
+	}
+
+	public int getMiddleProp() {
+		return middleProp;
+	}
+
+	public void setMiddleProp(int middleProp) {
+		middleProp = middleProp;
+	}
+
+	public int getMiddleVarCarrot() {
+		return middleVarCarrot;
+	}
+
+	public void setMiddleVarCarrot(int middleVarCarrot) {
+		middleVarCarrot = middleVarCarrot;
+	}
+
+	public int getRevealProp() {
+		return revealProp;
+	}
+
+	public void setRevealProp(int revealProp) {
+		this.revealProp = revealProp;
+	}
+
+	public boolean isNewTrick() {
+		return newTrick;
+	}
+
+	public void setNewTrick(boolean newTrick) {
+		this.newTrick = newTrick;
+	}
+
+	public boolean isPerformTrick() {
+		return performTrick;
+	}
+
+	public void setPerformTrick(boolean performTrick) {
+		this.performTrick = performTrick;
+	}
+	
 
 	public Player(String name, Date birthD) {
 		this.name = name;

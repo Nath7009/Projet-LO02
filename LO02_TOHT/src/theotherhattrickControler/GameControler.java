@@ -34,7 +34,42 @@ public class GameControler {
 		this.game.setNewPlayer(newPlayer);
 	}
 	
+	/**
+	 * 
+	 * @param p
+	 * @param choice
+	 */
+	public void setRevealNewTrick(Player p, boolean choice) {
+			p.setNewTrick(choice);
+	}
 	
+	/**
+	 * 
+	 * @param choice
+	 */
+	public void setOwnProp(Player p, int choice) {
+		p.setOwnProp(choice);
+	}
+	
+	public void setMiddleVarCarrot(Player p, int choice) {
+		p.setMiddleVarCarrot(choice);
+	}
+	
+	public void setPerformTrick(Player p, boolean choice) {
+		p.setPerformTrick(choice);
+	}
+	
+	public void setRevealProp(Player p, int choice) {
+		p.setRevealProp(choice);
+	}
+	
+	public void setMiddleProp(Player p, int choice) {
+		p.setMiddleProp(choice);
+	}
+	
+	public void setOtherProp(Player p, int choice) {
+		p.setOtherProp(choice);
+	}
 	
 	
 }
