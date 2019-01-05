@@ -33,19 +33,6 @@ public class Game extends Observable implements Serializable {
 	protected int variant;
 	protected int nbOfHuman;
 
-	public int getNbOfHuman() {
-		return nbOfHuman;
-	}
-
-	public void setNbOfHuman(int nbOfHuman) {
-		this.nbOfHuman = nbOfHuman;
-	}
-
-	public void setVariant(int variant) {
-		this.variant = variant;
-//		this.createGame(variant);
-	}
-
 	protected static Player[] players;
 	protected Player newPlayer;
 	
@@ -135,6 +122,19 @@ public class Game extends Observable implements Serializable {
 		}
 
 		keyboard.close();
+	}
+	
+	public int getNbOfHuman() {
+		return nbOfHuman;
+	}
+
+	public void setNbOfHuman(int nbOfHuman) {
+		this.nbOfHuman = nbOfHuman;
+	}
+
+	public void setVariant(int variant) {
+		this.variant = variant;
+//		this.createGame(variant);
 	}
 
 	private void createPlayers() {
@@ -387,6 +387,10 @@ public class Game extends Observable implements Serializable {
 		}
 		return bestPlayer;
 	}
+	
+	public Player[] getPlayers() {
+		return players;
+	}
 
 	public static int getWorstPlayer() {
 		boolean exAequo = false;
@@ -402,6 +406,10 @@ public class Game extends Observable implements Serializable {
 			return -1;
 		}
 		return worstPlayer;
+	}
+	
+	public Trick getDepiledTrick() {
+		return depiledTrick;
 	}
 
 	public boolean getBool() { // Récupère un booléen du joueur qui créé la

@@ -1,9 +1,13 @@
 package theotherhattrickControler;
 
 import theotherhattrick.*;
+import theotherhattrickView.Menu;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class GameControler {
+public class GameControler implements ActionListener{
 	protected Game game;
 	
 /**
@@ -11,10 +15,10 @@ public class GameControler {
  * Le controleur lance alors la partie.
  * @param variant : on récupère la version que l'on souhaite jouer en paramètre
  */
-	public GameControler(int variant) {
-
+	public GameControler(Menu menu) {
+		int variant = menu.getVariant();
 		this.game = Game.createGame(variant);
-//		this.game.start();
+		this.game.start();
 	}
 	
 	public Game getGame() {
@@ -32,6 +36,12 @@ public class GameControler {
 	public void setNewPlayer(String name, int day, int month, int year) {
 		Player newPlayer = new Human(name, new Date(day, month, year));
 		this.game.setNewPlayer(newPlayer);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

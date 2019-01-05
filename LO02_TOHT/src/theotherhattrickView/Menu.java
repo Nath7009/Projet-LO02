@@ -25,14 +25,15 @@ public class Menu extends JFrame{
 	private JLabel variantLabel;
 	private JComboBox variantcb = new JComboBox();
 	private JButton rules = new JButton("rules");
-	private JButton start = new JButton("Start !");
+	private JButton start;
 
 	/**
 	 * Create the application.
 	 */
-	public Menu() {
+	public Menu(JButton startButton) {
+		this.start = startButton;
 		initialize();
-		setVisible(true);
+		//setVisible(true);
 	}
 
 	/**
@@ -41,7 +42,7 @@ public class Menu extends JFrame{
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.white);
-		frame.setBounds(100, 100, 450, 220);
+		frame.setBounds(100, 100, 450, 420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 		frame.setTitle("THE OTHER HAT TRICK - Menu");
@@ -49,14 +50,14 @@ public class Menu extends JFrame{
 		
 		//Initialize the first line of the window : the choice of the variant
 		variantPanel.setBackground(null);
-		variantPanel.setPreferredSize(new Dimension(225,25));
+		variantPanel.setPreferredSize(new Dimension(225,35));
 		variantLabel = new JLabel("Choisissez une variante : ");
 		variantLabel.setBackground(Color.WHITE);
 		
-		variantcb.addItem("sans variante");
-		variantcb.addItem("couteau suisse");
-		variantcb.addItem("Laitue magique");
+		variantcb.addItem("Sans variante");
+		variantcb.addItem("Couteau suisse");
 		variantcb.addItem("Carotte magique");
+		variantcb.addItem("Laitue magique");
 		variantcb.addItemListener(new VariantListener());
 		
 		rules.addActionListener(new RuleButtonListener());
@@ -86,12 +87,15 @@ public class Menu extends JFrame{
 		this.frame.setVisible(bool);
 	}
 	
+	public int getVariant() {
+		return this.variantcb.getSelectedIndex();
+	}
 	
 	class VariantListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent arg0) {
-			
+			System.out.println(variantcb.getSelectedIndex());
 			
 		}
 		
