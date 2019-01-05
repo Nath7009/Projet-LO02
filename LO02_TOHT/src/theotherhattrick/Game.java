@@ -1,4 +1,4 @@
-package theotherhattrick;
+ package theotherhattrick;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class Game extends Observable implements Serializable {
 
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
-	// protected static Stack<Trick> depiledTricks = new Stack<Trick>();
+// 	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
 	protected static Trick depiledTrick;
 	protected Stack<Prop> allProps = new Stack<Prop>();
 
@@ -71,8 +71,6 @@ public class Game extends Observable implements Serializable {
 	}
 
 	public void start() {
-
-		// keyboard = new Scanner(System.in);
 
 		// Instanciation de tous les joueurs humains ou robots
 		this.createPlayers();
@@ -141,20 +139,12 @@ public class Game extends Observable implements Serializable {
 		String nom;
 		Date date;
 		players = new Player[3];
-//		System.out.println("nb d'observer : " + this.countObservers());
 		this.setChanged();
 		this.notifyObservers("nbOfPlayers");
 		
 		for (int i = 0; i < nbOfHuman; i++) {
-			System.out.println("bouclette " + i + " sur " + nbOfHuman);
 			this.setChanged();
 			this.notifyObservers("identityOfPLayer");
-			/*
-			nom = keyboard.nextLine();
-			date = this.askBirthDate();
-			keyboard.nextLine(); // La prochaine saisie ne sera pas un int
-			players[i] = new Human(nom, i, date);
-			*/
 			this.players[i] = this.newPlayer;
 		}
 
@@ -315,6 +305,10 @@ public class Game extends Observable implements Serializable {
 	
 	public void setNewPlayer(Player newPlayer) {
 		this.newPlayer = newPlayer;
+	}
+	
+	public Player[] getPlayers() {
+		return this.players;
 	}
 	
 	private void playTurn() {
@@ -516,6 +510,7 @@ public class Game extends Observable implements Serializable {
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
 		propToChange = p.chooseOwnProp();
+		System.out.println("\n OwnProp has been asked");
 		otherProp = p.chooseOtherProp(players);
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
