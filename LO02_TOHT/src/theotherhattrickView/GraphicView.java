@@ -57,42 +57,42 @@ public class GraphicView implements Observer {
 	private GroupLayout gl_player2;
 	private GroupLayout gl_player3;
 	private GroupLayout groupLayout;
-
-	private JButton btnTrickDpil;
 	private JPanel middleCards;
 	private JButton mprop1;
 	private JButton mprop2;
 	private JButton trickPile;
+	private JLabel depiledTrick;
 
 	private JPanel infos;
 	private JLabel lblInfos;
+	private JLabel lblTourActuel;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Menu menu = new Menu(gameStarter);
-					GameControler gc = new GameControler(menu);
-					GraphicView window = new GraphicView(gc, menu);
-					menu.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Menu menu = new Menu(gameStarter);
+//					GameControler gc = new GameControler(menu);
+//					GraphicView window = new GraphicView(gc, menu);
+//					menu.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
 	 */
-	public GraphicView(GameControler gc, Menu menu) {
+	public GraphicView(GameControler gc) {
 		gameStarter.addActionListener(new StartButtonListener());
 		this.controler = gc;
-		this.menu = menu;
-		// window.menu.setVisible(true);
+		this.menu = new Menu(gameStarter);
+		this.menu.setVisible(true);
 		initialize();
 		this.game.setVisible(false);
 
@@ -131,7 +131,7 @@ public class GraphicView implements Observer {
 		p2prop2 = new JButton("prop2");
 
 		p2Score = new JLabel("Score");
-		GroupLayout gl_player2 = new GroupLayout(player2);
+		gl_player2 = new GroupLayout(player2);
 		gl_player2.setHorizontalGroup(gl_player2.createParallelGroup(Alignment.LEADING).addGroup(gl_player2.createSequentialGroup().addContainerGap().addComponent(p2Name).addGap(18).addComponent(p2prop1).addPreferredGap(ComponentPlacement.RELATED)
 				.addComponent(p2prop2).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(p2Score).addContainerGap(29, Short.MAX_VALUE)));
 		gl_player2.setVerticalGroup(gl_player2.createParallelGroup(Alignment.LEADING).addGap(0, 133, Short.MAX_VALUE)
@@ -147,7 +147,7 @@ public class GraphicView implements Observer {
 		p3prop2 = new JButton("prop2");
 
 		p3Score = new JLabel("Score");
-		GroupLayout gl_player3 = new GroupLayout(player3);
+		gl_player3 = new GroupLayout(player3);
 		gl_player3
 				.setHorizontalGroup(
 						gl_player3.createParallelGroup(Alignment.LEADING).addGap(0, 91, Short.MAX_VALUE)
@@ -160,40 +160,60 @@ public class GraphicView implements Observer {
 		player3.setLayout(gl_player3);
 
 		middleCards = new JPanel();
+		
+		lblTourActuel = new JLabel("Tour actuel : ");
 		groupLayout = new GroupLayout(game.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup().addContainerGap(131, Short.MAX_VALUE).addComponent(infos, GroupLayout.PREFERRED_SIZE, 332, GroupLayout.PREFERRED_SIZE).addGap(121)).addGroup(groupLayout.createSequentialGroup()
-								.addComponent(player1, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(player2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(middleCards, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
-								.addGap(18).addComponent(player3, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)));
-		groupLayout
-				.setVerticalGroup(
-						groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup().addComponent(infos, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE).addGap(29)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addComponent(player1, GroupLayout.PREFERRED_SIZE, 149, Short.MAX_VALUE).addGap(77))
-												.addGroup(Alignment.TRAILING,
-														groupLayout
-																.createSequentialGroup().addGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addComponent(player3, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
-																		.addComponent(middleCards, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-																.addGap(49).addComponent(player2, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(lblTourActuel, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(infos, GroupLayout.PREFERRED_SIZE, 332, GroupLayout.PREFERRED_SIZE)
+					.addGap(121))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(player1, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(player2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(middleCards, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
+					.addGap(18)
+					.addComponent(player3, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(infos, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblTourActuel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+					.addGap(29)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(player1, GroupLayout.PREFERRED_SIZE, 149, Short.MAX_VALUE)
+							.addGap(77))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(player3, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
+								.addComponent(middleCards, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(49)
+							.addComponent(player2, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))))
+		);
 
 		lblInfos = new JLabel("Infos");
 		infos.add(lblInfos);
 
 		trickPile = new JButton("Pile deTricks");
 
-		btnTrickDpil = new JButton("Trick Dépilé");
-
 		mprop1 = new JButton("prop 1");
 
 		mprop2 = new JButton("prop2");
+
+		depiledTrick = new JLabel("Trick dépilé");
 		gl_middleCards = new GroupLayout(middleCards);
 		gl_middleCards.setHorizontalGroup(
 				gl_middleCards.createParallelGroup(Alignment.LEADING).addGroup(gl_middleCards.createSequentialGroup().addContainerGap().addGroup(gl_middleCards.createParallelGroup(Alignment.LEADING).addComponent(trickPile).addComponent(mprop1))
-						.addPreferredGap(ComponentPlacement.RELATED, 78, Short.MAX_VALUE).addGroup(gl_middleCards.createParallelGroup(Alignment.TRAILING).addComponent(btnTrickDpil).addComponent(mprop2)).addContainerGap()));
+						.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE).addGroup(gl_middleCards.createParallelGroup(Alignment.LEADING).addComponent(mprop2).addComponent(depiledTrick)).addContainerGap()));
 		gl_middleCards.setVerticalGroup(gl_middleCards.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_middleCards.createSequentialGroup().addContainerGap().addGroup(gl_middleCards.createParallelGroup(Alignment.BASELINE).addComponent(trickPile).addComponent(btnTrickDpil))
+				.addGroup(gl_middleCards.createSequentialGroup().addContainerGap().addGroup(gl_middleCards.createParallelGroup(Alignment.BASELINE).addComponent(trickPile).addComponent(depiledTrick))
 						.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE).addGroup(gl_middleCards.createParallelGroup(Alignment.BASELINE).addComponent(mprop1).addComponent(mprop2)).addGap(32)));
 		middleCards.setLayout(gl_middleCards);
 		gl_player1 = new GroupLayout(player1);
@@ -208,7 +228,7 @@ public class GraphicView implements Observer {
 				.addComponent(p1prop2).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(p1Score).addGap(19)));
 		player1.setLayout(gl_player1);
 		game.getContentPane().setLayout(groupLayout);
-		
+
 		addAllActionListeners();
 	}
 
@@ -216,49 +236,88 @@ public class GraphicView implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		redraw();
+		if (arg1 instanceof String) {
+			switch ((String) arg1) {
+			case "player0":
+				lblTourActuel.setText("Tour actuel : " + controler.getGame().getPlayers()[0].getName());
+				break;
+			case "player1":
+				lblTourActuel.setText("Tour actuel : " + controler.getGame().getPlayers()[1].getName());
+				break;
+			case "player2":
+				lblTourActuel.setText("Tour actuel : " + controler.getGame().getPlayers()[2].getName());
+				break;
+			}
+		}
 	}
-	
+
+	public Menu getMenu() {
+		return this.menu;
+	}
+
 	public void addAllActionListeners() {
-		btnTrickDpil.addActionListener(controler);
-		mprop1.addActionListener(controler);
-		mprop2.addActionListener(controler);
-		p1prop1.addActionListener(controler);
-		p1prop2.addActionListener(controler);
-		p2prop1.addActionListener(controler);
-		p2prop2.addActionListener(controler);
-		p3prop1.addActionListener(controler);
-		p3prop2.addActionListener(controler);
+		trickPile.addActionListener(new DepilePropButton()); //La pile de tricks
+		mprop1.addActionListener(new PropButtonListener(-1, 0)); //Les deux props du milieu
+		mprop2.addActionListener(new PropButtonListener(-1, 1));
+		p1prop1.addActionListener(new PropButtonListener(0, 0));//Les props des joueurs
+		p1prop2.addActionListener(new PropButtonListener(0, 1));
+		p2prop1.addActionListener(new PropButtonListener(1, 0));
+		p2prop2.addActionListener(new PropButtonListener(1, 1));
+		p3prop1.addActionListener(new PropButtonListener(2, 0));
+		p3prop2.addActionListener(new PropButtonListener(2, 1));
 	}
 
 	public void redraw() {
 		Game gameModel = this.controler.getGame();
 		Player[] players = gameModel.getPlayers();
 
-		p1Name.setText(players[0].getName());
-		p2Name.setText(players[1].getName());
-		p3Name.setText(players[2].getName());
+		boolean allGood = true; //Détermine si tous les éléments sont présents pour faire l'affichage
 
-		p1Score.setText(new Integer(players[0].getScore()).toString());
-		p2Score.setText(new Integer(players[1].getScore()).toString());
-		p3Score.setText(new Integer(players[2].getScore()).toString());
-
-		p1prop1.setText(players[0].getHand(0).getName());
-		p1prop2.setText(players[0].getHand(1).getName());
-		p2prop1.setText(players[1].getHand(0).getName());
-		p2prop2.setText(players[1].getHand(1).getName());
-		p3prop1.setText(players[2].getHand(0).getName());
-		p3prop2.setText(players[2].getHand(1).getName());
-
-		mprop1.setText(Game.getMiddleProp().get(0).getName());
-
-		if (Game.getMiddleProp().size() > 1) {
-			mprop2.setText(Game.getMiddleProp().get(1).getName());
-		} else {
-			middleCards.remove(mprop2);
-			//mprop2.setEnabled(false);
+		if (players == null) {
+			allGood = false;
+		}
+		if (players.length != 3) {
+			allGood = false;
 		}
 		
-		btnTrickDpil.setText(gameModel.getDepiledTrick().getName());
+		if(gameModel.getDepiledTrick() == null) {
+			allGood = false;
+		}
+
+		for (int i = 0; i < players.length; i++) {
+			if (players[i] == null) {
+				allGood = false;
+			}
+		}
+
+		if (allGood) {
+			System.out.println(players);
+			p1Name.setText(players[0].getName());
+			p2Name.setText(players[1].getName());
+			p3Name.setText(players[2].getName());
+
+			p1Score.setText(new Integer(players[0].getScore()).toString());
+			p2Score.setText(new Integer(players[1].getScore()).toString());
+			p3Score.setText(new Integer(players[2].getScore()).toString());
+
+			p1prop1.setText(players[0].getHand(0).getName());
+			p1prop2.setText(players[0].getHand(1).getName());
+			p2prop1.setText(players[1].getHand(0).getName());
+			p2prop2.setText(players[1].getHand(1).getName());
+			p3prop1.setText(players[2].getHand(0).getName());
+			p3prop2.setText(players[2].getHand(1).getName());
+
+			mprop1.setText(Game.getMiddleProp().get(0).getName());
+
+			depiledTrick.setText(gameModel.getDepiledTrick().getName());
+
+			if (Game.getMiddleProp().size() > 1) {
+				mprop2.setText(Game.getMiddleProp().get(1).getName());
+			} else {
+				middleCards.remove(mprop2);
+				// mprop2.setEnabled(false);
+			}
+		}
 
 	}
 
@@ -273,4 +332,27 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	class PropButtonListener implements ActionListener {
+
+		int player, propId;
+
+		public PropButtonListener(int player, int propId) {
+			this.player = player;
+			this.propId = propId;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			controler.actionPerformed(new ActionEvent(player, propId, "Appui sur le prop"));
+		}
+
+	}
+
+	class DepilePropButton implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			controler.setRevealNewTrick(controler.getGame().getCurrentPlayer(), true);
+		}
+
+	}
 }

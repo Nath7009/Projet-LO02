@@ -1,4 +1,4 @@
- package theotherhattrick;
+package theotherhattrick;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,29 +13,21 @@ import java.util.Stack;
  *
  */
 public class Game extends Observable implements Serializable {
-	
+
 	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
-	
+
 	public static String NAME = "THE OTHER HAT TRICK";
-	public static String RULE_SWISS_ARMY_KNIFE = 
-			"***** Le Couteau Suisse *****\n"
-			+ "Ajout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick\n"
+	public static String RULE_SWISS_ARMY_KNIFE = "***** Le Couteau Suisse *****\n" + "Ajout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick\n"
 			+ "Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick.\n";
-	public static String RULE_LETTUCE = 
-			"***** Les Carottes Magiques *****\n"
-			+ "Permet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte.\n";
-	public static String RULE_CARROT = 
-			"***** La Laitue Magique *****\n"
-			+ "Rater un tour où figure une laitue offre la possibilité de retourner un de vos props\n"
-			+ "Il a donc le choix de cacher une de ses cartes si elle était face visible.\n";
-			
+	public static String RULE_LETTUCE = "***** Les Carottes Magiques *****\n" + "Permet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte.\n";
+	public static String RULE_CARROT = "***** La Laitue Magique *****\n" + "Rater un tour où figure une laitue offre la possibilité de retourner un de vos props\n" + "Il a donc le choix de cacher une de ses cartes si elle était face visible.\n";
+
 	protected int variant;
 	protected int nbOfHuman;
 
 	protected static Player[] players;
 	protected Player newPlayer;
-	
 
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
@@ -121,7 +113,7 @@ public class Game extends Observable implements Serializable {
 
 		keyboard.close();
 	}
-	
+
 	public int getNbOfHuman() {
 		return nbOfHuman;
 	}
@@ -141,7 +133,7 @@ public class Game extends Observable implements Serializable {
 		players = new Player[3];
 		this.setChanged();
 		this.notifyObservers("nbOfPlayers");
-		
+
 		for (int i = 0; i < nbOfHuman; i++) {
 			this.setChanged();
 			this.notifyObservers("identityOfPLayer");
@@ -228,7 +220,6 @@ public class Game extends Observable implements Serializable {
 		boolean finished = false;
 		for (int i = 0; i < players.length; i++) {
 			ArrayList<Prop> hand = players[i].getHand();
-			System.out.println(hand.size());
 			if (!depiledIsEmpty() && depiledTrick.compareToProps(hand)) {
 				System.out.println("Le joueur " + players[i].getName() + " a réussi The Other Hat Trick, il gagne 6 points");
 				giveTrick(players[i]);
@@ -262,7 +253,8 @@ public class Game extends Observable implements Serializable {
 
 			// DONNER LE TRICK AU JOUEUR
 			this.giveTrick(p); // On lui donne le trick
-
+			setChanged();
+			notifyObservers("Un trick a été réalisé");
 		}
 
 		else {
@@ -298,22 +290,20 @@ public class Game extends Observable implements Serializable {
 	public static ArrayList<Prop> getMiddleProp() {
 		return middleProp;
 	}
-	
+
 	public Player getNewPlayer() {
 		return newPlayer;
 	}
-	
+
 	public void setNewPlayer(Player newPlayer) {
 		this.newPlayer = newPlayer;
 	}
-	
-	public Player[] getPlayers() {
-		return this.players;
-	}
-	
+
 	private void playTurn() {
 		System.out.println("\n]=====||=====||=====||=====[TOUR N°" + tour + "]=====||=====||=====||=====[\n");
 		Player p = players[tour % 3];
+		setChanged();
+		notifyObservers("player" + tour % 3);
 		boolean playerIn;
 		// if (p instanceof Human || p instanceof Robot) {
 		System.out.println(p.getName() + " joue");
@@ -345,14 +335,14 @@ public class Game extends Observable implements Serializable {
 		int choice = 0;
 
 		System.out.println("Voici les différentes règles du jeu : \n");
-		
+
 		System.out.println(Game.RULE_SWISS_ARMY_KNIFE);
 //		System.out.println("***** Le Couteau Suisse *****\nAjout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
 //		System.out.println("Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick");
-		
+
 		System.out.println(Game.RULE_CARROT);
 //		System.out.println("\n***** Les Carottes Magiques *****\nPermet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte");
-		
+
 		System.out.println(Game.RULE_LETTUCE);
 //		System.out.println("\n***** La Laitue Magique *****\nRater un tour où figure une laitue offre la possibilité de retourner un de vos props");
 //		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
@@ -381,9 +371,13 @@ public class Game extends Observable implements Serializable {
 		}
 		return bestPlayer;
 	}
-	
+
 	public Player[] getPlayers() {
 		return players;
+	}
+
+	public Player getCurrentPlayer() {
+		return players[tour % 3];
 	}
 
 	public static int getWorstPlayer() {
@@ -401,7 +395,7 @@ public class Game extends Observable implements Serializable {
 		}
 		return worstPlayer;
 	}
-	
+
 	public Trick getDepiledTrick() {
 		return depiledTrick;
 	}
@@ -583,6 +577,8 @@ public class Game extends Observable implements Serializable {
 		} else {
 			System.out.println("Tous vos props sont déjà  visibles. Aucune action n'est effectuée.");
 		}
+		setChanged();
+		notifyObservers("Un prop a été retourné");
 	}
 
 	public void printOthersHand(int id) {

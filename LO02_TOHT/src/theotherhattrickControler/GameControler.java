@@ -1,6 +1,7 @@
 package theotherhattrickControler;
 
 import theotherhattrick.*;
+import theotherhattrickView.GraphicView;
 import theotherhattrickView.Menu;
 
 import java.awt.event.ActionEvent;
@@ -15,9 +16,19 @@ public class GameControler implements ActionListener{
  * Le controleur lance alors la partie.
  * @param variant : on récupère la version que l'on souhaite jouer en paramètre
  */
-	public GameControler(Menu menu) {
-		int variant = menu.getVariant();
+	public GameControler() {
+		GraphicView gv = new GraphicView(this);
+		int variant = gv.getMenu().getVariant();
 		this.game = Game.createGame(variant);
+		game.addObserver(gv);
+		this.game.start();
+	}
+	
+	public GameControler(int variant) {
+		
+	}
+	
+	public void start() {
 		this.game.start();
 	}
 	
@@ -41,7 +52,7 @@ public class GameControler implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		System.out.println(e.getActionCommand() + " " + e.getSource() + " " + e.getID());
 	}
 	
 	/**
