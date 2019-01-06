@@ -66,6 +66,8 @@ public class GraphicView implements Observer {
 	private JPanel infos;
 	private JLabel lblInfos;
 	private JLabel lblTourActuel;
+	private JButton btnSave;
+	private JButton btnLoad;
 
 	/**
 	 * Launch the application.
@@ -162,6 +164,10 @@ public class GraphicView implements Observer {
 		middleCards = new JPanel();
 		
 		lblTourActuel = new JLabel("Tour actuel : ");
+		
+		btnSave = new JButton("Save");
+		
+		btnLoad = new JButton("Load");
 		groupLayout = new GroupLayout(game.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -169,7 +175,11 @@ public class GraphicView implements Observer {
 					.addComponent(lblTourActuel, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(infos, GroupLayout.PREFERRED_SIZE, 332, GroupLayout.PREFERRED_SIZE)
-					.addGap(121))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnLoad)
+						.addComponent(btnSave))
+					.addContainerGap())
 				.addGroup(groupLayout.createSequentialGroup()
 					.addComponent(player1, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -184,7 +194,11 @@ public class GraphicView implements Observer {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(infos, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblTourActuel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblTourActuel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnSave)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnLoad)))
 					.addGap(29)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -265,6 +279,8 @@ public class GraphicView implements Observer {
 		p2prop2.addActionListener(new PropButtonListener(1, 1));
 		p3prop1.addActionListener(new PropButtonListener(2, 0));
 		p3prop2.addActionListener(new PropButtonListener(2, 1));
+		btnLoad.addActionListener(new SaveButtonListener("load"));
+		btnSave.addActionListener(new SaveButtonListener("save"));
 	}
 
 	public void redraw() {
@@ -354,5 +370,16 @@ public class GraphicView implements Observer {
 			controler.setRevealNewTrick(controler.getGame().getCurrentPlayer(), true);
 		}
 
+	}
+	
+	class SaveButtonListener implements ActionListener{
+		String function;
+		public SaveButtonListener(String function) {
+			this.function = function;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			controler.actionPerformed(new ActionEvent(this.function, 0, ""));
+		}
 	}
 }
