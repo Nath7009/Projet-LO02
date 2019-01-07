@@ -163,7 +163,7 @@ public class Game extends Observable implements Serializable {
 			players[i] = new Robot(date);
 		}
 
-		this.sortPlayers();
+		sortPlayers();
 
 		for (int i = 0; i < players.length; i++) {
 			players[i].setId(i);
