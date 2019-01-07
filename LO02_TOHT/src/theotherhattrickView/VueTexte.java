@@ -51,6 +51,7 @@ public class VueTexte implements Observer{
 		this.gc.getGame().addObserver(this);
 //		System.out.println("nb d'observer (controler) : " + this.gc.getGame().countObservers());
 		this.gc.setVariant(variant);
+		this.gc.getGame().initGame();
 		this.gc.getGame().start();
 		
 	}

@@ -172,7 +172,7 @@ public class GraphicView implements Observer {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(lblTourActuel, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+					.addComponent(lblTourActuel, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(infos, GroupLayout.PREFERRED_SIZE, 332, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
@@ -180,14 +180,15 @@ public class GraphicView implements Observer {
 						.addComponent(btnLoad)
 						.addComponent(btnSave))
 					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 					.addComponent(player1, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(player2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(middleCards, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
-					.addGap(18)
-					.addComponent(player3, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(player3, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+					.addGap(8))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -200,16 +201,18 @@ public class GraphicView implements Observer {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnLoad)))
 					.addGap(29)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(player1, GroupLayout.PREFERRED_SIZE, 149, Short.MAX_VALUE)
-							.addGap(77))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(player3, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
-								.addComponent(middleCards, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(49)
-							.addComponent(player2, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(player3, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(player1, GroupLayout.PREFERRED_SIZE, 149, Short.MAX_VALUE)
+								.addGap(77))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(middleCards, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGap(49)
+								.addComponent(player2, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))))
 		);
 
 		lblInfos = new JLabel("Infos");
@@ -340,7 +343,7 @@ public class GraphicView implements Observer {
 	class StartButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			System.out.println("Démarrage du jeu");
-
+			controler.createGame();
 			menu.setVisible(false);
 
 			game.setVisible(true);
@@ -367,7 +370,8 @@ public class GraphicView implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			controler.setRevealNewTrick(controler.getGame().getCurrentPlayer(), true);
+			controler.actionPerformed(new ActionEvent("trickPile", 0, "Appui sur la pile de tricks"));
+			//controler.setRevealNewTrick(controler.getGame().getCurrentPlayer(), true);
 		}
 
 	}

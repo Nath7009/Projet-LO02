@@ -7,6 +7,8 @@ import java.util.Observable;
 import java.util.Scanner;
 import java.util.Stack;
 
+import theotherhattrickControler.GameParameters;
+
 /**
  * 
  * @author Antoine Mallet, Nathan Cantat
@@ -61,11 +63,27 @@ public class Game extends Observable implements Serializable {
 
 		return game;
 	}
-
-	public void start() {
-
+	
+	public static Game createGame(GameParameters param) {
+		players = new Player[3];
+		//On crée les joueurs puis on les trie suivant leur date de naissance
+		for(int i=0;i<param.players.length;i++) {
+			System.out.println(players);
+			players[i] = param.players[i];
+			players[i].setId(i);
+		}
+		
+		sortPlayers();
+		return createGame(param.variant);
+	}
+	
+	//Crée les éléments du jeu, utilisé uniquement pour l'interface en ligne de commande
+	public void initGame() {
 		// Instanciation de tous les joueurs humains ou robots
 		this.createPlayers();
+	}
+
+	public void start() {
 		this.createCards();
 		this.distributeProps();
 		this.depile();
@@ -137,7 +155,7 @@ public class Game extends Observable implements Serializable {
 		for (int i = 0; i < nbOfHuman; i++) {
 			this.setChanged();
 			this.notifyObservers("identityOfPLayer");
-			this.players[i] = this.newPlayer;
+			players[i] = this.newPlayer;
 		}
 
 		for (int i = nbOfHuman; i < 3; i++) {
@@ -606,7 +624,7 @@ public class Game extends Observable implements Serializable {
 		p.getHand(1).hide();
 	}
 
-	protected void sortPlayers() {
+	protected static void sortPlayers() {
 		Player[] newPlayers = new Player[players.length];
 		int indMax = 0;
 		int bestInd = 0;

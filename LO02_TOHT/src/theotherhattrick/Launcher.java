@@ -6,7 +6,8 @@ public class Launcher {
 
 	public static void main(String[] args) {
 		GameControler gc = new GameControler();
-		gc.start();
+		if(gc == gc);
+		//gc.start();
 //		Game game = Game.createGame();
 //		game.start();
 	}

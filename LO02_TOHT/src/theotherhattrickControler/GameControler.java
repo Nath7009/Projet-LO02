@@ -8,42 +8,55 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class GameControler implements ActionListener{
+public class GameControler implements ActionListener {
+	
 	protected Game game;
-	
-/**
- * Le contructeur du controleur instancie la version du jeux souhaitée avec la méthode statique createGame(variant) de Game.
- * Le controleur lance alors la partie.
- * @param variant : on récupère la version que l'on souhaite jouer en paramètre
- */
+	private GraphicView gv;
+	/**
+	 * Le contructeur du controleur instancie la version du jeux souhaitée avec la
+	 * méthode statique createGame(variant) de Game. Le controleur lance alors la
+	 * partie.
+	 * 
+	 * @param variant : on récupère la version que l'on souhaite jouer en paramètre
+	 */
 	public GameControler() {
-		GraphicView gv = new GraphicView(this);
-		int variant = gv.getMenu().getVariant();
-		this.game = Game.createGame(variant);
-		game.addObserver(gv);
-		this.game.start();
+		gv = new GraphicView(this);
+		// int variant = gv.getMenu().getVariant();
+		// this.game = Game.createGame(variant);
+		// Création du jeu à l'aide des données du menu
+
+		// this.game.initGame();
+		//this.game.start();
 	}
-	
+
+	public void createGame() {
+		//Cette méthode est appelée quand on valide le menu
+		//c'est l'interface graphique qui décide quand le jeu peut commencer
+		game = Game.createGame(new GameParameters(gv.getMenu()));
+		game.addObserver(this.gv);
+		game.start();
+	}
+
 	public GameControler(int variant) {
-		
+
 	}
-	
+
 	public void start() {
 		this.game.start();
 	}
-	
+
 	public Game getGame() {
 		return this.game;
 	}
-	
+
 	public void setVariant(int variant) {
 		this.game.setVariant(variant);
 	}
-	
+
 	public void setNbOfHuman(int nbOfHuman) {
 		this.game.setNbOfHuman(nbOfHuman);
 	}
-	
+
 	public void setNewPlayer(String name, int day, int month, int year) {
 		Player newPlayer = new Human(name, new Date(day, month, year));
 		this.game.setNewPlayer(newPlayer);
@@ -54,16 +67,16 @@ public class GameControler implements ActionListener{
 		// TODO Auto-generated method stub
 		System.out.println(e.getActionCommand() + " " + e.getSource() + " " + e.getID());
 	}
-	
+
 	/**
 	 * 
 	 * @param p
 	 * @param choice
 	 */
 	public void setRevealNewTrick(Player p, boolean choice) {
-			p.setNewTrick(choice);
+		p.setNewTrick(choice);
 	}
-	
+
 	/**
 	 * 
 	 * @param choice
@@ -71,26 +84,25 @@ public class GameControler implements ActionListener{
 	public void setOwnProp(Player p, int choice) {
 		p.setOwnProp(choice);
 	}
-	
+
 	public void setMiddleVarCarrot(Player p, int choice) {
 		p.setMiddleVarCarrot(choice);
 	}
-	
+
 	public void setPerformTrick(Player p, boolean choice) {
 		p.setPerformTrick(choice);
 	}
-	
+
 	public void setRevealProp(Player p, int choice) {
 		p.setRevealProp(choice);
 	}
-	
+
 	public void setMiddleProp(Player p, int choice) {
 		p.setMiddleProp(choice);
 	}
-	
+
 	public void setOtherProp(Player p, int choice) {
 		p.setOtherProp(choice);
 	}
-	
-	
+
 }

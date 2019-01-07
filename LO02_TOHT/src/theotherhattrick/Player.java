@@ -24,6 +24,17 @@ public abstract class Player extends Observable implements Decision {
 	protected int ownProp = 0, otherProp = 0, middleProp = 0, middleVarCarrot = 0, revealProp;
 	protected boolean newTrick = false, performTrick = false;
 	
+	public Player(String name, Date birthD) {
+		if(name == null) {
+			name = generateName();
+		}
+		if(birthD == null) {
+			birthD = new Date();
+		}
+		this.name = name;
+		this.birthD = birthD;
+	}
+	
 	public int getOwnProp() {
 		return ownProp;
 	}
@@ -79,16 +90,17 @@ public abstract class Player extends Observable implements Decision {
 	public void setPerformTrick(boolean performTrick) {
 		this.performTrick = performTrick;
 	}
-	
-
-	public Player(String name, Date birthD) {
-		this.name = name;
-		this.birthD = birthD;
-	}
 
 	public String getName() {
 		return this.name;
-	}	
+	}
+	
+	public String generateName() {
+		String[] names = {"Pierre", "Paul", "Jacques", "Rodolphe", "Nathan", "Antoine", "Léo", "Gabriel", "Jules", "Emma", "Manon", "Jade", "Louise"};
+		int name1 = (int) Math.floor(Math.random() * names.length);
+		int name2 = (int) Math.floor(Math.random() * names.length);
+		return names[name1] + "-" + names[name2];
+	}
 	
 	public int getSize() {
 		return hand.size();
