@@ -1,6 +1,13 @@
 package theotherhattrick;
 
-public class GameVarSwissKnife extends Game{
+import java.io.Serializable;
+
+public class GameVarSwissKnife extends Game implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3306308634642419092L;
+
 	public GameVarSwissKnife() {
 		super();
 	}

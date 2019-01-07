@@ -1,10 +1,15 @@
 package theotherhattrick;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class StratConservative implements Decision {
+public class StratConservative implements Decision, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5665304101790267834L;
 	private ArrayList<Prop> hand;
 	private int id;
 

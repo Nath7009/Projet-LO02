@@ -1,6 +1,13 @@
 package theotherhattrick;
 
-public class GameVarLettuce extends Game {
+import java.io.Serializable;
+
+public class GameVarLettuce extends Game implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public GameVarLettuce() {
 		super();
 	}

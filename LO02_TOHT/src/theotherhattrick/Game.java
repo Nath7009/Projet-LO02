@@ -16,6 +16,10 @@ import theotherhattrickControler.GameParameters;
  */
 public class Game extends Observable implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6832247783280823778L;
 	protected transient int tour; // Le joueur qui doit jouer
 	protected static Scanner keyboard = new Scanner(System.in);
 

@@ -1,6 +1,7 @@
 package theotherhattrick;
 
 
+import java.io.Serializable;
 import java.util.ArrayList; 
 import java.util.Iterator;
 import java.util.Observable;
@@ -12,8 +13,12 @@ import java.util.Stack;
  * @author amall
  *
  */
-public abstract class Player extends Observable implements Decision {
+public abstract class Player extends Observable implements Decision, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected int id;
 	protected String name;
 	protected Date birthD;

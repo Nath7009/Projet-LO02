@@ -1,6 +1,13 @@
 package theotherhattrick;
 
-public class GameVarCarrot extends Game {
+import java.io.Serializable;
+
+public class GameVarCarrot extends Game implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public GameVarCarrot() {
 		super();
 	}

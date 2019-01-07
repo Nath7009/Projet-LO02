@@ -1,7 +1,13 @@
 package theotherhattrick;
 
-public class Robot extends Player implements Decision {
+import java.io.Serializable;
 
+public class Robot extends Player implements Decision, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8125673734326190507L;
 	private Decision strategy;
 	private double tiltLevel = 0; // La chance qu'a le robot de faire un choix de stratégie au hasard
 

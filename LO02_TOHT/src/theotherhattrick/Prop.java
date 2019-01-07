@@ -1,8 +1,13 @@
 package theotherhattrick;
 
+import java.io.Serializable;
 import java.util.Observable;
 
-public class Prop extends Observable{
+public class Prop extends Observable implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5690187113774987887L;
 	private String name;
 	private int type;
 	private boolean isVisible;

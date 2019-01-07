@@ -1,11 +1,16 @@
 package theotherhattrick;
 
+import java.io.Serializable;
 import java.util.ArrayList; 
 import java.util.Iterator;
 import java.util.Observable;
 
 
-public class Trick extends Observable {
+public class Trick extends Observable implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8559185521054700937L;
 	String name;
 	int points;
 	PropEnum[][] ingredients = {{} , {}};

@@ -1,7 +1,13 @@
 package theotherhattrick;
 
-public class StratRisky implements Decision {
+import java.io.Serializable;
+
+public class StratRisky implements Decision, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8293653320471985815L;
 	StratDefault sd;
 	//Dans cette strat�gie, le joueur va toujours essaier de faire le trick qui est retourn�
 	//Il va essayer de prendre les cartes les plus rares aux autres joueurs

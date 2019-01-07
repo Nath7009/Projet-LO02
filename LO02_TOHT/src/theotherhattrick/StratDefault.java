@@ -1,8 +1,15 @@
 package theotherhattrick;
 
-public class StratDefault implements Decision {
+import java.io.Serializable;
+
+public class StratDefault implements Decision, Serializable {
 
 	// Dans cette strat�gie, le joueur va choisir au hasard
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3367408643741394896L;
 
 	public boolean revealNewTrick() {
 		// On multiplie 2 Math.random pour que les parties soient plus longues

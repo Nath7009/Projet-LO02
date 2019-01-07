@@ -1,6 +1,12 @@
 package theotherhattrick;
 
-	public class Date {
+import java.io.Serializable;
+
+public class Date implements Serializable{
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 829283417861837956L;
 		private int year;
 		private int month;
 		private int day;

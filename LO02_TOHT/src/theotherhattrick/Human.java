@@ -1,5 +1,6 @@
 package theotherhattrick;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
@@ -8,7 +9,12 @@ import java.util.Scanner;
  *
  */
 @SuppressWarnings("deprecation")
-public class Human extends Player {
+public class Human extends Player implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -681790841132521940L;
 
 	public Human(String name, Date birthDate) {
 		super(name, birthDate);
