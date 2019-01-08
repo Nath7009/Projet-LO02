@@ -36,7 +36,7 @@ public class Trick extends Observable implements Serializable {
 	public void decreaseValue() {
 		this.points--;
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers("value decreased");
 	}
 	
 	public void age() {
@@ -48,13 +48,8 @@ public class Trick extends Observable implements Serializable {
 	}
 	
 	public void print() {
-		System.out.println("<" + this.name + "> :");
-		for (int i = 0; i < ingredients.length; i++) {
-			for (int j = 0; j < ingredients[i].length; j++) {
-				System.out.println("[" + ingredients[i][j].getName() + "]");
-			}
-			System.out.println();
-		}
+		this.setChanged();
+		this.notifyObservers("print trick");
 	}
 	
 	public String toString() {

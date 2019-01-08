@@ -25,11 +25,16 @@ import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import theotherhattrick.Game;
+import theotherhattrick.Human;
 import theotherhattrick.Player;
 import theotherhattrick.Prop;
+import theotherhattrick.Robot;
+import theotherhattrick.Trick;
+
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 
+@SuppressWarnings("deprecation")
 public class GraphicView implements Observer {
 
 	// private JFrame menu;
@@ -323,19 +328,161 @@ public class GraphicView implements Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
+		
 		redraw();
-		if (arg1 instanceof String) {
-			switch ((String) arg1) {
-			case "player0":
-				lblTourActuel.setText("Tour actuel : " + controler.getGame().getPlayers()[0].getName());
-				break;
-			case "player1":
-				lblTourActuel.setText("Tour actuel : " + controler.getGame().getPlayers()[1].getName());
-				break;
-			case "player2":
-				lblTourActuel.setText("Tour actuel : " + controler.getGame().getPlayers()[2].getName());
-				break;
+		
+		if(arg0 instanceof Game) {
+			
+			switch((String)arg1) {
+			
+				case "nbOfPlayers" : 
+					
+					break;
+					
+				case "identityOfPLayer" : 
+					
+					break;
+					
+				case "new prop" : 
+					
+					break;
+					
+				case "new trick" :
+					
+					break;
+					
+				case "depile" :
+					
+					break;
+					
+				case "trick pile empty" : 
+					
+					break;
+				
+				case "Trick realized" : 
+					
+					break;
+					
+				case "last turn" : 
+					
+					break;
+					
+				
+			}
+		}
+		
+		if(arg0 instanceof Player) {
+			
+			if(arg0 instanceof Human) {
+				
+				switch((String)arg1){
+				
+					
+					case "name" : 
+						
+						break;
+						
+						
+					case "Player0" : 
+						
+						break;
+						
+					case "Player1" : 
+						
+						break;
+						
+					case "Player2" : 
+						
+						break;
+				
+					case "revealNewTrick" :
+						
+						break;
+				
+					case "chooseOwnProp" :
+						
+						break;
+				
+					case "chooseOtherProp" : 
+						
+						break;
+				
+					case "chooseMiddleVarCarrot" :
+						
+						break;
+				
+					case "performTrick" : 
+						
+						break;
+				
+					case "revealProp" :
+						
+						break;
+				
+					case "chooseMiddle" : 
+						
+						break;
+						
+						
+					case "reveal prop" : 
+						
+						break;
+						
+					case "other hat trick realized" :
+						
+						break;
+						
+					case "possess other rabbit" : 
+						
+						break;
+						
+					case "possess hat" : 
+						
+						break;
+						
+						
+				}
+			}
+			
+			if(arg0 instanceof Robot) {
+				
+			}
+			
+		}
+		
+		if(arg0 instanceof Trick) {
+			
+			switch((String) arg1) {
+			
+				case "print trick" : 
+					
+					break;
+					
+				case "value decreased" : 
+					
+					break;
+			}
+		}
+		
+		if(arg0 instanceof Prop) {
+			
+			switch((String) arg1) {
+			
+				case "hide" : 
+					break; 
+					
+				case "unhide" : 
+					break;
+					
+				case "print" : 
+					break;
+					
+				case "print visible" : 
+					
+					break;
+					
+				case "print debug" : 
+					break;
 			}
 		}
 	}

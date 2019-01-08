@@ -14,6 +14,8 @@ import theotherhattrickControler.GameParameters;
  * @author Antoine Mallet, Nathan Cantat
  *
  */
+
+@SuppressWarnings("deprecation")
 public class Game extends Observable implements Serializable {
 
 	/**
@@ -150,7 +152,6 @@ public class Game extends Observable implements Serializable {
 	}
 
 	private void createPlayers() {
-		String nom;
 		Date date;
 		players = new Player[3];
 		this.setChanged();
@@ -190,18 +191,40 @@ public class Game extends Observable implements Serializable {
 				allProps.push(new Prop(PropEnum.values()[i]));
 				allProps.push(new Prop(PropEnum.values()[i]));
 			}
+			this.setChanged();
+			this.notifyObservers("new prop");
 		}
 		Collections.shuffle(allProps);
 
 		Stack<Trick> temp = new Stack<Trick>();
 		for (int i = 0; i < TrickEnum.values().length - 1; i++) {
 			temp.push(new Trick(TrickEnum.values()[i]));
+			this.setChanged();
+			this.notifyObservers("new trick");
 		}
 		Collections.shuffle(temp);
 		temp.push(new Trick(TrickEnum.values()[TrickEnum.values().length - 1]));
+		this.setChanged();
+		this.notifyObservers("new trick");
 		for (int i = 0; i < TrickEnum.values().length; i++) {
 			tricks.push(temp.pop());
 		}
+	}
+
+	public Stack<Trick> getTricks() {
+		return tricks;
+	}
+
+	public void setTricks(Stack<Trick> tricks) {
+		this.tricks = tricks;
+	}
+
+	public Stack<Prop> getAllProps() {
+		return allProps;
+	}
+
+	public void setAllProps(Stack<Prop> allProps) {
+		this.allProps = allProps;
 	}
 
 	/**
@@ -231,26 +254,30 @@ public class Game extends Observable implements Serializable {
 		boolean playerIn = p.revealNewTrick(); // Conversion
 		if (playerIn) {
 			this.depile();
-			System.out.println("Le nouveau Trick est : ");
-			this.printTopTrick();
 		}
 	}
 
 	protected void playLastTurn() {
-		System.out.println("On joue le dernier tour");
-		depiledTrick.print();
+		
+		setChanged();
+		this.notifyObservers("last turn");
+
 		boolean finished = false;
+		
 		for (int i = 0; i < players.length; i++) {
 			ArrayList<Prop> hand = players[i].getHand();
 			if (!depiledIsEmpty() && depiledTrick.compareToProps(hand)) {
-				System.out.println("Le joueur " + players[i].getName() + " a réussi The Other Hat Trick, il gagne 6 points");
+				players[i].forceChanged();
+				players[i].notifyObservers("other hat trick realized");
 				giveTrick(players[i]);
 				finished = false;
 			} else if (hand.contains(new Prop(PropEnum.THE_OTHER_RABBIT)) && !finished) {
-				System.out.println("Le joueur " + players[i].getName() + "  possède The Other Rabbit, il perd 3 points");
+				players[i].forceChanged();
+				players[i].notifyObservers("possess other rabbit");
 				players[i].score -= 3;
 			} else if (hand.contains(new Prop(PropEnum.HAT)) && !finished) {
-				System.out.println("Le joueur " + players[i].getName() + "  possède The Hat, il perd 3 points");
+				players[i].forceChanged();
+				players[i].notifyObservers("possess hat");
 				players[i].score -= 3;
 			}
 		}
@@ -262,26 +289,28 @@ public class Game extends Observable implements Serializable {
 		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());
 
 		if (trickSuccessful) { // Si le joueur a réussi le trick
-			System.out.println("Vous avez réussi le tour");
-			this.showAllProps(p); // On montre ses cartes
+			this.setChanged();
+			this.notifyObservers("Trick realized");
+			p.showAllProps(); // On montre ses cartes
 
 			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
 			// longtemps
 
-			this.hideAllProps(p); // On cache ses cartes
-			System.out.println("Vous pouvez échanger l'une de vos cartes avec la carte du milieu");
+			p.hideAllProps(); // On cache ses cartes
 
 			exchangeMiddle(p);
 
 			// DONNER LE TRICK AU JOUEUR
 			this.giveTrick(p); // On lui donne le trick
-			setChanged();
-			notifyObservers("Un trick a été réalisé");
+			this.setChanged();
+			this.notifyObservers("trick given");
 		}
 
 		else {
 			// Si le joueur rate le trick
-			System.out.println("Vous avez échoué le tour");
+			this.setChanged();
+			this.notifyObservers("trick failed");
+			
 
 			this.revealProp(p);
 		}
@@ -294,10 +323,14 @@ public class Game extends Observable implements Serializable {
 	 */
 	public void depile() {
 		try {
+			this.setChanged();
+			this.notifyObservers("depile");
 			Trick temp = this.tricks.pop();
 			depiledTrick = temp;
 		} catch (Exception e) {
-			System.out.println("Impossible de retirer un trick, puisque la pile est vide");
+			this.setChanged();
+			this.notifyObservers("trick pile empty");
+//			System.out.println("Impossible de retirer un trick, puisque la pile est vide");
 		}
 	}
 
@@ -322,16 +355,15 @@ public class Game extends Observable implements Serializable {
 	}
 
 	private void playTurn() {
-		System.out.println("\n]=====||=====||=====||=====[TOUR N°" + tour + "]=====||=====||=====||=====[\n");
+		
 		Player p = players[tour % 3];
 		setChanged();
 		notifyObservers("player" + tour % 3);
 		boolean playerIn;
-		// if (p instanceof Human || p instanceof Robot) {
-		System.out.println(p.getName() + " joue");
-		System.out.println("\nVotre jeu est :");
+		
 		p.printProps();
 		this.printOthersHand(p.getId());
+		
 		System.out.println("\nLe trick à réaliser est : ");
 		this.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
@@ -353,30 +385,6 @@ public class Game extends Observable implements Serializable {
 		}
 	}
 
-	public static int askRules() {
-		int choice = 0;
-
-		System.out.println("Voici les différentes règles du jeu : \n");
-
-		System.out.println(Game.RULE_SWISS_ARMY_KNIFE);
-//		System.out.println("***** Le Couteau Suisse *****\nAjout d'une nouvelle carte capable d'être utilisée pour réaliser n'importe quel trick");
-//		System.out.println("Attention : l'utilisation du couteau suisse vous fera gagner >1< points de moins quand vous remportez un trick");
-
-		System.out.println(Game.RULE_CARROT);
-//		System.out.println("\n***** Les Carottes Magiques *****\nPermet d'échanger un prop avec un autre joueur quand un tour est réussi en utilisant une carotte");
-
-		System.out.println(Game.RULE_LETTUCE);
-//		System.out.println("\n***** La Laitue Magique *****\nRater un tour où figure une laitue offre la possibilité de retourner un de vos props");
-//		System.out.println("Il a donc le choix de cacher une de ses cartes si elle était face visible");
-
-		do {
-			System.out.println("\nVeuillez choisir la règle que vous voulez utiliser :");
-			System.out.println("Entrez 0 pour jouer sans variantes, 1 pour jouer avec le Couteau Suisse, 2 pour jouer avec la Carotte, 3 pour jouer avec la Laitue");
-			choice = keyboard.nextInt();
-		} while (choice < 0 || choice > 3);
-
-		return choice;
-	}
 
 	public static int getBestPlayer() {
 		boolean exAequo = false;
@@ -421,17 +429,7 @@ public class Game extends Observable implements Serializable {
 	public Trick getDepiledTrick() {
 		return depiledTrick;
 	}
-
-	public boolean getBool() { // Récupère un booléen du joueur qui créé la
-								// partie
-		String answer;
-		do {
-			System.out.println("Entrer y pour oui et n pour non : ");
-			answer = keyboard.nextLine();
-			answer.toLowerCase();
-		} while (answer.equals("y") && answer.equals("n"));
-		return answer.equals("y") ? true : false;
-	}
+	
 
 	private void nextTurn() {
 		this.tour++;
@@ -467,10 +465,11 @@ public class Game extends Observable implements Serializable {
 	 * Donne le trick du dessus de depiledTricks au joueur d'id id
 	 */
 	public void giveTrick(Player p) {
+		
 		if (p.getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
-			System.out.println("! ! Vous avez réalisé le tour <" + depiledTrick.getName() + "> avec le couteau suisse magique ! !\n");
 			depiledTrick.decreaseValue();
 		}
+		
 		p.increaseScore(depiledTrick.getPoints());
 		p.pushTrick(depiledTrick);
 		depiledTrick = null;
@@ -506,7 +505,7 @@ public class Game extends Observable implements Serializable {
 			players[p2].setHand(tmp1, ind2);
 		} else {
 			System.out.println(p2);
-			System.out.println("ERROR : undefined p2 value");
+//			System.out.println("ERROR : undefined p2 value");
 		}
 	}
 
@@ -519,14 +518,13 @@ public class Game extends Observable implements Serializable {
 		} else {
 			p.getHand(ind).unhide();
 		}
-		System.out.println("Nouvelle main => ");
-		System.out.println(p.getHand());
+		p.printProps();
 	}
 
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
 		propToChange = p.chooseOwnProp();
-		System.out.println("\n OwnProp has been asked");
+//		System.out.println("\n OwnProp has been asked");
 		otherProp = p.chooseOtherProp(players);
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
@@ -537,28 +535,6 @@ public class Game extends Observable implements Serializable {
 			return true;
 		}
 		return false;
-	}
-
-	public Date askBirthDate() {
-		int day = 0, month = 0, year = 0;
-		do {
-			try {
-				System.out.println("Entrer votre jour de naissance");
-				day = keyboard.nextInt();
-				System.out.println("Entrer votre mois de naissance");
-				month = keyboard.nextInt();
-				System.out.println("Entrer votre année de naissance");
-				year = keyboard.nextInt();
-
-			} catch (Exception e) {
-				keyboard.nextLine();
-				return askBirthDate();
-			}
-			;
-
-		} while (day < 0 || month < 0 || year < 1910 || day > 31 || month > 12 || year > 2010);
-
-		return new Date(year, month, day);
 	}
 
 	protected int getWinner() {
@@ -573,9 +549,10 @@ public class Game extends Observable implements Serializable {
 
 	public void revealProp(Player p) {
 		int choice = 0, i, hNum = 0;
-
-		System.out.println("Votre main, " + p.getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
-		System.out.println(p.getHand());
+		
+		p.forceChanged();
+		p.notifyObservers("reveal prop");
+		
 		for (i = 0; i < 2; i++) {
 //			players[id].getHand(i).printDebug();
 			if (p.getHand(i).getState() == false) {
@@ -604,10 +581,8 @@ public class Game extends Observable implements Serializable {
 	}
 
 	public void printOthersHand(int id) {
-		System.out.println("Voici les cartes visibles sur le terrain :");
 		for (Player p : players) {
 			if (p.getId() != id) {
-				System.out.println(p.getName());
 				p.printVisible();
 			}
 		}

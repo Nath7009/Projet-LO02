@@ -13,6 +13,7 @@ import java.util.Stack;
  * @author amall
  *
  */
+@SuppressWarnings("deprecation")
 public abstract class Player extends Observable implements Decision, Serializable {
 	
 	/**
@@ -40,12 +41,20 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		this.birthD = birthD;
 	}
 	
+	/**
+	 * la méthode setChanged est privée dans la classe Observable.
+	 * Cette méthode permet donc d'appeler setChanged depuis une classe extérieur effectuant des traitements sur Player.
+	 */
+	public void forceChanged() {
+		this.setChanged();
+	}
+	
 	public int getOwnProp() {
 		return ownProp;
 	}
 
 	public void setOwnProp(int ownProp) {
-		ownProp = ownProp;
+		this.ownProp = ownProp;
 	}
 
 	public int getOtherProp() {
@@ -53,7 +62,7 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	}
 
 	public void setOtherProp(int otherProp) {
-		otherProp = otherProp;
+		this.otherProp = otherProp;
 	}
 
 	public int getMiddleProp() {
@@ -61,7 +70,7 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	}
 
 	public void setMiddleProp(int middleProp) {
-		middleProp = middleProp;
+		this.middleProp = middleProp;
 	}
 
 	public int getMiddleVarCarrot() {
@@ -69,7 +78,7 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	}
 
 	public void setMiddleVarCarrot(int middleVarCarrot) {
-		middleVarCarrot = middleVarCarrot;
+		this.middleVarCarrot = middleVarCarrot;
 	}
 
 	public int getRevealProp() {
@@ -98,13 +107,6 @@ public abstract class Player extends Observable implements Decision, Serializabl
 
 	public String getName() {
 		return this.name;
-	}
-	
-	public String generateName() {
-		String[] names = {"Pierre", "Paul", "Jacques", "Rodolphe", "Nathan", "Antoine", "Léo", "Gabriel", "Jules", "Emma", "Manon", "Jade", "Louise"};
-		int name1 = (int) Math.floor(Math.random() * names.length);
-		int name2 = (int) Math.floor(Math.random() * names.length);
-		return names[name1] + "-" + names[name2];
 	}
 	
 	public int getSize() {
@@ -142,15 +144,6 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		}
 	}
 	
-	public void increaseScore(int points) {
-		this.score += points;
-		System.out.println("Vous gagnez >" + points + "< points. Vous avez désormais >" + this.score + "< points." );
-		this.setChanged();
-		this.notifyObservers();
-	}
-
-
-
 	public void SetBirthD(Date birthD) {
 		this.birthD = birthD;
 		this.setChanged();
@@ -165,6 +158,20 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		return successPile.empty();
 	}
 	
+	public String generateName() {
+		String[] names = {"Pierre", "Paul", "Jacques", "Rodolphe", "Nathan", "Antoine", "Léo", "Gabriel", "Jules", "Emma", "Manon", "Jade", "Louise"};
+		int name1 = (int) Math.floor(Math.random() * names.length);
+		int name2 = (int) Math.floor(Math.random() * names.length);
+		return names[name1] + "-" + names[name2];
+	}
+	
+	public void increaseScore(int points) {
+		this.score += points;
+		System.out.println("Vous gagnez >" + points + "< points. Vous avez désormais >" + this.score + "< points." );
+		this.setChanged();
+		this.notifyObservers();
+	}
+
 	public void pushTrick(Trick trick){
 		successPile.add(trick);
 		this.setChanged();
@@ -174,13 +181,25 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	public void printProps() {
 //		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
 		for (Iterator<Prop> it = hand.iterator();it.hasNext();) {
-			System.out.println(it.next());
+			it.next().print();
 		}
 	}
 	public void printVisible() {
-		for(Prop p : hand) {
-			p.printIfVisible();
+		for(Prop prop : hand) {
+			this.setChanged();
+			this.notifyObservers("name");
+			prop.printIfVisible();
 		}
+	}
+	
+	public void showAllProps() {
+		this.getHand(0).unhide();
+		this.getHand(1).unhide();
+	}
+	
+	public void hideAllProps() {
+		this.getHand(0).hide();
+		this.getHand(1).hide();
 	}
 
 }

@@ -22,8 +22,8 @@ public class VueTexte implements Observer{
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     public static String PROMPT = ">";
 
-	public VueTexte() {
-		
+	public VueTexte(GameControler gc) {
+		this.gc = gc;
 		this.initGame();
 	}
 	
@@ -75,9 +75,37 @@ public class VueTexte implements Observer{
 					this.askIdentity();
 					break;
 					
+				case "new prop" : 
+					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getAllProps().peek());
+					this.gc.getGame().getAllProps().peek().addObserver(this);
+					break;
+					
+				case "new trick" :
+					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getTricks().peek());
+					this.gc.getGame().getTricks().peek().addObserver(this);
+					break;
+					
 				case "depile" :
 					System.out.println("Le nouveau Trick à réaliser est : " + ((Game) o).getTopTrick());
 					break;
+					
+				case "trick pile empty" : 
+					System.out.println("Trick Pile empty");
+					break;
+				
+				case "Trick realized" : 
+					System.out.println("Vous avez réussi le tour !");
+					break;
+					
+					
+				
+					
+				case "last turn" : 
+					System.out.println("On joue le dernier tour");
+					this.gc.getGame().getDepiledTrick().print();
+					break;
+					
+				
 			}
 		}
 		
@@ -86,6 +114,30 @@ public class VueTexte implements Observer{
 			if(o instanceof Human) {
 				Player p = (Player) o;
 				switch((String)arg1){
+				
+					
+					case "name" : 
+						System.out.println(p.getName());
+						break;
+						
+						
+					case "Player0" : 
+						System.out.println("================================================================================");
+						System.out.println("C'est le tour de " + p.getName());
+						System.out.println("Votre jeux est : \n");
+						break;
+						
+					case "Player1" : 
+						System.out.println("================================================================================");
+						System.out.println("C'est le tour de " + p.getName());
+						System.out.println("Votre jeux est : \n");
+						break;
+						
+					case "Player2" : 
+						System.out.println("================================================================================");
+						System.out.println("C'est le tour de " + p.getName());
+						System.out.println("Votre jeux est : \n");
+						break;
 				
 					case "revealNewTrick" :
 						this.askRevealNewTrick(p);
@@ -114,6 +166,27 @@ public class VueTexte implements Observer{
 					case "chooseMiddle" : 
 						this.askChooseMiddle(p);
 						break;
+						
+						
+					case "reveal prop" : 
+						System.out.println("Vous avez échoué le tour");
+						System.out.println("Votre main, " + p.getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
+						System.out.println(p.getHand());
+						break;
+						
+					case "other hat trick realized" :
+						System.out.println("Le joueur " + p.getName() + " a réussi The Other Hat Trick, il gagne 6 points");
+						break;
+						
+					case "possess other rabbit" : 
+						System.out.println("Le joueur " + p.getName() + "  possède The Other Rabbit, il perd 3 points");
+						break;
+						
+					case "possess hat" : 
+						System.out.println("Le joueur " + p.getName() + "  possède The Hat, il perd 3 points");
+						break;
+						
+						
 				}
 			}
 			
@@ -125,10 +198,45 @@ public class VueTexte implements Observer{
 		
 		if(o instanceof Trick) {
 			
+			Trick trick =  (Trick) o;
+			switch((String) arg1) {
+			
+				case "print trick" : 
+					System.out.println("<" + trick.getName() + "> :");
+					for (int i = 0; i < trick.getIngredients().length; i++) {
+						for (int j = 0; j < trick.getLength(i); j++) {
+							System.out.println("[" + trick.getIngredient(i,j).getName() + "]");
+						}
+						System.out.println();
+					}
+					break;
+					
+				case "value decreased" : 
+					System.out.println("! ! Vous avez réalisé le tour <" + trick.getName() + "> avec le couteau suisse magique ! !\n");
+					break;
+			}
 		}
 		
 		if(o instanceof Prop) {
+			Prop prop = (Prop) o;
+			switch((String) arg1) {
 			
+				case "hide" : 
+					break; 
+					
+				case "unhide" : 
+					break;
+					
+				case "print" : 
+					break;
+					
+				case "print visible" : 
+					System.out.println(prop.getState() == true ? this.toString() : "[?????]");
+					break;
+					
+				case "print debug" : 
+					break;
+			}
 		}
 	}
 	
@@ -237,7 +345,8 @@ public class VueTexte implements Observer{
 	private void askChooseMiddle(Player p) {
 		int i = 0, ans = -1;
 		
-		System.out.println("Quel Prop voulez-vous replacer au milieu");
+		System.out.println("Vous pouvez échanger une de vos cartes avec celle du milieu : \n");
+		System.out.println("Quel Prop voulez-vous replacer au milieu : ");
 		do {
 			if(i == 1) {
 				System.out.println("\nSaisie incorrecte. Veuillez respecter les consignes : ");

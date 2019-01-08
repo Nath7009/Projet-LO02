@@ -1,17 +1,21 @@
 package theotherhattrickControler;
 
-import theotherhattrick.*;
-import theotherhattrickView.GraphicView;
-import theotherhattrickView.Menu;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
+import theotherhattrick.Date;
+import theotherhattrick.Game;
+import theotherhattrick.Human;
+import theotherhattrick.Player;
+import theotherhattrickView.GraphicView;
+import theotherhattrickView.VueTexte;
+
+@SuppressWarnings("deprecation")
 public class GameControler implements ActionListener {
 	
 	protected Game game;
 	private GraphicView gv;
+	private VueTexte vt;
 	/**
 	 * Le contructeur du controleur instancie la version du jeux souhaitée avec la
 	 * méthode statique createGame(variant) de Game. Le controleur lance alors la
@@ -21,6 +25,10 @@ public class GameControler implements ActionListener {
 	 */
 	public GameControler() {
 		gv = new GraphicView(this);
+//		vt = new VueTexte(this);
+		
+		
+		
 		// int variant = gv.getMenu().getVariant();
 		// this.game = Game.createGame(variant);
 		// Création du jeu à l'aide des données du menu
@@ -29,9 +37,10 @@ public class GameControler implements ActionListener {
 		//this.game.start();
 	}
 
+
 	public void createGame() {
 		//Cette méthode est appelée quand on valide le menu
-		//c'est l'interface graphique qui décide quand le jeu peut commencer
+		//c'est l'interface graphique qui décide quand le jeux peut commencer
 		game = Game.createGame(new GameParameters(gv.getMenu()));
 		game.addObserver(this.gv);
 		game.start();
@@ -65,7 +74,7 @@ public class GameControler implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.getActionCommand() + " " + e.getSource() + " " + e.getID());
+//		System.out.println(e.getActionCommand() + " " + e.getSource() + " " + e.getID());
 	}
 
 	/**

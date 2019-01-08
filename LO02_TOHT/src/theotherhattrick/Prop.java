@@ -3,6 +3,7 @@ package theotherhattrick;
 import java.io.Serializable;
 import java.util.Observable;
 
+@SuppressWarnings("deprecation")
 public class Prop extends Observable implements Serializable{
 	/**
 	 * 
@@ -36,13 +37,13 @@ public class Prop extends Observable implements Serializable{
 	public void hide() {
 		this.isVisible = false;
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers("hide");
 	}
 
 	public void unhide() {
 		this.isVisible = true;
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers("unhide");
 	}
 
 	public boolean getState() {
@@ -59,11 +60,15 @@ public class Prop extends Observable implements Serializable{
 	}
 
 	public void printDebug() {
-		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
+		this.setChanged();
+		this.notifyObservers("print debug");
+//		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
 	}
 
 	public void print() {
-		System.out.println("nom : " + this.name);
+		this.setChanged();
+		this.notifyObservers("print");
+//		System.out.println("nom : " + this.name);
 	}
 
 	public String toString() {
@@ -75,7 +80,8 @@ public class Prop extends Observable implements Serializable{
 	}
 
 	public void printIfVisible() {
-		System.out.println(isVisible == true ? this.toString() : "[?????]");
+		this.setChanged();
+		this.notifyObservers("print visible");
 	}
 
 	public Prop getLowest(Prop p) {
