@@ -24,7 +24,11 @@ public class VueTexte implements Observer{
 
 	public VueTexte(GameControler gc) {
 		this.gc = gc;
-		this.initGame();
+//		this.initGame();
+	}
+	
+	public VueTexte() {
+		
 	}
 	
 	public void initGame() {
@@ -76,12 +80,12 @@ public class VueTexte implements Observer{
 					break;
 					
 				case "new prop" : 
-					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getAllProps().peek());
+//					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getAllProps().peek());
 					this.gc.getGame().getAllProps().peek().addObserver(this);
 					break;
 					
 				case "new trick" :
-					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getTricks().peek());
+//					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getTricks().peek());
 					this.gc.getGame().getTricks().peek().addObserver(this);
 					break;
 					
@@ -102,7 +106,12 @@ public class VueTexte implements Observer{
 					
 				case "last turn" : 
 					System.out.println("On joue le dernier tour");
-					this.gc.getGame().getDepiledTrick().print();
+					try {
+						this.gc.getGame().getDepiledTrick().print();
+					} catch(NullPointerException e) {
+						e.printStackTrace();
+					}
+					
 					break;
 					
 				
@@ -112,7 +121,7 @@ public class VueTexte implements Observer{
 		if(o instanceof Player) {
 			
 			if(o instanceof Human) {
-				Player p = (Player) o;
+				Human p = (Human) o;
 				switch((String)arg1){
 				
 					
@@ -121,19 +130,19 @@ public class VueTexte implements Observer{
 						break;
 						
 						
-					case "Player0" : 
+					case "player0" : 
 						System.out.println("================================================================================");
 						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
-					case "Player1" : 
+					case "player1" : 
 						System.out.println("================================================================================");
 						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
-					case "Player2" : 
+					case "player2" : 
 						System.out.println("================================================================================");
 						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
@@ -167,6 +176,9 @@ public class VueTexte implements Observer{
 						this.askChooseMiddle(p);
 						break;
 						
+					case "increase score" : 
+						System.out.println("Vous gagnez > < points. Vous avez désormais >" + p.getScore() + "< points." );
+						break;
 						
 					case "reveal prop" : 
 						System.out.println("Vous avez échoué le tour");
@@ -191,6 +203,83 @@ public class VueTexte implements Observer{
 			}
 			
 			if(o instanceof Robot) {
+				Robot p = (Robot) o;
+				switch((String) arg1) {
+				
+					case "name" : 
+						System.out.println(p.getName());
+						break;
+						
+					case "player0" : 
+						System.out.println("================================================================================");
+						System.out.println("C'est le tour de " + p.getName());
+						System.out.println("Votre jeux est : \n");
+						break;
+						
+					case "player1" : 
+						System.out.println("================================================================================");
+						System.out.println("C'est le tour de " + p.getName());
+						System.out.println("Votre jeux est : \n");
+						break;
+						
+					case "player2" : 
+						System.out.println("================================================================================");
+						System.out.println("C'est le tour de " + p.getName());
+						System.out.println("Votre jeux est : \n");
+						break;
+						
+					case "strat risky" : 
+						System.out.println("Le robot " + p.getName() + " est passé à la stratégie risquée");
+						break;
+						
+					case "strat conservative" :
+						System.out.println("Le robot " + p.getName() + " est passé à la stratégie conservative");
+						break;
+						
+					case "basic strat" : 
+						System.out.println("Le robot " + p.getName() + " est passé à la stratégie de base");
+						break;
+						
+					case "gone crazy" : 
+						System.out.println("Le robot devient fou et choisit une stratégie au hasard");
+						break;
+						
+					case "reveal new trick" :
+						System.out.println("Le robot a choisi de retourner un nouveau trick");
+						break;
+						
+					case "don't reveal new trick" : 
+						System.out.println("Le robot a refusé de retourner un nouveau trick");
+						break;
+						
+					case "prop chosen" :
+						System.out.println("Le robot a choisi de retourner son prop numéro " + p.getChoice());
+						break;
+						
+					case "other prop chosen" :
+						System.out.println("Le robot a choisi de retourner le prop numéro " + p.getChoice());
+						break;
+						
+					case "perform trick" : 
+						System.out.println("Le robot a choisi de réaliser le trick");
+						break;
+						
+					case "don't perform trick" : 
+						System.out.println("Le robot a refusé de réaliser le trick");
+						break;
+						
+					case "reveal prop" :
+						System.out.println("Le robot a choisi de retourner son prop numéro " + p.getChoice());
+						break;
+						
+					case "choose middle" : 
+						System.out.println("Le robot a choisi le prop numéro " + p.getChoice());
+						break;
+						
+					case "choose middle var" : 
+						System.out.println("Le robot a choisi le prop numéro " + p.getChoice());
+						break;
+				}
 				
 			}
 			
@@ -398,8 +487,7 @@ public class VueTexte implements Observer{
 		
 		this.gc.setPerformTrick(p, (ans.equals("y") ? true : false));
 	}
-	
-	
+
 	private int readInt() {
 		int value = -1;
 		System.out.print(VueTexte.PROMPT);

@@ -39,6 +39,7 @@ public class Game extends Observable implements Serializable {
 
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
+	protected Stack<Trick> temp = new Stack<Trick>();
 // 	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
 	protected static Trick depiledTrick;
 	protected Stack<Prop> allProps = new Stack<Prop>();
@@ -189,25 +190,27 @@ public class Game extends Observable implements Serializable {
 			allProps.push(new Prop(PropEnum.values()[i]));
 			if (i == 0) { // Il y a 3 carrots dans le jeu
 				allProps.push(new Prop(PropEnum.values()[i]));
+				this.setChanged();
+				this.notifyObservers("new prop");
 				allProps.push(new Prop(PropEnum.values()[i]));
+				this.setChanged();
+				this.notifyObservers("new prop");
 			}
 			this.setChanged();
 			this.notifyObservers("new prop");
 		}
 		Collections.shuffle(allProps);
 
-		Stack<Trick> temp = new Stack<Trick>();
 		for (int i = 0; i < TrickEnum.values().length - 1; i++) {
 			temp.push(new Trick(TrickEnum.values()[i]));
-			this.setChanged();
-			this.notifyObservers("new trick");
 		}
 		Collections.shuffle(temp);
 		temp.push(new Trick(TrickEnum.values()[TrickEnum.values().length - 1]));
-		this.setChanged();
-		this.notifyObservers("new trick");
+
 		for (int i = 0; i < TrickEnum.values().length; i++) {
 			tricks.push(temp.pop());
+			this.setChanged();
+			this.notifyObservers("new trick");
 		}
 	}
 
@@ -290,7 +293,7 @@ public class Game extends Observable implements Serializable {
 
 		if (trickSuccessful) { // Si le joueur a réussi le trick
 			this.setChanged();
-			this.notifyObservers("Trick realized");
+			this.notifyObservers("");
 			p.showAllProps(); // On montre ses cartes
 
 			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
@@ -364,7 +367,7 @@ public class Game extends Observable implements Serializable {
 		p.printProps();
 		this.printOthersHand(p.getId());
 		
-		System.out.println("\nLe trick à réaliser est : ");
+		//System.out.println("\nLe trick à réaliser est : ");
 		this.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
 		// Demande à l'utilisateur si il souhaite dépiler un trick

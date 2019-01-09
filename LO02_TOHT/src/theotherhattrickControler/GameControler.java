@@ -43,6 +43,14 @@ public class GameControler implements ActionListener {
 		//c'est l'interface graphique qui décide quand le jeux peut commencer
 		game = Game.createGame(new GameParameters(gv.getMenu()));
 		game.addObserver(this.gv);
+		/*
+		vt = new VueTexte(this);
+		game.addObserver(vt);
+		game.getPlayers()[0].addObserver(vt);
+		game.getPlayers()[1].addObserver(vt);
+		game.getPlayers()[2].addObserver(vt);
+		*/
+		
 		game.start();
 	}
 

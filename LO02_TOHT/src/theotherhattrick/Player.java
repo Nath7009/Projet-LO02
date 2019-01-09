@@ -167,15 +167,15 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	
 	public void increaseScore(int points) {
 		this.score += points;
-		System.out.println("Vous gagnez >" + points + "< points. Vous avez désormais >" + this.score + "< points." );
+		
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers("increase score");
 	}
 
 	public void pushTrick(Trick trick){
 		successPile.add(trick);
-		this.setChanged();
-		this.notifyObservers();
+//		this.setChanged();
+//		this.notifyObservers();
 	}
 
 	public void printProps() {

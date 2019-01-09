@@ -2,6 +2,8 @@ package theotherhattrick;
 
 import java.io.Serializable;
 
+
+@SuppressWarnings("deprecation")
 public class Robot extends Player implements Decision, Serializable {
 
 	/**
@@ -10,7 +12,8 @@ public class Robot extends Player implements Decision, Serializable {
 	private static final long serialVersionUID = 8125673734326190507L;
 	private Decision strategy;
 	private double tiltLevel = 0; // La chance qu'a le robot de faire un choix de stratégie au hasard
-
+	private int choice;
+	private boolean choiceBool;
 	// On implémente décision pour étre sur que les méthodes que l'on apelle sont
 	// présentes dans l'interface
 
@@ -19,7 +22,17 @@ public class Robot extends Player implements Decision, Serializable {
 		// strategy = new StratConservative(this.hand, this.id);
 		strategy = new StratDefault();
 	}
+	
+	
+	public int getChoice() {
+		return this.choice;
+	}
+	
+	public boolean getChoiceBool() {
+		return this.choiceBool;
+	}
 
+	
 	public void adaptStrategy() {
 		// décide la stratégie à adopter.
 		// Si c'est le meilleur joueur, il joue de manière risquée.
@@ -27,19 +40,24 @@ public class Robot extends Player implements Decision, Serializable {
 		// Sinon, il joue la stratégie de base
 		if (this.id == Game.getBestPlayer()) {
 			this.strategy = new StratRisky();
-			System.out.println("Le robot " + this.name + " est passé à la stratégie risquée");
+			this.setChanged();
+			this.notifyObservers("strat risky");
 		} else if (this.id == Game.getWorstPlayer()) {
 			this.strategy = new StratConservative(hand, id);
 			this.tiltLevel += 0.2;
-			System.out.println("Le robot " + this.name + " est passé à la stratégie conservative");
+			this.setChanged();
+			this.notifyObservers("strat conservative");
 		} else {
 			this.strategy = new StratDefault();
 			this.tiltLevel += 0.1;
-			System.out.println("Le robot " + this.name + " est passé à la stratégie de base");
+			this.setChanged();
+			this.notifyObservers("basic strat");
+			
 		}
 
 		if (Math.random() < this.tiltLevel) {
-			System.out.println("Le robot devient fou et choisit une stratégie au hasard");
+			this.setChanged();
+			this.notifyObservers("gone crazy");
 			double madness = Math.random();
 			if(madness < 0.5) {
 				this.strategy = new StratRisky();
@@ -55,52 +73,65 @@ public class Robot extends Player implements Decision, Serializable {
 	public boolean revealNewTrick() {
 		this.adaptStrategy();
 
-		boolean choice = strategy.revealNewTrick();
-		if (choice) {
-			System.out.println("Le robot a choisi de retourner un nouveau trick");
+		choiceBool = strategy.revealNewTrick();
+		this.setChanged();
+		if (choiceBool) {
+			this.notifyObservers("reveal new trick");
+			
 		} else {
-			System.out.println("Le robot a refusé de retourner un nouveau trick");
+			this.notifyObservers("don't reaveal new trick");
+			
 		}
-		return choice;
+		return choiceBool;
 	}
 
 	public int chooseOwnProp() {
-		int choice = strategy.chooseOwnProp();
-		System.out.println("Le robot a choisi de retourner son prop numéro " + choice);
+		choice = strategy.chooseOwnProp();
+		this.setChanged();
+		this.notifyObservers("prop chosen");
 		return choice;
 	}
 
 	public int chooseOtherProp(Player[] players) {
-		int choice = strategy.chooseOtherProp(players);
-		System.out.println("Le robot a choisi de retourner le prop numéro " + choice);
+		choice = strategy.chooseOtherProp(players);
+		this.setChanged();
+		this.notifyObservers("other prop chosen");
 		return choice;
 	}
 
 	public boolean performTrick() {
-		boolean choice = strategy.performTrick();
-		if (choice) {
-			System.out.println("Le robot a choisi de réaliser le trick");
+		choiceBool = strategy.performTrick();
+		this.setChanged();
+		if (choiceBool) {
+			this.notifyObservers("perform trick");
+			
 		} else {
-			System.out.println("Le robot a refusé de réaliser le trick");
+			this.notifyObservers("don't perform trick");
+			
 		}
-		return choice;
+		return choiceBool;
 	}
 
 	public int revealProp() {
-		int choice = strategy.revealProp();
-		System.out.println("Le robot a choisi de retourner son prop numéro " + choice);
+		choice = strategy.revealProp();
+		this.setChanged();
+		this.notifyObservers("reveal prop");
 		return choice;
 	}
 
 	public int chooseMiddle() {
-		int choice = strategy.chooseMiddle();
-		System.out.println("Le robot a choisi le prop numéro " + choice);
+		choice = strategy.chooseMiddle();
+		this.setChanged();
+		this.notifyObservers("choose middle");
+		
 		return choice;
 	}
 
 	public int chooseMiddleVarCarrot(Player[] players) {
-		int choice = strategy.chooseMiddleVarCarrot(players);
-		System.out.println("Le robot a choisi le prop numéro " + choice);
+		choice = strategy.chooseMiddleVarCarrot(players);
+		this.setChanged();
+		this.notifyObservers("choose middle var");
+		
 		return choice;
 	}
 }
