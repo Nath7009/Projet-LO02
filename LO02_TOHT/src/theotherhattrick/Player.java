@@ -26,6 +26,7 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	protected int score;
 	protected ArrayList<Prop> hand = new ArrayList<Prop>(2);
 	protected Stack<Trick> successPile = new Stack<Trick>();
+	protected boolean canViewProps = false;
 	
 	protected int ownProp = 0, otherProp = 0, middleProp = 0, middleVarCarrot = 0, revealProp;
 	protected boolean newTrick = false, performTrick = false;
@@ -192,6 +193,18 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		for(Prop prop : hand) {
 			prop.printIfVisible();
 		}
+	}
+	
+	public boolean isViewable() {
+		return this.canViewProps;
+	}
+	
+	public void setViewable() {
+		this.canViewProps = true;
+	}
+	
+	public void setUnviewable() {
+		this.canViewProps = false;
 	}
 	
 	public void showAllProps() {
