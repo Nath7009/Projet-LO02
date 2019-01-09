@@ -36,20 +36,24 @@ public class Prop extends Observable implements Serializable{
 
 	public void hide() {
 		this.isVisible = false;
-		this.setChanged();
-		this.notifyObservers("hide");
+		//this.setChanged();
+		//this.notifyObservers("hide");
 	}
 
 	public void unhide() {
 		this.isVisible = true;
-		this.setChanged();
-		this.notifyObservers("unhide");
+		//this.setChanged();
+		//this.notifyObservers("unhide");
 	}
 
 	public boolean getState() {
 		return this.isVisible;
 	}
-
+	
+	public void setState(boolean state) {
+		this.isVisible = state;
+	}
+	
 	public int compareRarity(Prop other) {
 		if (this.type > other.getTypeSecure()) {
 			return 1;
@@ -60,15 +64,15 @@ public class Prop extends Observable implements Serializable{
 	}
 
 	public void printDebug() {
-		this.setChanged();
-		this.notifyObservers("print debug");
-//		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
+		//this.setChanged();
+		//this.notifyObservers("print debug");
+		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
 	}
 
 	public void print() {
-		this.setChanged();
-		this.notifyObservers("print");
-//		System.out.println("nom : " + this.name);
+		//this.setChanged();
+		//this.notifyObservers("print");
+		System.out.println("nom : " + this.name);
 	}
 
 	public String toString() {

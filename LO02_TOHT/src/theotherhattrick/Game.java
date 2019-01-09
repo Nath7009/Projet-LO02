@@ -3,6 +3,7 @@ package theotherhattrick;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Scanner;
 import java.util.Stack;
@@ -16,7 +17,7 @@ import theotherhattrickControler.GameParameters;
  */
 
 @SuppressWarnings("deprecation")
-public class Game extends Observable implements Serializable {
+public class Game extends Observable implements Serializable, Runnable {
 
 	/**
 	 * 
@@ -43,8 +44,10 @@ public class Game extends Observable implements Serializable {
 // 	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
 	protected static Trick depiledTrick;
 	protected Stack<Prop> allProps = new Stack<Prop>();
+	protected Thread t;
 
 	public Game() {
+		t = new Thread(this);
 	}
 
 	public static Game createGame(int variant) {
@@ -70,37 +73,30 @@ public class Game extends Observable implements Serializable {
 
 		return game;
 	}
-	
+
 	public static Game createGame(GameParameters param) {
 		players = new Player[3];
-		//On crée les joueurs puis on les trie suivant leur date de naissance
-		for(int i=0;i<param.players.length;i++) {
+		// On crée les joueurs puis on les trie suivant leur date de naissance
+		for (int i = 0; i < param.players.length; i++) {
 			System.out.println(players);
 			players[i] = param.players[i];
 			players[i].setId(i);
 		}
-		
+
 		sortPlayers();
 		return createGame(param.variant);
 	}
-	
-	//Crée les éléments du jeu, utilisé uniquement pour l'interface en ligne de commande
+
+	// Crée les éléments du jeu, utilisé uniquement pour l'interface en ligne de
+	// commande
 	public void initGame() {
 		// Instanciation de tous les joueurs humains ou robots
 		this.createPlayers();
 	}
 
-	public void start() {
-		this.createCards();
-		this.distributeProps();
-		this.depile();
-		// Gestion du tour de jeu : faire jouer chaque joueur tour après tour
-		// jusqu'à ce
-		// que la pile de tricks soit vide
-		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
-		// l'affiche
-		this.tour = 0;
+	public void run() {
 		boolean gameisFinished = false;
+
 		while (this.tour < 10000 && !gameisFinished) {
 			gameisFinished = this.isFinished();
 			this.playTurn();
@@ -125,6 +121,12 @@ public class Game extends Observable implements Serializable {
 				this.playLastTurn();
 				gameisFinished = true;
 			}
+			try {
+				t.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		if (gameisFinished) {
@@ -137,6 +139,22 @@ public class Game extends Observable implements Serializable {
 		}
 
 		keyboard.close();
+
+	}
+
+	public void start() {
+		this.createCards();
+		this.distributeProps();
+		this.depile();
+		// Gestion du tour de jeu : faire jouer chaque joueur tour après tour
+		// jusqu'à ce
+		// que la pile de tricks soit vide
+		// Quand la pile de tricks est vide, on cherche le joueur gagnant et on
+		// l'affiche
+		this.tour = 0;
+
+		t.start();
+
 	}
 
 	public int getNbOfHuman() {
@@ -173,7 +191,7 @@ public class Game extends Observable implements Serializable {
 		sortPlayers();
 		this.setChanged();
 		this.notifyObservers("new players");
-	
+
 		for (int i = 0; i < players.length; i++) {
 			players[i].setId(i);
 			System.out.println("Nombre d'observer du joueur : " + players[i].countObservers());
@@ -216,7 +234,7 @@ public class Game extends Observable implements Serializable {
 			this.setChanged();
 			this.notifyObservers("new trick");
 		}
-		
+
 	}
 
 	public Stack<Trick> getTricks() {
@@ -266,12 +284,12 @@ public class Game extends Observable implements Serializable {
 	}
 
 	protected void playLastTurn() {
-		
+
 		setChanged();
 		this.notifyObservers("last turn");
 
 		boolean finished = false;
-		
+
 		for (int i = 0; i < players.length; i++) {
 			ArrayList<Prop> hand = players[i].getHand();
 			if (!depiledIsEmpty() && depiledTrick.compareToProps(hand)) {
@@ -318,7 +336,6 @@ public class Game extends Observable implements Serializable {
 			// Si le joueur rate le trick
 			this.setChanged();
 			this.notifyObservers("trick failed");
-			
 
 			this.revealProp(p);
 		}
@@ -331,7 +348,7 @@ public class Game extends Observable implements Serializable {
 	 */
 	public void depile() {
 		try {
-			
+
 			Trick temp = this.tricks.pop();
 			depiledTrick = temp;
 			this.setChanged();
@@ -364,17 +381,21 @@ public class Game extends Observable implements Serializable {
 	}
 
 	private void playTurn() {
-		
-		Player p = players[tour % 3];
 		setChanged();
-		notifyObservers("new turn");
+		notifyObservers("Player" + tour % 3);
+		Player p = players[tour % 3];
+		if (p instanceof Human) {
+			setChanged();
+			notifyObservers("new turn");
+			return;
+		}
 //		notifyObservers("player" + tour % 3);
 		boolean playerIn;
-		
-		p.printProps();
-		this.printOthersHand(p.getId());
-		
-		//System.out.println("\nLe trick à réaliser est : ");
+
+		// p.printProps();
+		// this.printOthersHand(p.getId());
+
+		// System.out.println("\nLe trick à réaliser est : ");
 		this.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
 		// Demande à l'utilisateur si il souhaite dépiler un trick
@@ -383,7 +404,7 @@ public class Game extends Observable implements Serializable {
 		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
 
 		exchangePlayers(p);
-		
+
 		p.printProps();
 
 		// PERFORMER LE TRICK
@@ -394,7 +415,6 @@ public class Game extends Observable implements Serializable {
 			this.revealProp(p);
 		}
 	}
-
 
 	public static int getBestPlayer() {
 		boolean exAequo = false;
@@ -420,6 +440,10 @@ public class Game extends Observable implements Serializable {
 		return players[tour % 3];
 	}
 
+	public int getCurrentPlayerIndex() {
+		return tour % 3;
+	}
+
 	public static int getWorstPlayer() {
 		boolean exAequo = false;
 		int worstPlayer = 0;
@@ -439,7 +463,6 @@ public class Game extends Observable implements Serializable {
 	public Trick getDepiledTrick() {
 		return depiledTrick;
 	}
-	
 
 	private void nextTurn() {
 		this.tour++;
@@ -475,11 +498,11 @@ public class Game extends Observable implements Serializable {
 	 * Donne le trick du dessus de depiledTricks au joueur d'id id
 	 */
 	public void giveTrick(Player p) {
-		
+
 		if (p.getHand().contains(new Prop(PropEnum.SWISS_ARMY_KNIFE))) {
 			depiledTrick.decreaseValue();
 		}
-		
+
 		p.increaseScore(depiledTrick.getPoints());
 		p.pushTrick(depiledTrick);
 		depiledTrick = null;
@@ -490,6 +513,19 @@ public class Game extends Observable implements Serializable {
 		propToChange = p.chooseMiddle();
 		if (propToChange != 2) { // dans speak, on renvoie 2 si on veut garder nos 2 props.
 			this.exchangeProps(p.getId(), propToChange, -1, 0);
+		}
+	}
+	
+	public void showMiddleProps() {
+		for(Iterator<Prop> it = middleProp.iterator();it.hasNext(); ) {
+			it.next().unhide();
+		}
+		System.out.println(middleProp.get(0).toString());
+	}
+	
+	public void hideMiddleProps() {
+		for(Iterator<Prop> it = middleProp.iterator();it.hasNext(); ) {
+			it.next().hide();
 		}
 	}
 
@@ -559,10 +595,10 @@ public class Game extends Observable implements Serializable {
 
 	public void revealProp(Player p) {
 		int choice = 0, i, hNum = 0;
-		
+
 		p.forceChanged();
 		p.notifyObservers("reveal prop");
-		
+
 		for (i = 0; i < 2; i++) {
 //			players[id].getHand(i).printDebug();
 			if (p.getHand(i).getState() == false) {

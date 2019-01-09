@@ -48,8 +48,8 @@ public class Trick extends Observable implements Serializable {
 	}
 	
 	public void print() {
-		this.setChanged();
-		this.notifyObservers("print trick");
+		//this.setChanged();
+		//this.notifyObservers("print trick");
 	}
 	
 	public String toString() {

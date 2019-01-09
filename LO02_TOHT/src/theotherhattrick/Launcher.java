@@ -3,6 +3,7 @@ package theotherhattrick;
 import java.io.Serializable;
 
 import theotherhattrickControler.GameControler;
+import theotherhattrickView.GraphicView;
 import theotherhattrickView.VueTexte;
 
 public class Launcher implements Serializable{
@@ -15,8 +16,8 @@ public class Launcher implements Serializable{
 	public static void main(String[] args) {
 
 		GameControler gc = new GameControler();
-		VueTexte vt = new VueTexte(gc);
-
+		//VueTexte vt = new VueTexte(gc);
+		GraphicView gv = new GraphicView(gc);
 		//gc.start();
 //		Game game = Game.createGame();
 //		game.start();
