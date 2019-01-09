@@ -166,13 +166,17 @@ public class Game extends Observable implements Serializable {
 
 		for (int i = nbOfHuman; i < 3; i++) {
 			date = new Date();
-			players[i] = new Robot(date);
+			this.newPlayer = new Robot(date);
+			players[i] = this.newPlayer;
 		}
 
 		sortPlayers();
-
+		this.setChanged();
+		this.notifyObservers("new players");
+	
 		for (int i = 0; i < players.length; i++) {
 			players[i].setId(i);
+			System.out.println("Nombre d'observer du joueur : " + players[i].countObservers());
 		}
 	}
 
@@ -212,6 +216,7 @@ public class Game extends Observable implements Serializable {
 			this.setChanged();
 			this.notifyObservers("new trick");
 		}
+		
 	}
 
 	public Stack<Trick> getTricks() {
@@ -326,10 +331,11 @@ public class Game extends Observable implements Serializable {
 	 */
 	public void depile() {
 		try {
-			this.setChanged();
-			this.notifyObservers("depile");
+			
 			Trick temp = this.tricks.pop();
 			depiledTrick = temp;
+			this.setChanged();
+			this.notifyObservers("depile");
 		} catch (Exception e) {
 			this.setChanged();
 			this.notifyObservers("trick pile empty");
@@ -361,7 +367,8 @@ public class Game extends Observable implements Serializable {
 		
 		Player p = players[tour % 3];
 		setChanged();
-		notifyObservers("player" + tour % 3);
+		notifyObservers("new turn");
+//		notifyObservers("player" + tour % 3);
 		boolean playerIn;
 		
 		p.printProps();
@@ -376,7 +383,7 @@ public class Game extends Observable implements Serializable {
 		// DEMANDE LES CARTES A ECHANGER ET FAIT L'ECHANGE
 
 		exchangePlayers(p);
-		System.out.println("\nVotre nouvelle main :");
+		
 		p.printProps();
 
 		// PERFORMER LE TRICK

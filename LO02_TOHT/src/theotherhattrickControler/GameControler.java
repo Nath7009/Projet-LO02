@@ -24,7 +24,7 @@ public class GameControler implements ActionListener {
 	 * @param variant : on récupère la version que l'on souhaite jouer en paramètre
 	 */
 	public GameControler() {
-		gv = new GraphicView(this);
+//		gv = new GraphicView(this);
 //		vt = new VueTexte(this);
 		
 		
@@ -36,7 +36,11 @@ public class GameControler implements ActionListener {
 		// this.game.initGame();
 		//this.game.start();
 	}
+	
+	public GameControler(int variant) {
+			this.game = Game.createGame(variant);
 
+	}
 
 	public void createGame() {
 		//Cette méthode est appelée quand on valide le menu
@@ -54,9 +58,7 @@ public class GameControler implements ActionListener {
 		game.start();
 	}
 
-	public GameControler(int variant) {
-
-	}
+	
 
 	public void start() {
 		this.game.start();
@@ -120,6 +122,14 @@ public class GameControler implements ActionListener {
 
 	public void setOtherProp(Player p, int choice) {
 		p.setOtherProp(choice);
+	}
+	
+	public void loadGame() {
+		System.out.println("Game chargée ISSOU");
+	}
+	
+	public void saveGame() {
+		System.out.println("Game sauvegardée ISSOU");
 	}
 
 }

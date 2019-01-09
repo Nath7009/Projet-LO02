@@ -124,30 +124,33 @@ public class GraphicView implements Observer {
 		game.setBounds(100, 100, 1000, 800);
 		// menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		infos = new JPanel();
+		
+		//Initialisation du joueur 1
 		player1 = new JPanel();
 		player1.setBorder(new LineBorder(Color.BLACK));
-
 		p1Name = new JLabel("Name");
-
 		p1prop1 = new JButton("prop1");
-
 		p1prop2 = new JButton("prop2");
-
 		p1Score = new JLabel("Score");
 
-		infos = new JPanel();
-
+		
+		//Initialisation du joueur 2
 		player2 = new JPanel();
-		player2.setBorder(new LineBorder(new Color(0, 0, 0)));
-
+		player2.setBorder(new LineBorder(Color.BLACK));
 		p2Name = new JLabel("Name");
-
 		p2prop1 = new JButton("prop1");
-
 		p2prop2 = new JButton("prop2");
-
 		p2Score = new JLabel("Score");
+		
+		
+		//Initialisation du joueur 3
+		player3 = new JPanel();
+		player3.setBorder(new LineBorder(Color.BLACK));
+		p3Name = new JLabel("Name");
+		p3prop1 = new JButton("prop1");
+		p3prop2 = new JButton("prop2");		
+		
 		gl_player2 = new GroupLayout(player2);
 		gl_player2.setHorizontalGroup(
 			gl_player2.createParallelGroup(Alignment.LEADING)
@@ -179,15 +182,6 @@ public class GraphicView implements Observer {
 							.addGap(20))))
 		);
 		player2.setLayout(gl_player2);
-
-		player3 = new JPanel();
-		player3.setBorder(new LineBorder(new Color(0, 0, 0)));
-
-		p3Name = new JLabel("Name");
-
-		p3prop1 = new JButton("prop1");
-
-		p3prop2 = new JButton("prop2");
 
 		p3Score = new JLabel("Score");
 		gl_player3 = new GroupLayout(player3);
@@ -223,7 +217,7 @@ public class GraphicView implements Observer {
 		player3.setLayout(gl_player3);
 
 		middleCards = new JPanel();
-		middleCards.setBorder(new LineBorder(new Color(0, 0, 0)));
+		middleCards.setBorder(new LineBorder(Color.BLACK));
 
 		lblTourActuel = new JLabel("Tour actuel : ");
 
@@ -308,20 +302,10 @@ public class GraphicView implements Observer {
 							.addComponent(mprop2, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())))
 		);
-		gl_middleCards.setVerticalGroup(
-			gl_middleCards.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_middleCards.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_middleCards.createParallelGroup(Alignment.BASELINE)
-						.addComponent(trickPile, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
-						.addComponent(depiledTrick, GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
-					.addGap(20)
-					.addGroup(gl_middleCards.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(mprop1, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
-						.addComponent(mprop2, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
-					.addGap(12))
-		);
+	
 		middleCards.setLayout(gl_middleCards);
+		
+		
 		gl_player1 = new GroupLayout(player1);
 		gl_player1.setHorizontalGroup(
 			gl_player1.createParallelGroup(Alignment.LEADING)
@@ -343,6 +327,26 @@ public class GraphicView implements Observer {
 							.addComponent(p1prop2, GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
 							.addGap(25))))
 		);
+		
+		
+		gl_middleCards.setVerticalGroup(
+			gl_middleCards.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_middleCards.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(gl_middleCards.createParallelGroup(Alignment.BASELINE)
+						.addComponent(trickPile, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
+						.addComponent(depiledTrick, GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
+						.addGap(20)
+						.addGroup(gl_middleCards.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(mprop1, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
+						.addComponent(mprop2, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
+						.addGap(12))
+			);
+		
+		
+		
+		
+		
 		gl_player1.setVerticalGroup(
 			gl_player1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_player1.createSequentialGroup()
@@ -532,7 +536,8 @@ public class GraphicView implements Observer {
 	}
 
 	public void addAllActionListeners() {
-		trickPile.addActionListener(new DepileTrickButton()); // La pile de tricks
+		trickPile.addActionListener(new DepileTrickButtonListener()); // La pile de tricks
+		depiledTrick.addActionListener(new DepiledTrickButtonListener());
 		mprop1.addActionListener(new PropButtonListener(-1, 0)); // Les deux props du milieu
 		mprop2.addActionListener(new PropButtonListener(-1, 1));
 		p1prop1.addActionListener(new PropButtonListener(0, 0));// Les props des joueurs
@@ -594,7 +599,6 @@ public class GraphicView implements Observer {
 			
 			setImage(mprop1, Game.getMiddleProp().get(0));
 			
-			lblInfos.setText(textLabel);
 			trickPile.setText("");
 			trickPile.setMargin(new Insets(0, 0, 0, 0));
 			trickPile.setBorder(null);
@@ -654,10 +658,18 @@ public class GraphicView implements Observer {
 		public void actionPerformed(ActionEvent e) {
 			controler.actionPerformed(new ActionEvent(player, propId, "Appui sur le prop"));
 		}
+	}
+	
+	class DepiledTrickButtonListener implements ActionListener {
 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+		}
+		
 	}
 
-	class DepileTrickButton implements ActionListener {
+	class DepileTrickButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

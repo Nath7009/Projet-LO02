@@ -180,14 +180,16 @@ public abstract class Player extends Observable implements Decision, Serializabl
 
 	public void printProps() {
 //		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
+		this.setChanged();
+		this.notifyObservers("print hand");
 		for (Iterator<Prop> it = hand.iterator();it.hasNext();) {
 			it.next().print();
 		}
 	}
 	public void printVisible() {
+		this.setChanged();
+		this.notifyObservers("name");
 		for(Prop prop : hand) {
-			this.setChanged();
-			this.notifyObservers("name");
 			prop.printIfVisible();
 		}
 	}

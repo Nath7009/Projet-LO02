@@ -2,10 +2,8 @@ package theotherhattrick;
 
 import java.io.Serializable;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import theotherhattrickControler.GameControler;
+import theotherhattrickView.VueTexte;
 
 public class Launcher implements Serializable{
 
@@ -17,7 +15,8 @@ public class Launcher implements Serializable{
 	public static void main(String[] args) {
 
 		GameControler gc = new GameControler();
-		if(gc == gc);
+		VueTexte vt = new VueTexte(gc);
+
 		//gc.start();
 //		Game game = Game.createGame();
 //		game.start();

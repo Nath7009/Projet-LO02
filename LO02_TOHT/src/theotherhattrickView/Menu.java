@@ -48,7 +48,7 @@ public class Menu extends JFrame {
 		frame.setBounds(100, 100, 450, 420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.setTitle("THE OTHER HAT TRICK - Menu");
+		frame.setTitle("THE OTHER HAT TRICK - Nouvelle partie");
 		frame.setBackground(Color.WHITE);
 
 		// Initialize the first line of the window : the choice of the variant

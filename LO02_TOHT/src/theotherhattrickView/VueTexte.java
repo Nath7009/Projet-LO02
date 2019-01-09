@@ -24,11 +24,11 @@ public class VueTexte implements Observer{
 
 	public VueTexte(GameControler gc) {
 		this.gc = gc;
-//		this.initGame();
+		this.initGame();
 	}
 	
 	public VueTexte() {
-		
+		this.initGame();
 	}
 	
 	public void initGame() {
@@ -63,8 +63,8 @@ public class VueTexte implements Observer{
 		@Override
 	public void update(Observable o, Object arg1) {
 
-			if(o instanceof Game) {
-			
+		if(o instanceof Game) {
+			Game g = (Game) o;
 			switch((String)arg1) {
 			
 				case "nbOfPlayers" : 
@@ -77,6 +77,12 @@ public class VueTexte implements Observer{
 				case "identityOfPLayer" : 
 					
 					this.askIdentity();
+					break;
+					
+				case "new players" :
+					for(int i = 0; i < 3 ; i++) {
+						g.getPlayers()[i].addObserver(this);
+					}
 					break;
 					
 				case "new prop" : 
@@ -101,8 +107,10 @@ public class VueTexte implements Observer{
 					System.out.println("Vous avez réussi le tour !");
 					break;
 					
-					
-				
+				case "new turn" :
+					System.out.println("================================================================================");
+					System.out.println("C'est le tour de " + g.getCurrentPlayer().getName());
+					break;
 					
 				case "last turn" : 
 					System.out.println("On joue le dernier tour");
@@ -129,22 +137,19 @@ public class VueTexte implements Observer{
 						System.out.println(p.getName());
 						break;
 						
+					case "print hand" : 
+						System.out.println("Votre main est : \n");
+						break;
 						
 					case "player0" : 
-						System.out.println("================================================================================");
-						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
 					case "player1" : 
-						System.out.println("================================================================================");
-						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
 					case "player2" : 
-						System.out.println("================================================================================");
-						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 				
@@ -210,21 +215,19 @@ public class VueTexte implements Observer{
 						System.out.println(p.getName());
 						break;
 						
+					case "print hand" : 
+						System.out.println("Votre main est : \n");
+						break;
+						
 					case "player0" : 
-						System.out.println("================================================================================");
-						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
 					case "player1" : 
-						System.out.println("================================================================================");
-						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
 					case "player2" : 
-						System.out.println("================================================================================");
-						System.out.println("C'est le tour de " + p.getName());
 						System.out.println("Votre jeux est : \n");
 						break;
 						
@@ -317,10 +320,11 @@ public class VueTexte implements Observer{
 					break;
 					
 				case "print" : 
+					System.out.println(prop);
 					break;
 					
 				case "print visible" : 
-					System.out.println(prop.getState() == true ? this.toString() : "[?????]");
+					System.out.println(prop.getState() == true ? prop.toString() : "[?????]");
 					break;
 					
 				case "print debug" : 
