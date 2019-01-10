@@ -52,16 +52,18 @@ public class GameControler implements ActionListener, Runnable {
 		GameParameters gp = new GameParameters(menu);
 		game = Game.createGame(gp);
 		game.addObserver(this.gv);
-		/*
-		 * vt = new VueTexte(this); game.addObserver(vt);
-		 * game.getPlayers()[0].addObserver(vt); game.getPlayers()[1].addObserver(vt);
-		 * game.getPlayers()[2].addObserver(vt);
-		 */
+		
+		vt = new VueTexte(this); game.addObserver(vt);
+		game.getPlayers()[0].addObserver(vt); 
+		game.getPlayers()[1].addObserver(vt);
+		game.getPlayers()[2].addObserver(vt);
+		
+		 
 
 		game.start();
 	}
 
-	public void playTurn() {
+	public synchronized void playTurn() {
 		phase = 1;
 		int currPlayer = game.getCurrentPlayerIndex();
 		game.getPlayers()[currPlayer].setViewable();
@@ -71,8 +73,10 @@ public class GameControler implements ActionListener, Runnable {
 		gv.redraw();
 		canContinue = null;
 		gv.setInfo("Voulez vous retourner le trick ?");
+//		vt.askRevealNewTrick(game.getPlayers()[currPlayer]);
 		while (canContinue == null) {
 			try {
+			
 				t.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -292,11 +296,11 @@ public class GameControler implements ActionListener, Runnable {
 	}
 
 	public void loadGame() {
-		System.out.println("Game chargée ISSOU");
+		System.out.println("Game chargée");
 	}
 
 	public void saveGame() {
-		System.out.println("Game sauvegardée ISSOU");
+		System.out.println("Game sauvegardée");
 	}
 
 	@Override

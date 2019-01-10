@@ -539,11 +539,12 @@ public class Game extends Observable implements Serializable, Runnable {
 		Prop tmp1 = players[p1].getHand(ind1);
 		players[p1].getHand().remove(ind1);
 //		int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
-
+		
+		System.out.println("Le joueur " + p1 + " échange prop " + ind1 + " avec le prop " + ind2 + " du joueur " + p2);
 		if (p2 == -1) { // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu
-			players[p1].setHand(middleProp.get(ind2), ind1);
+			players[p1].setHand(middleProp.get(0), ind1);
 			middleProp.remove(tmp1);
-			middleProp.set(ind2, tmp1);
+			middleProp.set(0, tmp1);
 		} else if (p2 == (p1 + 1) % 3 || p2 == (p1 + 2) % 3) { // Si on veut Ã©changer le prop du joueur dont c'est le tour avec celui d'un
 																// autre joueur
 			players[p1].setHand(players[p2].getHand(ind2), ind1);
@@ -551,7 +552,7 @@ public class Game extends Observable implements Serializable, Runnable {
 			players[p2].setHand(tmp1, ind2);
 		} else {
 			System.out.println(p2);
-//			System.out.println("ERROR : undefined p2 value");
+			System.out.println("ERROR : undefined p2 value");
 		}
 	}
 

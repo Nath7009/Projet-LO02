@@ -21,14 +21,16 @@ public class VueTexte implements Observer{
 	private GameControler gc;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     public static String PROMPT = ">";
+    
+    private Thread t;
 
 	public VueTexte(GameControler gc) {
 		this.gc = gc;
-		this.initGame();
+//		this.initGame();
 	}
 	
 	public VueTexte() {
-		this.initGame();
+//		this.initGame();
 	}
 	
 	public void initGame() {
@@ -50,14 +52,14 @@ public class VueTexte implements Observer{
 			variant = this.readInt();
 		} while (variant < 0 || variant > 3);
 		
-		
+		/*
 		this.gc = new GameControler(variant);
 		this.gc.getGame().addObserver(this);
 //		System.out.println("nb d'observer (controler) : " + this.gc.getGame().countObservers());
 		this.gc.setVariant(variant);
 		this.gc.getGame().initGame();
 		this.gc.getGame().start();
-		
+		*/
 	}
 	
 		@Override
@@ -87,16 +89,16 @@ public class VueTexte implements Observer{
 					
 				case "new prop" : 
 //					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getAllProps().peek());
-					this.gc.getGame().getAllProps().peek().addObserver(this);
+					g.getAllProps().peek().addObserver(this);
 					break;
 					
 				case "new trick" :
 //					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getTricks().peek());
-					this.gc.getGame().getTricks().peek().addObserver(this);
+					g.getTricks().peek().addObserver(this);
 					break;
 					
 				case "depile" :
-					System.out.println("Le nouveau Trick à réaliser est : " + ((Game) o).getTopTrick());
+					System.out.println("Le nouveau Trick à réaliser est : " + g.getTopTrick());
 					break;
 					
 				case "trick pile empty" : 
@@ -256,11 +258,11 @@ public class VueTexte implements Observer{
 						break;
 						
 					case "prop chosen" :
-						System.out.println("Le robot a choisi de retourner son prop numéro " + p.getChoice());
+						System.out.println("Le robot a choisi d'échanger son prop numéro " + p.getChoice());
 						break;
 						
 					case "other prop chosen" :
-						System.out.println("Le robot a choisi de retourner le prop numéro " + p.getChoice());
+						System.out.println("Le robot a choisi d'échanger avec le prop " + p.getChoice());
 						break;
 						
 					case "perform trick" : 
@@ -333,7 +335,7 @@ public class VueTexte implements Observer{
 		}
 	}
 	
-	private void askIdentity() {
+	public void askIdentity() {
 		System.out.println("Entrez le nom du joueur : ");
 		String name = this.readString();
 //		this.gc.setName();
@@ -357,7 +359,7 @@ public class VueTexte implements Observer{
 		this.gc.getGame().getNewPlayer().addObserver(this);
 	}
 	
-	private void askRevealNewTrick(Player p) {
+	public void askRevealNewTrick(Player p) {
 		int i = 0;
 		String ans;
 		System.out.println("Voulez-vous retourner un nouveau Trick ?");
@@ -373,7 +375,7 @@ public class VueTexte implements Observer{
 		this.gc.setRevealNewTrick(p, (ans.equals("y") ? true : false));
 	}
 	
-	private void askChooseOwnProp(Player p) {
+	public void askChooseOwnProp(Player p) {
 		int i = 0, ans = -1;
 		
 		System.out.println("Lequel de vos Props choissisez-vous ?");
@@ -389,7 +391,7 @@ public class VueTexte implements Observer{
 		
 	}
 	
-	private void askChooseOtherProp(Player p) {
+	public void askChooseOtherProp(Player p) {
 		int i = 0, ans = -1;
 		Player[] players = this.gc.getGame().getPlayers();
 		System.out.println("Avec quel Prop des autres joueurs voulez-vous faire l'échange ?");
@@ -406,7 +408,7 @@ public class VueTexte implements Observer{
 		
 	}
 
-	private void askChooseMiddleVarCarrot(Player p) {
+	public void askChooseMiddleVarCarrot(Player p) {
 		int i = 0, ans = -1;
 		Player[] players = this.gc.getGame().getPlayers();
 		System.out.println("Avec quel Prop voulez-vous faire l'échange ?");
@@ -435,7 +437,7 @@ public class VueTexte implements Observer{
 		this.gc.setMiddleVarCarrot(p, ans);
 	}
 
-	private void askChooseMiddle(Player p) {
+	public void askChooseMiddle(Player p) {
 		int i = 0, ans = -1;
 		
 		System.out.println("Vous pouvez échanger une de vos cartes avec celle du milieu : \n");
@@ -455,7 +457,7 @@ public class VueTexte implements Observer{
 		this.gc.setMiddleProp(p, ans);
 	}
 	
-	private void askRevealProp(Player p) {
+	public void askRevealProp(Player p) {
 		int i = 0, ans = -1;
 		
 		System.out.println("Lequel de vos Props souhaitez-vous retourner ?");
@@ -473,7 +475,7 @@ public class VueTexte implements Observer{
 		this.gc.setRevealProp(p, ans);
 	}
 	
-	private void askPerformTrick(Player p) {
+	public void askPerformTrick(Player p) {
 		
 		int i = 0;
 		String ans;
@@ -520,6 +522,5 @@ public class VueTexte implements Observer{
 		}
 		return value;
 	}
-
 	
 }
