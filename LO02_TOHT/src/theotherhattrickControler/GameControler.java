@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import theotherhattrick.Date;
 import theotherhattrick.Game;
+import theotherhattrick.GameSaver;
 import theotherhattrick.Human;
 import theotherhattrick.Player;
 import theotherhattrickView.GraphicView;
@@ -246,7 +247,7 @@ public class GameControler implements ActionListener, Runnable {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof Boolean) {
 			if (phase == 1 || phase == 4) {
-				System.out.println(e.getSource());
+				//System.out.println(e.getSource());
 				canContinue = e.getSource();
 			}
 		} else if (e.getID() >= -1) {
@@ -292,11 +293,13 @@ public class GameControler implements ActionListener, Runnable {
 	}
 
 	public void loadGame() {
-		System.out.println("Game chargée ISSOU");
+		game = GameSaver.load();
+		System.out.println("Game chargée");
 	}
 
 	public void saveGame() {
-		System.out.println("Game sauvegardée ISSOU");
+		GameSaver.save(game);
+		System.out.println("Game sauvegardée");
 	}
 
 	@Override
