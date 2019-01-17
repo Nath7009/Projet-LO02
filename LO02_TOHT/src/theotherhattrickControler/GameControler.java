@@ -247,7 +247,7 @@ public class GameControler implements ActionListener, Runnable {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof Boolean) {
 			if (phase == 1 || phase == 4) {
-				System.out.println(e.getSource());
+				//System.out.println(e.getSource());
 				canContinue = e.getSource();
 			}
 		} else if (e.getID() >= -1) {
