@@ -17,7 +17,7 @@ public class GameParameters {
 		variant = menu.getVariant();
 		
 		for (int i = 0; i < players.length; i++) {
-			System.out.println(i);
+//			System.out.println(i);
 			if (menu.isAI(i)) {
 				players[i] = new Robot(menu.getBirthDate(i));
 			} else {

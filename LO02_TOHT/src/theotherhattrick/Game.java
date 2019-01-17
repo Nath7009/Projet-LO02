@@ -78,7 +78,7 @@ public class Game extends Observable implements Serializable, Runnable {
 		players = new Player[3];
 		// On crée les joueurs puis on les trie suivant leur date de naissance
 		for (int i = 0; i < param.players.length; i++) {
-			System.out.println(players);
+//			System.out.println(players);
 			players[i] = param.players[i];
 			players[i].setId(i);
 		}

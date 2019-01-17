@@ -247,7 +247,7 @@ public class GraphicView implements Observer {
 						gl_middleCards.createParallelGroup(Alignment.LEADING, false).addComponent(mprop1, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE).addComponent(mprop2, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
 				.addGap(12)));
 
-		gl_player1.setVerticalGroup(gl_player1.createParallelGroup(Alignment.LEADING).addGroup(gl_player1.createSequentialGroup().addComponent(p1Name).addGap(40).addComponent(p1Hand[0], GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+		gl_player1.setVerticalGroup(gl_player1.createParallelGroup(Alignment.LEADING).addGroup(gl_player1.createSequentialGroup().addComponent(p1Name).addGap(25).addComponent(p1Hand[0], GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
 				.addPreferredGap(ComponentPlacement.RELATED).addComponent(p1Hand[1], GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(p1Score).addGap(6)));
 		player1.setLayout(gl_player1);
 		game.getContentPane().setLayout(groupLayout);
@@ -551,7 +551,11 @@ public class GraphicView implements Observer {
 	public void redraw() {
 		Game gameModel = this.controler.getGame();
 		Player[] players = gameModel.getPlayers();
-
+		
+		btnLoad.hide();
+		btnSave.hide();
+		//CODE DEGEULASSE 
+		
 		boolean allGood = true; // Détermine si tous les éléments sont présents pour faire l'affichage
 
 		if (players == null) {
@@ -698,7 +702,7 @@ public class GraphicView implements Observer {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			controler.actionPerformed(new ActionEvent(this.function, 0, ""));
+			controler.actionPerformed(new ActionEvent(this.function, -2, ""));
 		}
 	}
 }
