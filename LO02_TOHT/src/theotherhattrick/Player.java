@@ -8,17 +8,17 @@ import java.util.Observable;
 import java.util.Stack;
 
 
+
+@SuppressWarnings("deprecation")
 /**
- * 
+ * Classe abstraite définissant les foncionnalités communes aux joueurs humains et aux IA.
+ * Les classes qui héritent de Player spécifieront les méthodes de l'interface Decision. 
+ * La classe Joueur hérite de la classe Observable. Elle notifie les Observers avec des String décrivant explicitement le changement à l'origine de la notification.
  * @author amall
  *
  */
-@SuppressWarnings("deprecation")
 public abstract class Player extends Observable implements Decision, Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected int id;
 	protected String name;
@@ -31,6 +31,13 @@ public abstract class Player extends Observable implements Decision, Serializabl
 	protected int ownProp = 0, otherProp = 0, middleProp = 0, middleVarCarrot = 0, revealProp;
 	protected boolean newTrick = false, performTrick = false;
 	
+	/**
+	 * Constructeur de la classe Joueur
+	 * @param name le nom du joueur.S'il vaut null, on attribut un nom aléatoire au joueur.
+	 * @param birthD
+	 * 
+	 * @see #generateName()
+	 */
 	public Player(String name, Date birthD) {
 		if(name == null) {
 			name = generateName();
@@ -159,6 +166,11 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		return successPile.empty();
 	}
 	
+	/**
+	 * On génère un nom composé de manière aléatoire à partir d'une liste de nom.
+	 * @return
+	 * 
+	 */
 	public String generateName() {
 		String[] names = {"Pierre", "Paul", "Jacques", "Rodolphe", "Nathan", "Antoine", "Léo", "Gabriel", "Jules", "Emma", "Manon", "Jade", "Louise"};
 		int name1 = (int) Math.floor(Math.random() * names.length);
@@ -166,6 +178,10 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		return names[name1] + "-" + names[name2];
 	}
 	
+	/**
+	 * On notifie les Observers que le score du joueur a augmenté.
+	 * @param points
+	 */
 	public void increaseScore(int points) {
 		this.score += points;
 		
@@ -175,18 +191,22 @@ public abstract class Player extends Observable implements Decision, Serializabl
 
 	public void pushTrick(Trick trick){
 		successPile.add(trick);
-//		this.setChanged();
-//		this.notifyObservers();
 	}
-
+	
+	/**
+	 * On notifie les Observers que l'on souhaite montrer les cartes du joueur
+	 */
 	public void printProps() {
-//		System.out.println("Le joueur " + this.name + " possède les cartes suivantes");
 		this.setChanged();
 		this.notifyObservers("print hand");
 		for (Iterator<Prop> it = hand.iterator();it.hasNext();) {
 			it.next().print();
 		}
 	}
+	
+	/**
+	 * On notifie les Observers que l'on souhaite montrer les cartes visibles du joueur uniquement
+	 */
 	public void printVisible() {
 		this.setChanged();
 		this.notifyObservers("name");
@@ -207,11 +227,17 @@ public abstract class Player extends Observable implements Decision, Serializabl
 		this.canViewProps = false;
 	}
 	
+	/**
+	 * La main du joueur devient visible
+	 */
 	public void showAllProps() {
 		this.getHand(0).unhide();
 		this.getHand(1).unhide();
 	}
 	
+	/**
+	 * La main du joueur devient cachée.
+	 */
 	public void hideAllProps() {
 		this.getHand(0).hide();
 		this.getHand(1).hide();

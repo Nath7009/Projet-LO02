@@ -4,15 +4,23 @@ import java.io.Serializable;
 import java.util.Observable;
 
 @SuppressWarnings("deprecation")
+/**
+ * Prop est un type d'objets observables représentant les cartes accessoires.
+ * @author amall
+ * @see PropEnum
+ */
 public class Prop extends Observable implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5690187113774987887L;
 	private String name;
 	private int type;
 	private boolean isVisible;
 
+	/**
+	 * On génère les Props à partir des valeurs de l'énumération PropEnum
+	 * 
+	 * @param prop
+	 * @see PropEnum
+	 */
 	public Prop(PropEnum prop) {
 		this.name = prop.getName();
 		this.type = prop.getType();
@@ -36,14 +44,10 @@ public class Prop extends Observable implements Serializable{
 
 	public void hide() {
 		this.isVisible = false;
-		//this.setChanged();
-		//this.notifyObservers("hide");
 	}
 
 	public void unhide() {
 		this.isVisible = true;
-		//this.setChanged();
-		//this.notifyObservers("unhide");
 	}
 
 	public boolean getState() {
@@ -64,14 +68,10 @@ public class Prop extends Observable implements Serializable{
 	}
 
 	public void printDebug() {
-		//this.setChanged();
-		//this.notifyObservers("print debug");
 		System.out.println("nom : " + this.name + " type : " + this.type + " visible : " + this.isVisible);
 	}
 
 	public void print() {
-		//this.setChanged();
-		//this.notifyObservers("print");
 		System.out.println("nom : " + this.name);
 	}
 

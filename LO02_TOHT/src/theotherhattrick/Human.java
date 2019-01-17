@@ -3,8 +3,11 @@ package theotherhattrick;
 import java.io.Serializable;
 import java.util.Scanner;
 
+import theotherhattrickView.VueTexte;
+
 /**
- * 
+ * Classe représentant les joueurs humains. Pour interagir avec l'utilisateur, elle implémente le patron Observer/Observable pour notifier les vues des actions à réaliser.
+ * Elle spécifie les méthodes de l'interface Decision.
  * @author amall
  *
  */
@@ -20,7 +23,11 @@ public class Human extends Player implements Serializable{
 		super(name, birthDate);
 	}
 	
-	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public boolean revealNewTrick() {
 		
 		this.setChanged();
@@ -29,6 +36,11 @@ public class Human extends Player implements Serializable{
 		return this.newTrick;
 	}
 	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public int chooseOwnProp() {
 		
 		this.setChanged();
@@ -37,6 +49,11 @@ public class Human extends Player implements Serializable{
 		return this.ownProp;
 	}
 	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public int chooseOtherProp(Player[] players) {
 		
 		this.setChanged();
@@ -45,6 +62,11 @@ public class Human extends Player implements Serializable{
 		return this.otherProp;
 	}
 	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public int chooseMiddleVarCarrot(Player[] players) {
 		
 		this.setChanged();
@@ -53,6 +75,11 @@ public class Human extends Player implements Serializable{
 		return middleVarCarrot;
 	}
 	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public boolean performTrick() {
 		
 		this.setChanged();
@@ -61,6 +88,11 @@ public class Human extends Player implements Serializable{
 		return this.performTrick;
 	}
 	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public int revealProp() {
 		
 		this.setChanged();
@@ -69,6 +101,11 @@ public class Human extends Player implements Serializable{
 		return this.revealProp;
 	}
 	
+	/**
+	 * notifie les Observers qu'une action doit être réalisée
+	 * 
+	 * @see VueTexte
+	 */
 	public int chooseMiddle() {
 		
 		this.setChanged();

@@ -24,10 +24,8 @@ public abstract class GameSaver implements Serializable{
 			oos.writeObject(game);
 			oos.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

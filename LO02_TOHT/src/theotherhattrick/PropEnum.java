@@ -1,5 +1,11 @@
 package theotherhattrick;
 
+
+/**
+ * 
+ * @author amall
+ *
+ */
 public enum PropEnum {
 	
 	CARROT("Carrot", 1, false),

@@ -17,9 +17,17 @@ import javax.swing.JTextField;
 
 import theotherhattrick.Date;
 
+/**
+ * Un objet PlayerSetUp affiche les options de paramétrages d'un joueur dans le Menu. On y renseigne la nature du joueur : 
+ * si c'est un robot, les champs de saisies du nom et de la date de naissance sont désactivés, et sont disponibles si on clique sur 
+ * le JRadioButton human.
+ * 
+ * @author amall
+ * @see Menu
+ *
+ */
 public class PlayerSetUp extends JPanel {
 
-//	private JPanel playerPane = new JPanel();
 	private ButtonGroup bg = new ButtonGroup();
 	private JRadioButton human, AI;
 	private JLabel nameL, natureOfPlayer, birthD;
@@ -33,10 +41,22 @@ public class PlayerSetUp extends JPanel {
 	private JComboBox comboBoxMonth;
 	private JComboBox comboBoxYear;
 
+	/**
+	 * Constructeur du panneau de paramétrisation d'un joueur
+	 * @param i on créé le panneau de paramétrisation du i-ième joueur
+	 */
 	public PlayerSetUp(int i) {
 		this.initComponent(i);
 	}
 
+	/**
+	 * Le panneau PlayerSetUp est encadré est porte pour nom "joueur i".
+	 * On indique à l'aide de JLabel la nature des informations à renseigner.
+	 * Les saisies (JTextField et les JComboBox) sont agencés horizontalement dans des panneaux avec les JLabel correspondant.
+	 * Ces panneaux sont agencés verticalement les uns par rapport aux autres.
+	 * 
+	 * @param i
+	 */
 	private void initComponent(int i) {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -87,7 +107,11 @@ public class PlayerSetUp extends JPanel {
 		this.add(this.namePane);
 		this.add(this.datePane);
 	}
-
+	
+	/**
+	 * On Créé un objet de type Date à partir des valeurs des index des JComboBox.
+	 * @return si le joueur n'est pas un humain (c'est donc un robot) on renvoie null.
+	 */
 	public Date getBirthD() {
 		if (!isAI()) {
 			// On ajoute 1 puisque les index commencent à 0
@@ -99,20 +123,30 @@ public class PlayerSetUp extends JPanel {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * @return renvoie le nom du joueur s'il sagit d'un joueur humain, null sinon.
+	 */
 	public String getName() {
-		if (!isAI() && name.getText().length() > 0) { // On a affaire à un humain
+		if (!isAI() && name.getText().length() > 0) {
 			return name.getText();
 		}
-		// Si c'est un robot, ou qu'aucun nom n'a été renseigné, on génère un nom au
-		// hasard
 		return null;
 	}
 	
+	/**
+	 * @return revoie l'inverse de la valeur du JTextField nom. Si nom est désactivé, il s'agit d'un robot, sinon c'est un humain.
+	 */
 	public boolean isAI() {
 		return !name.isEnabled();
 	}
-
+	
+	/**
+	 * classe interne qui écoute le JRadioButton IA.
+	 * si l'uilisateur clique sur le bouton, les autres champs du panneau sont désactivés.
+	 * @author amall
+	 *
+	 */
 	class IAButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
@@ -126,6 +160,12 @@ public class PlayerSetUp extends JPanel {
 		}
 	}
 
+	/**
+	 * classe interne qui écoute le JRadioButton human.
+	 * si l'uilisateur clique sur le bouton, les champs du panneau sont activés.
+	 * @author amall
+	 *
+	 */
 	class HumanButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {

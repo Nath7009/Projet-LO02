@@ -41,7 +41,6 @@ public class Game extends Observable implements Serializable, Runnable {
 	protected static ArrayList<Prop> middleProp = new ArrayList<Prop>();
 	protected Stack<Trick> tricks = new Stack<Trick>();
 	protected Stack<Trick> temp = new Stack<Trick>();
-// 	protected static Stack<Trick> depiledTricks = new Stack<Trick>();
 	protected static Trick depiledTrick;
 	protected Stack<Prop> allProps = new Stack<Prop>();
 	protected Thread t;
@@ -52,12 +51,6 @@ public class Game extends Observable implements Serializable, Runnable {
 
 	public static Game createGame(int variant) {
 		Game game = new Game();
-//		Game.keyboard = new Scanner(System.in);
-		// 0 pour le jeu de base
-		// 1 pour la variante swissKnife
-		// 2 pour la variante carrot
-		// 3 pour la variante lettuce
-//		variant = askRules();
 
 		// On utilise le polymorphisme pour gérer les variantes
 		switch (variant) {
@@ -78,8 +71,6 @@ public class Game extends Observable implements Serializable, Runnable {
 		players = new Player[3];
 		// On crée les joueurs puis on les trie suivant leur date de naissance
 		for (int i = 0; i < param.players.length; i++) {
-//			System.out.println(players);
-			//System.out.println(players);
 			players[i] = param.players[i];
 			players[i].setId(i);
 		}
@@ -114,8 +105,6 @@ public class Game extends Observable implements Serializable, Runnable {
 					System.out.println("Le nouveau trick est ");
 					depiledTrick.print();
 				}
-				// System.out.println("La taille de la pile de tricks est maintenant " +
-				// this.tricks.size());
 			}
 
 			if (this.tricks.size() == 0 || depiledTrick.name.equals("The Other Hat Trick")) {
@@ -125,7 +114,6 @@ public class Game extends Observable implements Serializable, Runnable {
 			try {
 				t.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -168,7 +156,6 @@ public class Game extends Observable implements Serializable, Runnable {
 
 	public void setVariant(int variant) {
 		this.variant = variant;
-//		this.createGame(variant);
 	}
 
 	private void createPlayers() {
@@ -320,9 +307,6 @@ public class Game extends Observable implements Serializable, Runnable {
 			this.notifyObservers("");
 			p.showAllProps(); // On montre ses cartes
 
-			// TODO Ajouter un délai afin que le joueur montre ses cartes pendant plus
-			// longtemps
-
 			p.hideAllProps(); // On cache ses cartes
 
 			exchangeMiddle(p);
@@ -390,13 +374,7 @@ public class Game extends Observable implements Serializable, Runnable {
 			notifyObservers("new turn");
 			return;
 		}
-//		notifyObservers("player" + tour % 3);
 		boolean playerIn;
-
-		// p.printProps();
-		// this.printOthersHand(p.getId());
-
-		// System.out.println("\nLe trick à réaliser est : ");
 		this.printTopTrick(); // On affiche le trick sur le dessus de la pile pour que le joueur puisse faire
 								// son choix
 		// Demande à l'utilisateur si il souhaite dépiler un trick
@@ -469,14 +447,6 @@ public class Game extends Observable implements Serializable, Runnable {
 		this.tour++;
 		if (!depiledIsEmpty()) {
 			depiledTrick.age();
-			/*
-			 * System.out.println("Le trick " +depiledTricks.peek().name + " a un age de " +
-			 * depiledTricks.peek().lifeLength); if (depiledTricks.peek().isTooOld()) {
-			 * System.out.
-			 * println("Personne n'a réussi à réaliser le trick, on en retourne un nouveau"
-			 * ); this.depile(); System.out.println("Le nouveau trick est " +
-			 * depiledTricks.peek().name); }
-			 */
 		}
 	}
 
@@ -530,16 +500,11 @@ public class Game extends Observable implements Serializable, Runnable {
 		}
 	}
 
-	/*
-	 * Echange la position de 2 props la version où l'on utilise createCopy()
-	 * provoque plusieurs erreurs de type java.lang.CloneNotSupportedException La
-	 * version où l'on utilise directement les accesseurs est fonctionnelle.
-	 */
+	
 	public void exchangeProps(int p1, int ind1, int p2, int ind2) { // Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2
 																	// du joueur p2
 		Prop tmp1 = players[p1].getHand(ind1);
 		players[p1].getHand().remove(ind1);
-//		int i = (variant ==  1 ? 0 : players[p1].speak("yeee", 2, players, 'p') ); // à utiliser si on n'a pas décidé quel prop au milieu on veut récupérer.
 
 		if (p2 == -1) { // Si on veut échanger le prop du joueur dont c'est le tour avec celui du milieu
 			players[p1].setHand(middleProp.get(ind2), ind1);
@@ -552,7 +517,6 @@ public class Game extends Observable implements Serializable, Runnable {
 			players[p2].setHand(tmp1, ind2);
 		} else {
 			System.out.println(p2);
-//			System.out.println("ERROR : undefined p2 value");
 		}
 	}
 
@@ -571,7 +535,6 @@ public class Game extends Observable implements Serializable, Runnable {
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
 		propToChange = p.chooseOwnProp();
-//		System.out.println("\n OwnProp has been asked");
 		otherProp = p.chooseOtherProp(players);
 		int p2 = (otherProp / 2 + 1 + p.getId()) % 3;
 		this.exchangeProps(p.getId(), propToChange, p2, otherProp % 2);
@@ -593,7 +556,10 @@ public class Game extends Observable implements Serializable, Runnable {
 		}
 		return bestPlayer;
 	}
-
+	/**
+	 * 
+	 * @param p
+	 */
 	public void revealProp(Player p) {
 		int choice = 0, i, hNum = 0;
 
@@ -601,7 +567,6 @@ public class Game extends Observable implements Serializable, Runnable {
 		p.notifyObservers("reveal prop");
 
 		for (i = 0; i < 2; i++) {
-//			players[id].getHand(i).printDebug();
 			if (p.getHand(i).getState() == false) {
 				hNum++;
 				if (i == 0) {

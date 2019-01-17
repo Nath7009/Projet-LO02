@@ -2,21 +2,37 @@ package theotherhattrick;
 
 import java.io.Serializable;
 
+/**
+ * Cette classe permet de modéliser les date de naissances des joueurs.
+ * On peut générer des dates de façon aléatoire ou à partir de valeurs données.
+ * On peut comparer deux objets Date pour savoir si l'objet Date courant est plus petit ou pas que l'objet Datepassé en paramètre
+ * @author amall
+ *
+ */
 public class Date implements Serializable{
-		/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 829283417861837956L;
 		private int year;
 		private int month;
 		private int day;
 		
+		/**
+		 * Constructeur qui créé une date à partir des paramètres d'entrée.
+		 * @param year
+		 * @param month
+		 * @param day
+		 */
 		public Date(int year, int month, int day) {
 			this.day = day; 
 			this.month = month;
 			this.year = year;
 		}
-		
+		/**
+		 * Constructeur qui créé une date aléatoirement.
+		 * @param year
+		 * @param month
+		 * @param day
+		 */
 		public Date() {
 			this.day =  (int)Math.floor(Math.random()*31)+1;
 			this.month =  (int)Math.floor(Math.random()*31)+1;
@@ -48,8 +64,12 @@ public class Date implements Serializable{
 			this.day = day;
 		}
 		
+		/**
+		 * @param date On va comparer l'objet courant à date.
+		 * @return true si l'objet courant est plus petit que date, faux sinon.
+		 */
 		public boolean isUnder(Date date) {
-			boolean isUnder = true; // true si la date courante est plus petite que le ou égale au paramètre.
+			boolean isUnder = true;
 			if(this.year > date.getYear()) {
 				isUnder = false;
 			}
@@ -60,9 +80,6 @@ public class Date implements Serializable{
 				else if(this.month == date.getMonth()) {
 					if(this.day > date.getDay()) {
 						isUnder = false;
-					}
-					else {
-						//System.out.println("Les 2 joueurs sont nés le même jour, on ne change pas l'ordre\n");
 					}
 				}
 			}

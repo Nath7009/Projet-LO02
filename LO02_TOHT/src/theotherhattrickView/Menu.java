@@ -18,6 +18,16 @@ import javax.swing.JPanel;
 import theotherhattrick.Date;
 import theotherhattrick.Game;
 
+/**
+ *  Un objet de type Menu représente la fenêtre s'affichant en premier lors du lancement de la partie. 
+ *  On y rentre les paramètres de la partie.
+ *  On utilise un objet de type JComboBox pour choisir la variante, et un boutton, quand appuyé, instancie un objet JOptionPane qui indique les règles du jeux.
+ *  
+ * @author amall
+ *
+ * @see PlayerSetUp
+ * @see GraphicView
+ */
 public class Menu extends JFrame {
 
 	private JFrame frame;
@@ -31,16 +41,18 @@ public class Menu extends JFrame {
 	private PlayerSetUp[] psu = new PlayerSetUp[3];
 
 	/**
-	 * Create the application.
+	 * Constructeur du Menu. Il lance l'initialisation.
+	 * 
+	 * @see #initialize()
 	 */
 	public Menu(JButton startButton) {
 		this.start = startButton;
 		initialize();
-		// setVisible(true);
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialise le contenu de la fenetre.
+	 * Le panneau de la variant et les panneaux des joueurs sont agencés verticalement.
 	 */
 	private void initialize() {
 		frame = new JFrame();
@@ -51,7 +63,6 @@ public class Menu extends JFrame {
 		frame.setTitle("THE OTHER HAT TRICK - Nouvelle partie");
 		frame.setBackground(Color.WHITE);
 
-		// Initialize the first line of the window : the choice of the variant
 		variantPanel.setBackground(null);
 		variantPanel.setPreferredSize(new Dimension(225, 35));
 		variantLabel = new JLabel("Choisissez une variante : ");
@@ -69,7 +80,6 @@ public class Menu extends JFrame {
 		variantPanel.add(rules);
 		frame.getContentPane().add(variantPanel);
 
-		// Initialize the 3 lines for the set up of the players
 		for (int i = 0; i < 3; i++) {
 			psu[i] = new PlayerSetUp(i);
 			frame.getContentPane().add(psu[i]);
@@ -81,6 +91,9 @@ public class Menu extends JFrame {
 		frame.getContentPane().add(start);
 	}
 
+	/**
+	 * Permet de controler l'affichage du Menu par un autre objet.
+	 */
 	public void setVisible(boolean bool) {
 		this.frame.setVisible(bool);
 	}
@@ -89,29 +102,45 @@ public class Menu extends JFrame {
 		return this.variantcb.getSelectedIndex();
 	}
 
-	//Retourne la date de naissance du joueur ID
+	/**
+	 * @param id
+	 * @return la date de naissance du naissance du joueur représenté par l'objet PlayerSetup d'indice id.
+	 */
 	public Date getBirthDate(int id) {
 		return psu[id].getBirthD();
 	}
 	
+	/**
+	 * @param id
+	 * @return le nom du joueur représenté par l'objet PlayerSetup d'indice id.
+	 */
 	public String getName(int id) {
 		return psu[id].getName();
 	}
 	
+	/**
+	 * @param id
+	 * @return la nature du joueur représenté par l'objet PlayerSetup d'indice id : joueur humain ou IA
+	 */
 	public boolean isAI(int id) {
 		return psu[id].isAI();
 	}
-
+	
+	
 	class VariantListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent arg0) {
-			// System.out.println(variantcb.getSelectedIndex());
-
+			
 		}
 
 	}
 
+	/**
+	 * Classe interne qui écoute le bouton des règles.
+	 * @author amall
+	 *
+	 */
 	class RuleButtonListener implements ActionListener {
 
 		@Override

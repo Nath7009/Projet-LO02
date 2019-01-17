@@ -16,6 +16,11 @@ import theotherhattrick.Trick;
 import theotherhattrickControler.GameControler;
  
 @SuppressWarnings("deprecation")
+/**
+ * 
+ * @author amall
+ *
+ */
 public class VueTexte implements Observer{
 	
 	private GameControler gc;
