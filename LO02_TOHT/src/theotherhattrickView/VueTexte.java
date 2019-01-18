@@ -556,14 +556,12 @@ public class VueTexte implements Observer{
 		return value;
 	}
 	
-<<<<<<< HEAD
+
 	/**
 	 * Lit une saisie et la convertit en un booléen
 	 * @return
 	 */
-=======
 	@SuppressWarnings("unused")
->>>>>>> 499d28830f2a4b85766ad28f6e38c6ced7315316
 	private boolean readBool() {
 		boolean value = false;
 		try {
