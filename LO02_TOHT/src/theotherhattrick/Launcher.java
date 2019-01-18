@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import theotherhattrickControler.GameControler;
 import theotherhattrickView.GraphicView;
-import theotherhattrickView.VueTexte;
 
 /**
  * La classe qui permet de lancer le jeu
@@ -19,6 +18,7 @@ public class Launcher implements Serializable {
 	 * 
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		GameControler gc = new GameControler();
 		GraphicView gv = new GraphicView(gc);

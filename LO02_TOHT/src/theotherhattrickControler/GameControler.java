@@ -16,8 +16,7 @@ import theotherhattrickView.Menu;
  * Permet de controler le jeu sous la forme d'un automate à etats
  *
  */
-@SuppressWarnings("deprecation")
-public class GameControler implements ActionListener, Runnable{
+public class GameControler implements ActionListener {
 
 	/**
 	 * Le jeu qui va tourner sous le controle du controleur
@@ -32,6 +31,7 @@ public class GameControler implements ActionListener, Runnable{
 	/**
 	 * La vue texte
 	 */
+	@SuppressWarnings("unused")
 	private VueTexte vt;
 
 	/**
@@ -45,11 +45,6 @@ public class GameControler implements ActionListener, Runnable{
 	private int phase = 1;
 
 	/**
-	 * Le thread dans lequel tourne le controleur
-	 */
-	private Thread t;
-
-	/**
 	 * Le contructeur du controleur instancie la version du jeux souhaitée avec la
 	 * méthode statique createGame(variant) de Game. Le controleur lance alors la
 	 * partie.
@@ -57,7 +52,6 @@ public class GameControler implements ActionListener, Runnable{
 	 * @param variant : on récupère la version que l'on souhaite jouer en paramètre
 	 */
 	public GameControler() {
-		t = new Thread(this);
 	}
 
 	public GameControler(int variant) {
@@ -102,7 +96,7 @@ public class GameControler implements ActionListener, Runnable{
 		while (canContinue == null) { // On attend une reponse d'actionPerformed a chaque fois que l'on veut une
 										// entree utilisateur
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -121,7 +115,7 @@ public class GameControler implements ActionListener, Runnable{
 		gv.disableDecisionCards();
 		while (canContinue == null) {
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -137,7 +131,7 @@ public class GameControler implements ActionListener, Runnable{
 
 		while (canContinue == null) {
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -156,7 +150,7 @@ public class GameControler implements ActionListener, Runnable{
 
 		while (canContinue == null) {
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -168,7 +162,7 @@ public class GameControler implements ActionListener, Runnable{
 				gv.setInfo("Vous avez réussi le trick");
 				game.giveTrick(game.getCurrentPlayer());
 				try {
-					t.sleep(1000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -189,7 +183,7 @@ public class GameControler implements ActionListener, Runnable{
 				canContinue = null;
 				while (canContinue == null) {
 					try {
-						t.sleep(10);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -208,7 +202,7 @@ public class GameControler implements ActionListener, Runnable{
 				canContinue = null;
 				while (canContinue == null) {
 					try {
-						t.sleep(10);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -224,7 +218,7 @@ public class GameControler implements ActionListener, Runnable{
 			canContinue = null;
 			while (canContinue == null) {
 				try {
-					t.sleep(10);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -377,11 +371,4 @@ public class GameControler implements ActionListener, Runnable{
 		GameSaver.save(game);
 		System.out.println("Game sauvegardée");
 	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

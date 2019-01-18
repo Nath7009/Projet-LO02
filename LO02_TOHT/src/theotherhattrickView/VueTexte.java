@@ -15,7 +15,6 @@ import theotherhattrick.Robot;
 import theotherhattrick.Trick;
 import theotherhattrickControler.GameControler;
  
-@SuppressWarnings("deprecation")
 /**
  * 
  * @author amall
@@ -101,7 +100,7 @@ public class VueTexte implements Observer{
 					break;
 					
 				case "depile" :
-					System.out.println("Le nouveau Trick à réaliser est : " + ((Game) o).getTopTrick());
+					System.out.println("Le nouveau Trick à réaliser est : " + Game.getTopTrick());
 					break;
 					
 				case "trick pile empty" : 
@@ -504,6 +503,7 @@ public class VueTexte implements Observer{
 		return value;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean readBool() {
 		boolean value = false;
 		try {

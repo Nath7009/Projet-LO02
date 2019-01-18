@@ -1,6 +1,5 @@
 package theotherhattrickView;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
@@ -9,16 +8,10 @@ import java.util.Observer;
 import javax.swing.JFrame;
 
 import theotherhattrickControler.GameControler;
-import javax.swing.JComboBox;
-import java.awt.BorderLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -68,6 +61,7 @@ public class GraphicView implements Observer {
 	private GroupLayout gl_player1;
 	private GroupLayout gl_player2;
 	private GroupLayout gl_player3;
+	@SuppressWarnings("unused")
 	private GroupLayout[] gl_players = { gl_player1, gl_player2, gl_player3 };
 	private GroupLayout groupLayout;
 	private JPanel middleCards;

@@ -3,7 +3,6 @@ package theotherhattrick;
 import java.io.Serializable;
 import java.util.Observable;
 
-@SuppressWarnings("deprecation")
 /**
  * Prop est un type d'objets observables représentant les cartes accessoires.
  * @author amall

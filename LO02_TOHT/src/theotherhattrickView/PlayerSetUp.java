@@ -28,6 +28,7 @@ import theotherhattrick.Date;
  */
 public class PlayerSetUp extends JPanel {
 
+	private static final long serialVersionUID = -670498147147938814L;
 	private ButtonGroup bg = new ButtonGroup();
 	private JRadioButton human, AI;
 	private JLabel nameL, natureOfPlayer, birthD;
@@ -37,8 +38,11 @@ public class PlayerSetUp extends JPanel {
 	private JPanel namePane = new JPanel();
 	private JPanel datePane = new JPanel();
 
+	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxDay;
+	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxMonth;
+	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxYear;
 
 	/**
@@ -57,6 +61,7 @@ public class PlayerSetUp extends JPanel {
 	 * 
 	 * @param i
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initComponent(int i) {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

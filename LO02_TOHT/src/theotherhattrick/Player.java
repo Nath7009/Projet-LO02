@@ -9,7 +9,6 @@ import java.util.Stack;
 
 
 
-@SuppressWarnings("deprecation")
 /**
  * Classe abstraite définissant les foncionnalités communes aux joueurs humains et aux IA.
  * Les classes qui héritent de Player spécifieront les méthodes de l'interface Decision. 

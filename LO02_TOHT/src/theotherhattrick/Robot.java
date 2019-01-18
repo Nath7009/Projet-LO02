@@ -6,7 +6,6 @@ import java.io.Serializable;
  * Classe qui gère les joueurs dotes d'intelligence artificielle
  *
  */
-@SuppressWarnings("deprecation")
 public class Robot extends Player implements Decision, Serializable {
 
 	private static final long serialVersionUID = 8125673734326190507L;

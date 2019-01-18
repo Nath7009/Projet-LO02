@@ -16,7 +16,6 @@ import theotherhattrickControler.GameParameters;
  *
  */
 
-@SuppressWarnings("deprecation")
 public class Game extends Observable implements Serializable, Runnable {
 
 	/**
@@ -112,7 +111,7 @@ public class Game extends Observable implements Serializable, Runnable {
 				gameisFinished = true;
 			}
 			try {
-				t.sleep(500);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
