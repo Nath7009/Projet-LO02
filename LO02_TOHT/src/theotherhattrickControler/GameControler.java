@@ -12,15 +12,37 @@ import theotherhattrickView.GraphicView;
 import theotherhattrickView.VueTexte;
 import theotherhattrickView.Menu;
 
-@SuppressWarnings("deprecation")
-public class GameControler implements ActionListener, Runnable {
+/**
+ * Permet de controler le jeu sous la forme d'un automate à etats
+ *
+ */
+public class GameControler implements ActionListener {
 
+	/**
+	 * Le jeu qui va tourner sous le controle du controleur
+	 */
 	protected Game game;
+
+	/**
+	 * La vue graphique
+	 */
 	private GraphicView gv;
+
+	/**
+	 * La vue texte
+	 */
+	@SuppressWarnings("unused")
 	private VueTexte vt;
+
+	/**
+	 * Permet de savoir si on peut continuer le jeu
+	 */
 	private Object canContinue = null;
+
+	/**
+	 * La phase de l'automate a etats
+	 */
 	private int phase = 1;
-	private Thread t;
 
 	/**
 	 * Le contructeur du controleur instancie la version du jeux souhaitée avec la
@@ -30,39 +52,38 @@ public class GameControler implements ActionListener, Runnable {
 	 * @param variant : on récupère la version que l'on souhaite jouer en paramètre
 	 */
 	public GameControler() {
-		t = new Thread(this);
-//		gv = new GraphicView(this);
-//		vt = new VueTexte(this);
-
-		// int variant = gv.getMenu().getVariant();
-		// this.game = Game.createGame(variant);
-		// Création du jeu à l'aide des données du menu
-
-		// this.game.initGame();
-		// this.game.start();
 	}
 
 	public GameControler(int variant) {
 		this.game = Game.createGame(variant);
-
 	}
 
+	/**
+	 * Permet de creer le jeu a l'aide du menu
+	 * 
+	 * @param menu recupere les informations remplies dans le menu
+	 */
 	public void createGame(Menu menu) {
 		// Cette méthode est appelée quand on valide le menu
-		// c'est l'interface graphique qui décide quand le jeux peut commencer
+		// c'est l'interface graphique qui décide quand le jeu peut commencer
 		GameParameters gp = new GameParameters(menu);
 		game = Game.createGame(gp);
 		game.addObserver(this.gv);
-		/*
-		 * vt = new VueTexte(this); game.addObserver(vt);
-		 * game.getPlayers()[0].addObserver(vt); game.getPlayers()[1].addObserver(vt);
-		 * game.getPlayers()[2].addObserver(vt);
-		 */
-
 		game.start();
 	}
 
+	/**
+	 * Joue un tour de jeu
+	 * 
+	 */
 	public void playTurn() {
+		// Differentes valeurs pour la phase de jeu
+		// 1 : Retourner le trick ?
+		// 2 : Selection de la carte que le joueur veut echanger
+		// 3 : Selection de la carte de l'autre joueur
+		// 4 : Performer le trick ?
+		// 5 : Echange au milieu si le trick est reussi
+		// 6 : Choisit le trick a retourner en cas d'echec
 		phase = 1;
 		int currPlayer = game.getCurrentPlayerIndex();
 		game.getPlayers()[currPlayer].setViewable();
@@ -72,9 +93,10 @@ public class GameControler implements ActionListener, Runnable {
 		gv.redraw();
 		canContinue = null;
 		gv.setInfo("Voulez vous retourner le trick ?");
-		while (canContinue == null) {
+		while (canContinue == null) { // On attend une reponse d'actionPerformed a chaque fois que l'on veut une
+										// entree utilisateur
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -93,7 +115,7 @@ public class GameControler implements ActionListener, Runnable {
 		gv.disableDecisionCards();
 		while (canContinue == null) {
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -109,7 +131,7 @@ public class GameControler implements ActionListener, Runnable {
 
 		while (canContinue == null) {
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -117,7 +139,7 @@ public class GameControler implements ActionListener, Runnable {
 		}
 		game.exchangeProps(currPlayer, carte1, (int) ((ActionEvent) canContinue).getSource(), ((ActionEvent) canContinue).getID());
 		gv.redraw();
-		
+
 		phase++;
 		canContinue = null;
 		gv.disableAllCards();
@@ -128,7 +150,7 @@ public class GameControler implements ActionListener, Runnable {
 
 		while (canContinue == null) {
 			try {
-				t.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -140,7 +162,7 @@ public class GameControler implements ActionListener, Runnable {
 				gv.setInfo("Vous avez réussi le trick");
 				game.giveTrick(game.getCurrentPlayer());
 				try {
-					t.sleep(1000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -161,18 +183,18 @@ public class GameControler implements ActionListener, Runnable {
 				canContinue = null;
 				while (canContinue == null) {
 					try {
-						t.sleep(10);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 				Game.getMiddleProp().get(0).setState(middleCardState);
-				//Si le joueur ne veut échanger sa carte avec un prop du milieu
-				if((int)((ActionEvent) canContinue).getSource() != -1) {
+				// Si le joueur ne veut échanger sa carte avec un prop du milieu
+				if ((int) ((ActionEvent) canContinue).getSource() != -1) {
 					game.exchangeProps(currPlayer, ((ActionEvent) canContinue).getID(), -1, 0);
 				}
-				
+
 			} else { // Le joueur échoue le trick
 
 				diableAllPlayersButOne(currPlayer);
@@ -180,7 +202,7 @@ public class GameControler implements ActionListener, Runnable {
 				canContinue = null;
 				while (canContinue == null) {
 					try {
-						t.sleep(10);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -196,7 +218,7 @@ public class GameControler implements ActionListener, Runnable {
 			canContinue = null;
 			while (canContinue == null) {
 				try {
-					t.sleep(10);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -210,6 +232,11 @@ public class GameControler implements ActionListener, Runnable {
 
 	}
 
+	/**
+	 * Desactive les boutons de tous les joueurs sauf du joueur d'indice players
+	 * 
+	 * @param player le joueur dont on ne desactive pas les cartes
+	 */
 	public void diableAllPlayersButOne(int player) {
 		for (int i = -1; i < 3; i++) {
 			if (i != player) {
@@ -218,45 +245,75 @@ public class GameControler implements ActionListener, Runnable {
 		}
 	}
 
+	/**
+	 * Permet d'affecter la vue graphique au controleur
+	 * 
+	 * @param gv
+	 */
 	public void setGraphicView(GraphicView gv) {
 		this.gv = gv;
 	}
 
+	/**
+	 * Demarre le jeu
+	 */
 	public void start() {
 		this.game.start();
 	}
 
+	/**
+	 * @return l'instance du jeu que l'on est en train de jouer
+	 */
 	public Game getGame() {
 		return this.game;
 	}
 
+	/**
+	 * Modifie la variante du jeu
+	 * 
+	 * @param variant la variante que l'on veut affecter
+	 */
 	public void setVariant(int variant) {
 		this.game.setVariant(variant);
 	}
 
+	/**
+	 * Fixe le nombre d'humains qui jouent au jeu
+	 * 
+	 * @param nbOfHuman le nombre d'humains qui jouent
+	 */
 	public void setNbOfHuman(int nbOfHuman) {
 		this.game.setNbOfHuman(nbOfHuman);
 	}
 
+	/**
+	 * Cree un nouveau joueur
+	 * 
+	 * @param name  le nom du joueur
+	 * @param day   le jour de naissance du joueur
+	 * @param month le mois de naissance du joueur
+	 * @param year  l'annee de naissance du joueur
+	 */
 	public void setNewPlayer(String name, int day, int month, int year) {
 		Player newPlayer = new Human(name, new Date(day, month, year));
 		this.game.setNewPlayer(newPlayer);
 	}
 
-	@Override
+	/**
+	 * Recupere les entrees des vues et les filtre pour etre sur que les entrees
+	 * utilisateurs sont valables
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof Boolean) {
 			if (phase == 1 || phase == 4) {
-				//System.out.println(e.getSource());
 				canContinue = e.getSource();
 			}
 		} else if (e.getID() >= -1) {
 			canContinue = e;
-		} else if(e.getSource() instanceof String) {
-			if(e.getSource().equals("save")) {
+		} else if (e.getSource() instanceof String) {
+			if (e.getSource().equals("save")) {
 				this.saveGame();
-			}
-			else if(e.getSource().equals("load")) {
+			} else if (e.getSource().equals("load")) {
 				this.loadGame();
 			}
 		}
@@ -272,7 +329,7 @@ public class GameControler implements ActionListener, Runnable {
 	}
 
 	/**
-	 * 
+	 * @param p
 	 * @param choice
 	 */
 	public void setOwnProp(Player p, int choice) {
@@ -299,20 +356,19 @@ public class GameControler implements ActionListener, Runnable {
 		p.setOtherProp(choice);
 	}
 
+	/**
+	 * Charge le jeu à partir du fichier de sauvegarde
+	 */
 	public void loadGame() {
 		game = GameSaver.load();
 		System.out.println("Game chargée");
 	}
 
+	/**
+	 * Sauvagarde le jeu dans un fichier de configuration
+	 */
 	public void saveGame() {
 		GameSaver.save(game);
 		System.out.println("Game sauvegardée");
 	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

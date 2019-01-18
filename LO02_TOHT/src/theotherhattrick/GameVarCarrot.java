@@ -2,16 +2,25 @@ package theotherhattrick;
 
 import java.io.Serializable;
 
+
+/**
+ * Permet de jouer à la variante Carrot
+ * Ne redéfinit que quelques méthodes de Game
+ *
+ */
 public class GameVarCarrot extends Game implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 
 	public GameVarCarrot() {
 		super();
 	}
 
+	/**
+	 * Realise le trick
+	 * @param p Le joueur qui réalise le trick
+	 * 
+	 */
 	protected void realizeTrick(Player p) {
 		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
 		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());
@@ -50,6 +59,11 @@ public class GameVarCarrot extends Game implements Serializable{
 		}
 	}
 
+	/* 
+	 * Echange les cartes entre deux joueurs, ou avec une carte du milieu
+	 * @param p le joueur qui doit faire l'echange
+	 * 
+	 */
 	protected void exchangePlayers(Player p) { // échange une carte avec un autre joueur ou la carte du milieu
 		int propToChange, otherProp;
 		propToChange = p.chooseOwnProp();

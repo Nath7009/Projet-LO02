@@ -1,7 +1,6 @@
 package theotherhattrick;
 
 import java.io.Serializable;
-import java.util.Scanner;
 
 import theotherhattrickView.VueTexte;
 
@@ -11,7 +10,6 @@ import theotherhattrickView.VueTexte;
  * @author amall
  *
  */
-@SuppressWarnings("deprecation")
 public class Human extends Player implements Serializable{
 
 	/**

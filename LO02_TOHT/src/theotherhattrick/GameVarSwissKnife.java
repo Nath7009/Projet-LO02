@@ -2,16 +2,27 @@ package theotherhattrick;
 
 import java.io.Serializable;
 
+/**
+ * Permet de jouer à la variante Swiss Knife
+ * Ne redéfinit que quelques méthodes de Game
+ *
+ */
 public class GameVarSwissKnife extends Game implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 3306308634642419092L;
 
+	/**
+	 * Constructeur
+	 */
 	public GameVarSwissKnife() {
 		super();
 	}
 	
+	/**
+	 * Realise le trick
+	 * @param p Le joueur qui réalise le trick
+	 * 
+	 */
 	protected void realizeTrick(Player p) {
 		// Gère l'enchainement des actions qui se réalisent quand on réalise un trick
 		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());

@@ -2,7 +2,8 @@ package theotherhattrick;
 
 
 /**
- * 
+ * Enumération qui répertorie les différentes cartes du jeux.
+ * Par défaut, les cartes sont cachées.
  * @author amall
  *
  */

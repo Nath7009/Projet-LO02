@@ -4,23 +4,24 @@ import java.io.Serializable;
 
 import theotherhattrickControler.GameControler;
 import theotherhattrickView.GraphicView;
-import theotherhattrickView.VueTexte;
 
-public class Launcher implements Serializable{
+/**
+ * La classe qui permet de lancer le jeu
+ *
+ */
+public class Launcher implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -26706685655911217L;
 
+	/**
+	 * La méthode main qui lance le programme
+	 * 
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		//System.loadLibrary("jpeg");
 		GameControler gc = new GameControler();
-		//VueTexte vt = new VueTexte(gc);
 		GraphicView gv = new GraphicView(gc);
-		//gc.start();
-//		Game game = Game.createGame();
-//		game.start();
 	}
 
 }

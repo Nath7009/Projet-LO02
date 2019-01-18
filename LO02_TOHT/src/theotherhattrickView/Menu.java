@@ -30,11 +30,13 @@ import theotherhattrick.Game;
  */
 public class Menu extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	private JFrame frame;
 
 	private JPanel variantPanel = new JPanel();
 	private JLabel variantLabel;
-	private JComboBox variantcb = new JComboBox();
+	private JComboBox<String> variantcb = new JComboBox<String>();
 	private JButton rules = new JButton("rules");
 	private JButton start;
 
@@ -145,8 +147,7 @@ public class Menu extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JOptionPane rules = new JOptionPane();
-			rules.showMessageDialog(null, Game.RULE_SWISS_ARMY_KNIFE + Game.RULE_CARROT + Game.RULE_LETTUCE, "Règles du jeux", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, Game.RULE_SWISS_ARMY_KNIFE + Game.RULE_CARROT + Game.RULE_LETTUCE, "Règles du jeux", JOptionPane.INFORMATION_MESSAGE);
 
 		}
 

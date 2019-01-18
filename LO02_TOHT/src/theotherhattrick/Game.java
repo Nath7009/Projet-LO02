@@ -16,7 +16,6 @@ import theotherhattrickControler.GameParameters;
  *
  */
 
-@SuppressWarnings("deprecation")
 public class Game extends Observable implements Serializable, Runnable {
 
 	/**
@@ -112,7 +111,7 @@ public class Game extends Observable implements Serializable, Runnable {
 				gameisFinished = true;
 			}
 			try {
-				t.sleep(500);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -196,7 +195,7 @@ public class Game extends Observable implements Serializable, Runnable {
 	 * @param rule
 	 */
 	public void createCards() {
-		for (int i = 0; i < PropEnum.values().length - (this.getVariant() == 1 ? 0 : 1); i++) {// Si on joue avec le couteau suisse, on veut 1 prop supplémentaire.
+		for (int i = 0; i < PropEnum.values().length - (this.getVariant() == 1 ? 0 : 1); i++) {
 			allProps.push(new Prop(PropEnum.values()[i]));
 			if (i == 0) { // Il y a 3 carrots dans le jeu
 				allProps.push(new Prop(PropEnum.values()[i]));
@@ -252,8 +251,7 @@ public class Game extends Observable implements Serializable, Runnable {
 	public void distributeProps() {
 		middleProp = new ArrayList<Prop>(1);
 		middleProp.add(allProps.pop());
-		if (this.getVariant() == 1) { // Si on joue avec la variante du couteau suisse, on Veut une carte
-										// supplémentaire au milieu
+		if (this.getVariant() == 1) { 
 			middleProp.ensureCapacity(2);
 			middleProp.add(allProps.pop());
 		}
@@ -264,8 +262,12 @@ public class Game extends Observable implements Serializable, Runnable {
 		}
 	}
 
+	/**
+	 * Appelle la méthode pour demander au joueur s'il veut retourner un trick.
+	 * @param p le joueur à qui l'on veut poser la question
+	 */
 	protected void depileTrick(Player p) {
-		boolean playerIn = p.revealNewTrick(); // Conversion
+		boolean playerIn = p.revealNewTrick();
 		if (playerIn) {
 			this.depile();
 		}
@@ -297,31 +299,28 @@ public class Game extends Observable implements Serializable, Runnable {
 		}
 	}
 
+	/**
+	 * On regarde si le joueur p a réussi le tour. 
+	 * S'il a réussi, on lui demande quel prop il veut replacer au milieu.
+	 * S'il a raté, on lui demande lequel de ses props il veut retourner.
+	 * @param p
+	 */
 	protected void realizeTrick(Player p) {
-		// Gère l'enchainement des actions qui se réalisent quand on réalise un
-		// trick
 		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());
 
-		if (trickSuccessful) { // Si le joueur a réussi le trick
+		if (trickSuccessful) {
 			this.setChanged();
 			this.notifyObservers("");
-			p.showAllProps(); // On montre ses cartes
-
-			p.hideAllProps(); // On cache ses cartes
-
+			p.showAllProps();
+			p.hideAllProps();
 			exchangeMiddle(p);
-
-			// DONNER LE TRICK AU JOUEUR
-			this.giveTrick(p); // On lui donne le trick
+			this.giveTrick(p);
 			this.setChanged();
 			this.notifyObservers("trick given");
 		}
-
 		else {
-			// Si le joueur rate le trick
 			this.setChanged();
 			this.notifyObservers("trick failed");
-
 			this.revealProp(p);
 		}
 
@@ -341,7 +340,6 @@ public class Game extends Observable implements Serializable, Runnable {
 		} catch (Exception e) {
 			this.setChanged();
 			this.notifyObservers("trick pile empty");
-//			System.out.println("Impossible de retirer un trick, puisque la pile est vide");
 		}
 	}
 
@@ -465,8 +463,9 @@ public class Game extends Observable implements Serializable, Runnable {
 		return tricks.size();
 	}
 
-	/*
+	/**
 	 * Donne le trick du dessus de depiledTricks au joueur d'id id
+	 * @param p
 	 */
 	public void giveTrick(Player p) {
 
@@ -479,10 +478,14 @@ public class Game extends Observable implements Serializable, Runnable {
 		depiledTrick = null;
 	}
 
-	protected void exchangeMiddle(Player p) { // échange une carte avec celle du milieu
+	/**
+	 * Appelle la méthode pour demander au joueur quelle carte il veut reposer au milieu.
+	 * @param p
+	 */
+	protected void exchangeMiddle(Player p) { 
 		int propToChange;
 		propToChange = p.chooseMiddle();
-		if (propToChange != 2) { // dans speak, on renvoie 2 si on veut garder nos 2 props.
+		if (propToChange != 2) {
 			this.exchangeProps(p.getId(), propToChange, -1, 0);
 		}
 	}
@@ -500,7 +503,13 @@ public class Game extends Observable implements Serializable, Runnable {
 		}
 	}
 
-	
+	/**
+	 * Réalise un échange de props. En fonction de la valeur de p2, l'échange se fait soit entre deux joueurs, soit entre un joueur et la carte du milieu.
+	 * @param p1 indice du joueur qui veut échanger un de ses Props
+	 * @param ind1 indice de la carte du joueur p1
+	 * @param p2 si p2 vaut -1, l'échange se fait avec la carte du milieu, si elle vaut 0 ou 1, elle se fait avec un autre joueur. 
+	 * @param ind2
+	 */
 	public void exchangeProps(int p1, int ind1, int p2, int ind2) { // Echange le prop d'indice ind1 du joueur d'id p1, avec le prop d'indice ind2
 																	// du joueur p2
 		Prop tmp1 = players[p1].getHand(ind1);
@@ -519,7 +528,11 @@ public class Game extends Observable implements Serializable, Runnable {
 			System.out.println(p2);
 		}
 	}
-
+	
+	/**
+	 * Change l'état de visibilité d'une carte.
+	 * @param p
+	 */
 	public void returnProp(Player p) {
 		System.out.println("Main de " + p.getName() + " => ");
 		System.out.println(p.getHand());
@@ -532,6 +545,11 @@ public class Game extends Observable implements Serializable, Runnable {
 		p.printProps();
 	}
 
+	/**
+	 * Appelle les méthodes pour demander au joueur p quels sont les props qu'il veut échanger.
+	 * Puis appelle la méthode qui réalise l'échange de Props.
+	 * @param p
+	 */
 	protected void exchangePlayers(Player p) {
 		int propToChange, otherProp;
 		propToChange = p.chooseOwnProp();
@@ -557,7 +575,10 @@ public class Game extends Observable implements Serializable, Runnable {
 		return bestPlayer;
 	}
 	/**
-	 * 
+	 * Si le joueur a raté un tour de magie, il doit retourner une de ses cartes.
+	 * On compte d'abord le nombre de cartes qui sont déjà visibles.
+	 * S'il a le choix (si les deux sont cachées), on lui demande laquelle il veut retourner.
+	 * Sinon, l'action est automatique
 	 * @param p
 	 */
 	public void revealProp(Player p) {
@@ -574,7 +595,6 @@ public class Game extends Observable implements Serializable, Runnable {
 				} else if (i == 1) {
 					choice = 1;
 				} else {
-					System.out.println("ERROR : choice value undefined.");
 					choice = 2;
 				}
 			}
@@ -592,6 +612,10 @@ public class Game extends Observable implements Serializable, Runnable {
 		notifyObservers("Un prop a été retourné");
 	}
 
+	/**
+	 * Affiche les cartes des autres joueurs en fonction de leur visibilité
+	 * @param id le joueur d'indice id qui veut voir les cartes des autres joueurs.
+	 */
 	public void printOthersHand(int id) {
 		for (Player p : players) {
 			if (p.getId() != id) {
@@ -604,13 +628,20 @@ public class Game extends Observable implements Serializable, Runnable {
 		depiledTrick.print();
 	}
 
-	public void showAllProps(Player p) { // Montre tous les props du joueur afin de montrer qu'il peut bien réaliser le
-											// tour
+	/**
+	 * Si le joueur réussi le tour de magie, il révèle toutes ses cartes.
+	 * @param p
+	 */
+	public void showAllProps(Player p) {
 		p.getHand(0).unhide();
 		p.getHand(1).unhide();
 	}
 
-	public void hideAllProps(Player p) { // Retourne face cachée tous les props du joueur en cas de tour réussi
+	/**
+	 * Si le joueur réussi le tour de magie, il révèle puis retourne toutes ses cartes.
+	 * @param p
+	 */
+	public void hideAllProps(Player p) { 
 		p.getHand(0).hide();
 		p.getHand(1).hide();
 	}

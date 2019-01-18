@@ -5,17 +5,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 
-
+@SuppressWarnings("deprecation")
+/**
+ * Classe représentant les cartes tour de magie qui sont à réaliser au cours de la partie.
+ * Les objets Tricks sont générés à partir de l'énumération TrickEnum. Les Tricks sont des objets Observable
+ * 
+ * @see TrickEnum
+ */
 public class Trick extends Observable implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 8559185521054700937L;
 	String name;
 	int points;
 	PropEnum[][] ingredients = {{} , {}};
 	int lifeLength = 0;
 	
+	/**
+	 * Le constructeur de la classe Trick utilise les valeurs du TrickEnum correspondant pour son initialisation
+	 * @param trick
+	 */
 	public Trick(TrickEnum trick){
 		this.name = trick.getName();
 		this.points = trick.getPoints();
@@ -33,10 +41,25 @@ public class Trick extends Observable implements Serializable {
 		return ingredients[ind].length;
 	}
 	
+	/**
+	 * La variante du couteau suisse implique parfois une perte de valeur des Props
+	 * 
+	 * @see GameVarSwissKnife
+	 */
 	public void decreaseValue() {
 		this.points--;
 		this.setChanged();
 		this.notifyObservers("value decreased");
+	}
+	
+	public void print() {
+		System.out.println("Trick : <" + name + ">");
+		for(int i = 0; i < ingredients.length ; i++) {
+			for(int j = 0; j < ingredients[i].length ; j++) {
+				ingredients[i][j].print();
+			}
+			System.out.println("\n");
+		}
 	}
 	
 	public void age() {
@@ -47,10 +70,6 @@ public class Trick extends Observable implements Serializable {
 		return this.lifeLength > 5;
 	}
 	
-	public void print() {
-		//this.setChanged();
-		//this.notifyObservers("print trick");
-	}
 	
 	public String toString() {
 		return name;
@@ -64,6 +83,11 @@ public class Trick extends Observable implements Serializable {
 		return points;
 	}
 	
+	/**
+	 * Test si le prop passé en paramètre est un ingrédient du Trick.
+	 * @param prop
+	 * @return 
+	 */
 	public boolean contains(Prop prop) {
 		boolean match = false;
 		for(int i = 0; i < 2; i++) {
@@ -74,8 +98,12 @@ public class Trick extends Observable implements Serializable {
 		return match;
 	}
 	
+	/**
+	 * Compte le nombre de Prop en commun entre la main d'un joueur et les ingrédients du Trick.
+	 * @param hand
+	 * @return
+	 */
 	public int getMatchingTricks(ArrayList<Prop> hand) {
-		//Retourne le nombre de tricks en commun avec le trick courant
 		int matching = 0;
 
 		if(compareToProps(hand)) {
@@ -87,14 +115,18 @@ public class Trick extends Observable implements Serializable {
 				matching++;
 			}
 		}
-		//Si on a trouvé plus de 2 cartes qui fonctionnent et que compareToProps n'a pas renvoyé vrai,
-		//Il est impossible que l'on pait plus de 2 matchs
 		if(matching>=2) {
 			matching = 1;
 		}
 		return matching;
 	}
 	
+	/**
+	 * Détermine si un joueur peut réaliser le Trick. Compare les cartes de la main l'une après l'autre aux ingrédients du Trick. 
+	 * Dès qu'un Prop de la main ne figure pas parmi les ingrédients, on retourne faux.
+	 * @param hand la main d'un joueur
+	 * @return renvoie true si la main permet de réaliser le Trick, false sinon. 
+	 */
 	public boolean compareToProps(ArrayList<Prop> hand) {
 		int ind1 = 0, ind2 = 0, ind = (hand.contains(new Prop(PropEnum.SWISS_ARMY_KNIFE)) ? hand.indexOf(new Prop(PropEnum.SWISS_ARMY_KNIFE)) : 0);
 		boolean card1 = false, card2 = (hand.contains(new Prop(PropEnum.SWISS_ARMY_KNIFE)) ? true : false);

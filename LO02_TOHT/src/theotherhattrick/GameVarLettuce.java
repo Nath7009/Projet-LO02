@@ -2,16 +2,28 @@ package theotherhattrick;
 
 import java.io.Serializable;
 
+
+/**
+ * Permet de jouer à la variante Lettuce
+ * Ne redéfinit que quelques méthodes de Game
+ *
+ */
 public class GameVarLettuce extends Game implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructeur
+	 */
 	public GameVarLettuce() {
 		super();
 	}
 
+	/**
+	 * Realise le trick
+	 * @param p Le joueur qui réalise le trick
+	 * 
+	 */
 	protected void realizeTrick(Player p) {
 		// G�re l'enchainement des actions qui se r�alisent quand on r�alise un trick
 		boolean trickSuccessful = depiledTrick.compareToProps(p.getHand());

@@ -15,11 +15,13 @@ import theotherhattrick.Robot;
 import theotherhattrick.Trick;
 import theotherhattrickControler.GameControler;
  
-@SuppressWarnings("deprecation")
 /**
+ * La classe VueTexte représente l'ensemble des affichages console et saisies console qui permettent de jouer à The Other Hat Trick en ligne de commande.
+ * Elle est une des deux vue du patron de conception MVC implémenté dans ce projet.
+ * Elle est notifiée par les classes du modèle, et informe le controleur des mises à jour qui doivent être effectuées sur le modèle.
  * 
- * @author amall
- *
+ * @see theotherhattrickControler.GameControler
+ * @see theotherhattrick.Game
  */
 public class VueTexte implements Observer{
 	
@@ -32,12 +34,24 @@ public class VueTexte implements Observer{
 		this.initGame();
 	}
 	
+	/**
+	 * Constructeur de VueTexte. Lance tout de suite l'initialisation du jeux
+	 * 
+	 * @see #initGame()
+	 */
 	public VueTexte() {
 		this.initGame();
 	}
 	
+	/**
+	 * On créé la partie en indiquant la variante que l'on veut jouer.
+	 * On créé un controleur. On ajoute la cet objet dans la liste des Observers de Game.
+	 * Puis on lance la partie
+	 * 
+	 * @see theotherhattrick.Game
+	 * @see theotherhattrickControler.GameControler
+	 */
 	public void initGame() {
-//		On choisit la variante
 		System.out.println("=|=[=====]=|=[=====]=|=" + Game.NAME + "=|=[=====]=|=[=====]=|=\n");
 		System.out.println("Voici les différentes règles du jeu : \n" 
 				+ Game.RULE_SWISS_ARMY_KNIFE 
@@ -58,14 +72,18 @@ public class VueTexte implements Observer{
 		
 		this.gc = new GameControler(variant);
 		this.gc.getGame().addObserver(this);
-//		System.out.println("nb d'observer (controler) : " + this.gc.getGame().countObservers());
 		this.gc.setVariant(variant);
 		this.gc.getGame().initGame();
 		this.gc.getGame().start();
 		
 	}
 	
-		@Override
+	@Override
+	/**
+	 * Cette méthode traite tous les cas ou un objet Observable notifie ses Observers. Elle affiche les informations relatives au déroulement de la partie.
+	 * Elle appelle les méthodes pour effectuer des saisies quand cela est nécessaire (quand un joueur humain doit faire une action)
+	 * Elle appelle les méthodes du controleur pour mettre à jour le modèle à partir des saisies.
+	 */
 	public void update(Observable o, Object arg1) {
 
 		if(o instanceof Game) {
@@ -91,17 +109,15 @@ public class VueTexte implements Observer{
 					break;
 					
 				case "new prop" : 
-//					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getAllProps().peek());
 					this.gc.getGame().getAllProps().peek().addObserver(this);
 					break;
 					
 				case "new trick" :
-//					System.out.println("Nouveau Prop créé : " + this.gc.getGame().getTricks().peek());
 					this.gc.getGame().getTricks().peek().addObserver(this);
 					break;
 					
 				case "depile" :
-					System.out.println("Le nouveau Trick à réaliser est : " + ((Game) o).getTopTrick());
+					System.out.println("Le nouveau Trick à réaliser est : " + Game.getTopTrick());
 					break;
 					
 				case "trick pile empty" : 
@@ -192,7 +208,7 @@ public class VueTexte implements Observer{
 						
 					case "reveal prop" : 
 						System.out.println("Vous avez échoué le tour");
-						System.out.println("Votre main, " + p.getName() + " : \n"); // On affiche la main du joueur et on regarde quels props sont cachÃ©s
+						System.out.println("Votre main, " + p.getName() + " : \n"); 
 						System.out.println(p.getHand());
 						break;
 						
@@ -338,10 +354,14 @@ public class VueTexte implements Observer{
 		}
 	}
 	
+	/**
+	 * Cette méthode permet de récupérer tous les paramètres pour instancier un joueur humain.
+	 * on créé un nouveau joueur de type Human à partir de la méthode du controleur.
+	 * On ajoute la vue dans la liste des Observers du joueur créé.
+	 */
 	private void askIdentity() {
 		System.out.println("Entrez le nom du joueur : ");
 		String name = this.readString();
-//		this.gc.setName();
 		
 		int day = 0, month = 0, year = 0;
 		do {
@@ -362,6 +382,10 @@ public class VueTexte implements Observer{
 		this.gc.getGame().getNewPlayer().addObserver(this);
 	}
 	
+	/**
+	 * On demande au joueur passé en paramètres s'il veut retourner un nouveau trick en début de tour.
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askRevealNewTrick(Player p) {
 		int i = 0;
 		String ans;
@@ -378,6 +402,11 @@ public class VueTexte implements Observer{
 		this.gc.setRevealNewTrick(p, (ans.equals("y") ? true : false));
 	}
 	
+	
+	/**
+	 * Demande à un joueur lequel de ses props il veut échanger.
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askChooseOwnProp(Player p) {
 		int i = 0, ans = -1;
 		
@@ -393,7 +422,10 @@ public class VueTexte implements Observer{
 		this.gc.setOwnProp(p, ans);
 		
 	}
-	
+	/**
+	 * Demande au joueur avec quel prop des autres joueurs il veut faire l'échange
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askChooseOtherProp(Player p) {
 		int i = 0, ans = -1;
 		Player[] players = this.gc.getGame().getPlayers();
@@ -411,6 +443,10 @@ public class VueTexte implements Observer{
 		
 	}
 
+	/**
+	 * demande au joueur avec quel prop il vaut faire l'échange dans le cadre de la variante de la carote.
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askChooseMiddleVarCarrot(Player p) {
 		int i = 0, ans = -1;
 		Player[] players = this.gc.getGame().getPlayers();
@@ -440,6 +476,10 @@ public class VueTexte implements Observer{
 		this.gc.setMiddleVarCarrot(p, ans);
 	}
 
+	/**
+	 * Demande au joueur quel Prop il veut placer au milieu après avoir réussi un tour.
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askChooseMiddle(Player p) {
 		int i = 0, ans = -1;
 		
@@ -460,6 +500,10 @@ public class VueTexte implements Observer{
 		this.gc.setMiddleProp(p, ans);
 	}
 	
+	/**
+	 * Demande au joueur lequel de ses props il veut révéler
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askRevealProp(Player p) {
 		int i = 0, ans = -1;
 		
@@ -478,6 +522,10 @@ public class VueTexte implements Observer{
 		this.gc.setRevealProp(p, ans);
 	}
 	
+	/**
+	 * Demande au joueur s'il veut réaliser le trick
+	 * @param p le joueur qui a notifié ses Observers.
+	 */
 	private void askPerformTrick(Player p) {
 		
 		int i = 0;
@@ -497,6 +545,10 @@ public class VueTexte implements Observer{
 		this.gc.setPerformTrick(p, (ans.equals("y") ? true : false));
 	}
 
+	/**
+	 * Lit une saisie et la convertit en un entier
+	 * @return
+	 */
 	private int readInt() {
 		int value = -1;
 		System.out.print(VueTexte.PROMPT);
@@ -504,6 +556,14 @@ public class VueTexte implements Observer{
 		return value;
 	}
 	
+<<<<<<< HEAD
+	/**
+	 * Lit une saisie et la convertit en un booléen
+	 * @return
+	 */
+=======
+	@SuppressWarnings("unused")
+>>>>>>> 499d28830f2a4b85766ad28f6e38c6ced7315316
 	private boolean readBool() {
 		boolean value = false;
 		try {
@@ -515,6 +575,10 @@ public class VueTexte implements Observer{
 		return value;
 	}
 	
+	/**
+	 * Lit une saisie et la retourne telle quelle.
+	 * @return
+	 */
 	private String readString() {
 		String value = "";
 		try {

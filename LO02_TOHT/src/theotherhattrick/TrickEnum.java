@@ -1,8 +1,7 @@
 package theotherhattrick;
 /**
- * 
- * @author amall
- *
+ * Répertorie l'ensemble des Tricks du jeux. On utilise les PropEnum dans la déclaration des valeurs de TrickEnum.
+ *  
  */
 public enum TrickEnum {
 	
@@ -37,20 +36,6 @@ public enum TrickEnum {
 
 	public int getLength(int ind) {
 		return ingredients[ind].length;
-	}
-	
-	public void print() {
-		System.out.println("<" + this.name + "> :");
-		for (int i = 0; i < ingredients.length; i++) {
-			for (int j = 0; j < ingredients[i].length; j++) {
-				System.out.println("[" + ingredients[i][j].getName() + "]");
-			}
-			System.out.println();
-		}
-	}
-	
-	public String toString() {
-		return name;
 	}
 	
 	public String getName() {

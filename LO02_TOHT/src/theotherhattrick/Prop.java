@@ -3,7 +3,6 @@ package theotherhattrick;
 import java.io.Serializable;
 import java.util.Observable;
 
-@SuppressWarnings("deprecation")
 /**
  * Prop est un type d'objets observables représentant les cartes accessoires.
  * @author amall
@@ -31,6 +30,10 @@ public class Prop extends Observable implements Serializable{
 		return type;
 	}
 	
+	/**
+	 * Ne renvoie la valeur de la carte que si elle est visible
+	 * @return
+	 */
 	public int getTypeSecure() {
 		if(this.isVisible) {
 			return this.getType();
@@ -58,6 +61,14 @@ public class Prop extends Observable implements Serializable{
 		this.isVisible = state;
 	}
 	
+	/**
+	 * Compare la "rareté" d'un prop à celle du Prop courant. Utile pour les stratégies du Robot.
+	 * @param other un autre Prop
+	 * @return
+	 * 
+	 * @see Robot
+	 * @see StratConservative
+	 */
 	public int compareRarity(Prop other) {
 		if (this.type > other.getTypeSecure()) {
 			return 1;
@@ -79,6 +90,10 @@ public class Prop extends Observable implements Serializable{
 		return "[" + name + (isVisible == false ? " -> caché " : " -> visible") + "]";
 	}
 
+	/**
+	 * Renvoie un String correspondant à ce qu'un joueur voit des cartes des autres joueurs.
+	 * @return Si le Prop est visible, renvoie le String par défaut du Prop, sinon renvoie [?????]
+	 */
 	public String toStringIfVisible() {
 		return isVisible == true ? this.toString() : "[?????]";
 	}
@@ -88,6 +103,11 @@ public class Prop extends Observable implements Serializable{
 		this.notifyObservers("print visible");
 	}
 
+	/**
+	 * Permet de comparer le Prop courant au Prop passer en paramètre. Celui avec le plus petit id est sélectionné.
+	 * @param p
+	 * @return
+	 */
 	public Prop getLowest(Prop p) {
 		// Si les deux props ont la même valeur, renvoie soi même
 		if (this.type >= p.type) {
@@ -95,7 +115,12 @@ public class Prop extends Observable implements Serializable{
 		}
 		return p;
 	}
-
+	
+	/**
+	 * Permet de comparer le Prop courant au Prop passer en paramètre. Celui avec le plus grand id est sélectionné.
+	 * @param p
+	 * @return
+	 */
 	public Prop getHighest(Prop p) {
 		// Si les deux props ont la même valeur, renvoie soi même
 		if (this.type <= p.type) {
