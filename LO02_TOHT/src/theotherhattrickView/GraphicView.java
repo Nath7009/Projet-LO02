@@ -85,25 +85,7 @@ public class GraphicView implements Observer {
 	private JButton btnNon;
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Menu menu = new Menu(gameStarter);
-//					GameControler gc = new GameControler(menu);
-//					GraphicView window = new GraphicView(gc, menu);
-//					menu.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	/**
-	 * Create the application.
+	 * Cree la vue graphique
 	 */
 	public GraphicView(GameControler gc) {
 		gameStarter.addActionListener(new StartButtonListener());
@@ -117,7 +99,7 @@ public class GraphicView implements Observer {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialise la frame, code genere avec WindowsBuilder
 	 */
 	private void initialize() {
 		// menu = new JFrame();
@@ -255,7 +237,9 @@ public class GraphicView implements Observer {
 		addAllActionListeners();
 	}
 
-	@Override
+	/**
+	 * Recupere les donnees du jeu pour pouvoir faire des modifications
+	 */
 	public void update(Observable arg0, Object arg1) {
 
 		redraw();
@@ -430,10 +414,17 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * @return le menu cree par la vue graphique
+	 */
 	public Menu getMenu() {
 		return this.menu;
 	}
 
+	/**
+	 * Desactive les cartes du joueur
+	 * @param player l'indice du joueur dont les cartes vont etre desactivees
+	 */
 	public void disableCardsOfPlayer(int player) {
 		switch (player) {
 		case -1:
@@ -455,10 +446,17 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * Affiche un message dans la rectangle au dessus de l'ecran
+	 * @param info le message a afficher
+	 */
 	public void setInfo(String info) {
 		this.lblInfos.setText(info);
 	}
 
+	/**
+	 * Active toutes les cartes des joueurs
+	 */
 	public void enableAllCards() {
 		mprop1.setEnabled(true);
 		mprop2.setEnabled(true);
@@ -471,18 +469,26 @@ public class GraphicView implements Observer {
 
 	}
 
+	/**
+	 * Desactive les cartes permettant au joueur de donner des reponses binaires
+	 */
 	public void disableDecisionCards() {
 		trickPile.setEnabled(false);
 		depiledTrick.setEnabled(false);
 		btnNon.setEnabled(false);
 	}
-
+	/**
+	 * Active les cartes permettant au joueur de donner des reponses binaires
+	 */
 	public void enableDecisionCards() {
 		trickPile.setEnabled(true);
 		depiledTrick.setEnabled(false);
 		btnNon.setEnabled(true);
 	}
 
+	/**
+	 * Desactive toutes les cartes des joueurs
+	 */
 	public void disableAllCards() {
 		mprop1.setEnabled(false);
 		mprop2.setEnabled(false);
@@ -494,7 +500,10 @@ public class GraphicView implements Observer {
 		p3Hand[1].setEnabled(false);
 
 	}
-
+	/**
+	 * Active les cartes du joueur
+	 * @param player l'indice du joueur dont les cartes vont etre activees
+	 */
 	public void enableCardsOfPlayer(int player) {
 		switch (player) {
 		case -1:
@@ -516,22 +525,37 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * Desactive le bouton des tricks depiles
+	 */
 	public void disableTrickCard() {
 		depiledTrick.setEnabled(false);
 	}
 
+	/**
+	 * Active le bouton des tricks depiles
+	 */
 	public void enableTrickCard() {
 		depiledTrick.setEnabled(true);
 	}
 
+	/**
+	 * Desactive le bouton de la pile de tricks
+	 */
 	public void diableTrickPile() {
 		trickPile.setEnabled(false);
 	}
 
+	/**
+	 * Active le bouton de la pile de tricks
+	 */
 	public void enableTrickPile() {
 		trickPile.setEnabled(true);
 	}
 
+	/**
+	 * Ajoute les ActionListeners aux boutons
+	 */
 	public void addAllActionListeners() {
 		trickPile.addActionListener(new DepileTrickButtonListener()); // La pile de tricks
 		depiledTrick.addActionListener(new DepileTrickButtonListener());
@@ -548,14 +572,16 @@ public class GraphicView implements Observer {
 		btnNon.addActionListener(new NonButtonListener());
 	}
 
+	/**
+	 * Permet de reafficher entierement l'interface graphique en recuperant les informations contenues dans game
+	 */
 	public void redraw() {
 		Game gameModel = this.controler.getGame();
 		Player[] players = gameModel.getPlayers();
-		
+
 		btnLoad.hide();
 		btnSave.hide();
-		//CODE DEGEULASSE 
-		
+
 		boolean allGood = true; // Détermine si tous les éléments sont présents pour faire l'affichage
 
 		if (players == null) {
@@ -568,8 +594,7 @@ public class GraphicView implements Observer {
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] == null) {
 				allGood = false;
-			}
-			else if(players[i].getHand().size() !=2 ) {
+			} else if (players[i].getHand().size() != 2) {
 				allGood = false;
 			}
 		}
@@ -582,15 +607,6 @@ public class GraphicView implements Observer {
 			p1Score.setText("Score : " + String.valueOf(players[0].getScore()));
 			p2Score.setText("Score : " + String.valueOf(players[1].getScore()));
 			p3Score.setText("Score : " + String.valueOf(players[2].getScore()));
-
-			/*
-			 * p1prop1.setText(players[0].getHand(0).getName());
-			 * p1Hand[1].setText(players[0].getHand(1).getName());
-			 * p2Hand[0].setText(players[1].getHand(0).getName());
-			 * p2Hand[1].setText(players[1].getHand(1).getName());
-			 * p3Hand[0].setText(players[2].getHand(0).getName());
-			 * p3Hand[1].setText(players[2].getHand(1).getName());
-			 */
 
 			setImage(p1Hand[0], players[0].getHand(0), players[0]);
 			setImage(p1Hand[1], players[0].getHand(1), players[0]);
@@ -612,21 +628,23 @@ public class GraphicView implements Observer {
 				depiledTrick.setBorder(null);
 				depiledTrick.setIcon(new ImageIcon("./CARTES/resizedTRICKS/" + controler.getGame().getDepiledTrick().getName() + ".jpg"));
 
-				// mprop1.setText(Game.getMiddleProp().get(0).getName());
-
 				depiledTrick.setText(gameModel.getDepiledTrick().getName());
 			}
 			if (Game.getMiddleProp().size() > 1) {
 				setImage(mprop2, Game.getMiddleProp().get(1));
-				// mprop2.setText(Game.getMiddleProp().get(1).getName());
 			} else {
 				middleCards.remove(mprop2);
-				// mprop2.setEnabled(false);
 			}
 		}
 
 	}
 
+	/**
+	 * Permet d'affecter une image a un bouton
+	 * @param button le bouton auquel on souhaite affecter l'image
+	 * @param prop le prop qui est affecte au bouton
+	 * @param p le possesseur du Prop prop
+	 */
 	private void setImage(JButton button, Prop prop, Player p) {
 		button.setText("");
 		button.setMargin(new Insets(0, 0, 0, 0));
@@ -639,6 +657,11 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * Permet d'affecter une image a un bouton
+	 * @param button le bouton auquel on souhaite affecter l'image
+	 * @param prop le prop qui est affecte au bouton
+	 */
 	private void setImage(JButton button, Prop prop) {
 		button.setText("");
 		button.setMargin(new Insets(0, 0, 0, 0));
@@ -651,6 +674,11 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	
+	/**
+	 * Permet d'ecouter le menu pour savoir quand on clique sur le bouton demarrer
+	 *
+	 */
 	class StartButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			System.out.println("Démarrage du jeu");
@@ -662,6 +690,10 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * Permet de savoir quand on appuie sur un prop, et a qui appartient le prop
+	 *
+	 */
 	class PropButtonListener implements ActionListener {
 
 		int player, propId;
@@ -676,6 +708,10 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * Permet de savoir quand on appuie sur le bouton non
+	 *
+	 */
 	class NonButtonListener implements ActionListener {
 
 		@Override
@@ -685,6 +721,10 @@ public class GraphicView implements Observer {
 		}
 	}
 
+	/**
+	 * Permet de savoir quand on appuie sur le bouton pour depiler un trick
+	 *
+	 */
 	class DepileTrickButtonListener implements ActionListener {
 
 		@Override
@@ -693,7 +733,11 @@ public class GraphicView implements Observer {
 			// controler.setRevealNewTrick(controler.getGame().getCurrentPlayer(), true);
 		}
 	}
-
+	
+	/**
+	 * Permet de savoir quand on appuie sur un bouton de sauvegarde, et l'action que l'on veut faire
+	 *
+	 */
 	class SaveButtonListener implements ActionListener {
 		String function;
 

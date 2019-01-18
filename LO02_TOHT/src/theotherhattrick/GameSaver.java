@@ -9,13 +9,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+
+/**
+ * Permet de sauvegarder le jeu
+ *
+ */
 public abstract class GameSaver implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
+	/** Sauvegarde le jeu dans un fichier
+	 * @param game l'instance du jeu que l'on veut sauvegarder
+	 */
 	public static void save(Game game) {
 		// Stocke l'objet dans un fichier
 		File file = new File("save.ser");
@@ -30,6 +35,10 @@ public abstract class GameSaver implements Serializable{
 		}
 	}
 
+	/**
+	 * Permet de charger un jeu à partir du fichier
+	 * @return l'instance du jeu qui a été sauvegardée
+	 */
 	public static Game load() {
 		try {
 			File file = new File("save.ser");
